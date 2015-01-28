@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Settings.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MIMDGP65MCiVh1EoxdmEA05zeikshfGiTXvXewhN3rm2eFGF0NS/G72RO9Blixr0C7AA38fIlVs0KurqKc1J80q8N6p47L53UG5a3+ybTts=</Value>
+    </Setting>
+    <Setting Name="LDAPUserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AD_turniket@pwr</Value>
+    </Setting>
+    <Setting Name="LDAPEncryptedPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">uhh0joeX/12AzuPmHVrz5A==</Value>
+    </Setting>
+    <Setting Name="MaxDBConnectionCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="ActivityManagerPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\nas\media$\ActivityManager\ActivityManager.exe</Value>
+    </Setting>
+    <Setting Name="ActivityManagerOutputCodePage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">cp866</Value>
+    </Setting>
+    <Setting Name="ActivityManagerConfigsPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\nas\media$\ActivityManager\templates\registry</Value>
+    </Setting>
+    <Setting Name="DataModelsCallbackUpdateTimeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="CalcDataModelsUpdateTimeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="UseLDAP" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

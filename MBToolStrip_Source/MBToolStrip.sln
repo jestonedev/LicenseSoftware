@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MBToolStrip", "MBToolStrip\MBToolStrip.vbproj", "{D9966908-D553-43F5-A655-F794FB767C12}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MBToolStripTest", "MBToolStripTest\MBToolStripTest.vbproj", "{E04B489C-BD0D-4924-ACBA-C629AE1B5E77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9966908-D553-43F5-A655-F794FB767C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9966908-D553-43F5-A655-F794FB767C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9966908-D553-43F5-A655-F794FB767C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9966908-D553-43F5-A655-F794FB767C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04B489C-BD0D-4924-ACBA-C629AE1B5E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04B489C-BD0D-4924-ACBA-C629AE1B5E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04B489C-BD0D-4924-ACBA-C629AE1B5E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04B489C-BD0D-4924-ACBA-C629AE1B5E77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

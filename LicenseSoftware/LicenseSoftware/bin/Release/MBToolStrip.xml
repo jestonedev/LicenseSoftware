@@ -1,0 +1,216 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+MBToolStrip
+</name>
+</assembly>
+<members>
+<member name="M:MBToolStrip.UseClipping.#ctor(System.Drawing.Graphics,System.Drawing.Drawing2D.GraphicsPath)">
+	<summary>
+ Constructor for UsingClipping Class
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.GradientItemColor.#ctor(System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color)">
+	<summary>
+ Constructor for GradientItemColor Class
+ </summary>
+</member><member name="T:MBToolStrip.MBMenuRenderer.GradientItemColor">
+	<summary>
+ GradientItemColor Class which Provides Gradient Colors
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.#ctor">
+	<summary>
+ Constructor for MBToolStripRenderer Class
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render Arrow
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render ToolStrip Button Background
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render ToolStrip DropDownButtonBackground
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event Raised When Item Checked
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render ItemText
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render Item Image
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render MenuItemBackground
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render SplitButtonBckground
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render Status Strip Sizing Grip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class to Render Seperator
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class to Render ToolStrip Background
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render Image Margin
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs)">
+	<summary>
+ MBToolStripRenderer Class Event to Render ToolStrip Border
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.RenderToolButtonBackground(System.Drawing.Graphics,System.Windows.Forms.ToolStripButton,System.Windows.Forms.ToolStrip)">
+	<summary>
+ RenderToolButtonBackground Method for Button Background Renderring
+ </summary>
+	<param name="g">graphics As Graphics</param>
+	<param name="button">button As ToolStripButton</param>
+	<param name="toolstrip">toolstrip As ToolStrip</param>
+</member><member name="M:MBToolStrip.MBMenuRenderer.RenderToolDropButtonBackground(System.Drawing.Graphics,System.Windows.Forms.ToolStripItem,System.Windows.Forms.ToolStrip)">
+	<summary>
+ RendereToolDropButtonBackground Method for DropDown Button Background
+ </summary>
+	<param name="g">graphics As Graphics</param>
+	<param name="item">Item As ToolStripItem</param>
+	<param name="toolstrip">toolstrip As ToolStrip</param>
+</member><member name="M:MBToolStrip.MBMenuRenderer.RenderToolSplitButtonBackground(System.Drawing.Graphics,System.Windows.Forms.ToolStripSplitButton,System.Windows.Forms.ToolStrip)">
+	<summary>
+ RenderToolSplitButtonBackground Method for Split Button Background
+ </summary>
+	<param name="g">graphics As Graphics</param>
+	<param name="splitButton">Button As ToolStripSplitButton</param>
+	<param name="toolstrip">toolStrip As ToolStrip</param>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientToolItem(System.Drawing.Graphics,System.Windows.Forms.ToolStripItem,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient Tool Item for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientToolSplitItem(System.Drawing.Graphics,System.Windows.Forms.ToolStripSplitButton,MBToolStrip.MBMenuRenderer.GradientItemColor,MBToolStrip.MBMenuRenderer.GradientItemColor,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient Tool Split Item for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawContextMenuHeader(System.Drawing.Graphics,System.Windows.Forms.ToolStripItem)">
+	<summary>
+ Draw Gradient ContextMenuHeader for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientContextMenuItem(System.Drawing.Graphics,System.Windows.Forms.ToolStripItem,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient ContextMenu Item for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientItem(System.Drawing.Graphics,System.Drawing.Rectangle,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient Item for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientBack(System.Drawing.Graphics,System.Drawing.Rectangle,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient Background for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGradientBorder(System.Drawing.Graphics,System.Drawing.Rectangle,MBToolStrip.MBMenuRenderer.GradientItemColor)">
+	<summary>
+ Draw Gradient Border for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawGripGlyph(System.Drawing.Graphics,System.Int32,System.Int32,System.Drawing.Brush,System.Drawing.Brush)">
+	<summary>
+ Draw Grip for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawSeparator(System.Drawing.Graphics,System.Boolean,System.Drawing.Rectangle,System.Drawing.Pen,System.Drawing.Pen,System.Int32,System.Boolean)">
+	<summary>
+ Draw Gradient Separator for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawBorderPath(System.Drawing.Rectangle,System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw Gradient Border Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawBorderPath(System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw Border Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawInsideBorderPath(System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw InsideBorder Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawInsideBorderPath(System.Drawing.Rectangle,System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw InsideBorder Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawClipBorderPath(System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw ClipBorder Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawClipBorderPath(System.Drawing.Rectangle,System.Drawing.Rectangle,System.Single)">
+	<summary>
+ Draw ClipBorder Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawArrowPath(System.Windows.Forms.ToolStripItem,System.Drawing.Rectangle,System.Windows.Forms.ArrowDirection)">
+	<summary>
+ Draw Arrow Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawTickPath(System.Drawing.Rectangle)">
+	<summary>
+ Draw Tick Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBMenuRenderer.DrawIndeterminatePath(System.Drawing.Rectangle)">
+	<summary>
+ Draw Indermidiate Path for MBToolStrip/MBStatusStrip
+ </summary>
+</member><member name="T:MBToolStrip.MBMenuRenderer">
+	<summary>
+ MBToolStripRenderer Class © Manoj K Bhoir
+ </summary>
+	<remarks>Version 1.0.1096.2286</remarks>
+</member><member name="M:MBToolStrip.MBStatusStrip.#ctor">
+	<summary>
+ Constructor of MBStatusStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBStatusStrip.InitializeComponent">
+	<summary>
+ Initialize MBStatusStrip and MBToolItemRenderClass
+ </summary>
+</member><member name="T:MBToolStrip.MBStatusStrip">
+	<summary>
+ MBStatusStrip Class © Manoj K Bhoir
+ </summary>
+	<remarks>Version 1.0</remarks>
+</member><member name="M:MBToolStrip.MBToolStrip.#ctor">
+	<summary>
+ Constructor of MBToolStrip
+ </summary>
+</member><member name="M:MBToolStrip.MBToolStrip.InitializeComponent">
+	<summary>
+ Initialize MBToolStrip and MBToolItemRenderClass
+ </summary>
+</member><member name="T:MBToolStrip.MBToolStrip">
+	<summary>
+ MBToolStrip Class © Manoj K Bhoir
+ </summary>
+	<remarks>Version 1.0</remarks>
+</member><member name="P:MBToolStrip.My.Resources.Resources.ResourceManager">
+	<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member><member name="P:MBToolStrip.My.Resources.Resources.Culture">
+	<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member><member name="T:MBToolStrip.My.Resources.Resources">
+	<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+</members>
+</doc>

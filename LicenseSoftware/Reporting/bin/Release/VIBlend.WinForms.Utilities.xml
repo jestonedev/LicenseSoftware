@@ -1,0 +1,1897 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VIBlend.WinForms.Utilities</name>
+    </assembly>
+    <members>
+        <member name="T:VIBlend.Utilities.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.IDrawText">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.NativeFunctions">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.IFill">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.TrialForm">
+            <exclude/>
+        </member>
+        <member name="F:VIBlend.Utilities.TrialForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.TrialForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.TrialForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.IDraw">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.IBorder">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.IShape">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.WinForms.Controls.vColorTable.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.WinForms.Controls.vColorTable"/> class.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemSelected">
+            <summary>
+            Gets the solid color to use when a <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> other than the top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the solid color to use when a <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> other than the top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonPressedGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used when the button is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used when the button is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonPressedGradientEnd">
+            <summary>
+            Gets the end color of the gradient used when the button is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used when the button is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonPressedGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used when the button is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the middle color of the gradient used when the button is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonSelectedGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used when the button is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used when the button is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonSelectedGradientEnd">
+            <summary>
+            Gets the end color of the gradient used when the button is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used when the button is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonSelectedGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used when the button is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the middle color of the gradient used when the button is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ButtonSelectedHighlightBorder">
+            <summary>
+            Gets the border color to use with <see cref="P:System.Windows.Forms.ProfessionalColorTable.ButtonSelectedHighlight"/>.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the border color to use with <see cref="P:System.Windows.Forms.ProfessionalColorTable.ButtonSelectedHighlight"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.CheckBackground">
+            <summary>
+            Gets the solid color to use when the button is checked and gradients are being used.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the solid color to use when the button is checked and gradients are being used.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.GripDark">
+            <summary>
+            Gets the color to use for shadow effects on the grip (move handle).
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the color to use for shadow effects on the grip (move handle).
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.GripLight">
+            <summary>
+            Gets the color to use for highlight effects on the grip (move handle).
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the color to use for highlight effects on the grip (move handle).
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ImageMarginGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/>.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ImageMarginGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/>.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ImageMarginRevealedGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/> when an item is revealed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the middle color of the gradient used in the image margin of a <see cref="T:System.Windows.Forms.ToolStripDropDownMenu"/> when an item is revealed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuBorder">
+            <summary>
+            Gets the color that is the border color to use on a <see cref="T:System.Windows.Forms.MenuStrip"/>.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the border color to use on a <see cref="T:System.Windows.Forms.MenuStrip"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemPressedGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemPressedGradientEnd">
+            <summary>
+            Gets the end color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemPressedGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the middle color of the gradient used when a top-level <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is pressed.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemSelectedGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used when the <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used when the <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuItemSelectedGradientEnd">
+            <summary>
+            Gets the end color of the gradient used when the <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used when the <see cref="T:System.Windows.Forms.ToolStripMenuItem"/> is selected.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuStripGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the MenuStrip.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.MenuStrip"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.MenuStripGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the MenuStrip.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.OverflowButtonGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the ToolStripOverflowButton.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripOverflowButton"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.OverflowButtonGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the ToolStripOverflowButton.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.OverflowButtonGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used in the ToolStripOverflowButton.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.RaftingContainerGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the ToolStripContainer.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripContainer"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.RaftingContainerGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the ToolStripContainer.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.SeparatorDark">
+            <summary>
+            Gets the color to use to for shadow effects on the ToolStripSeparator.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the color to use to for shadow effects on the <see cref="T:System.Windows.Forms.ToolStripSeparator"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.SeparatorLight">
+            <summary>
+            Gets the color to use to for highlight effects on the ToolStripSeparator.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.StatusStripGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used on the StatusStrip.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used on the <see cref="T:System.Windows.Forms.StatusStrip"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.StatusStripGradientEnd">
+            <summary>
+            Gets the end color of the gradient used on the StatusStrip.
+            </summary>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripBorder">
+            <summary>
+            Gets the border color to use on the bottom edge of the ToolStrip.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the border color to use on the bottom edge of the <see cref="T:System.Windows.Forms.ToolStrip"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripContentPanelGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the ToolStripContentPanel.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripContentPanel"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripContentPanelGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the ToolStripContentPanel.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripContentPanel"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripDropDownBackground">
+            <summary>
+            Gets the solid background color of the ToolStripDropDown.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the solid background color of the <see cref="T:System.Windows.Forms.ToolStripDropDown"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the ToolStrip background.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStrip"/> background.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the ToolStrip background.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStrip"/> background.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripGradientMiddle">
+            <summary>
+            Gets the middle color of the gradient used in the ToolStrip background.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the middle color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStrip"/> background.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripPanelGradientBegin">
+            <summary>
+            Gets the starting color of the gradient used in the ToolStripPanel.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the starting color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripPanel"/>.
+            </returns>
+        </member>
+        <member name="P:VIBlend.WinForms.Controls.vColorTable.ToolStripPanelGradientEnd">
+            <summary>
+            Gets the end color of the gradient used in the ToolStripPanel.
+            </summary>
+            <value></value>
+            <returns>
+            A <see cref="T:System.Drawing.Color"/> that is the end color of the gradient used in the <see cref="T:System.Windows.Forms.ToolStripPanel"/>.
+            </returns>
+        </member>
+        <member name="T:VIBlend.Utilities.vTextBoxBase">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.GetIndexInAutoCompleteValues(System.String)">
+            <summary>
+            Gets the index in auto complete values.
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnTextChanged(System.EventArgs)">
+            <summary>
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.vTextBoxBase"/> class.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnTextAlignChanged(System.EventArgs)">
+            <summary>
+            Redraw the control when the text alignment changes
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.Paint"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnMouseEnter(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseEnter"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnKeyDown(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.KeyDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.KeyEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.OnKeyUp(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.KeyUp"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.KeyEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.WndProc(System.Windows.Forms.Message@)">
+            <summary>
+            </summary>
+            <param name="m">A Windows Message object.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.DrawDefaultText">
+            <summary>
+            Draws the default text.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vTextBoxBase.DrawDefaultText(System.Drawing.Graphics)">
+            <summary>
+            Draws the default text.
+            </summary>
+            <param name="g">The g.</param>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.AutoCompleteEnabled">
+            <summary>
+            Gets or sets a value indicating whether auto complete is enabled.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.AutoCompleteValues">
+            <summary>
+            Gets or sets the values.
+            </summary>
+            <value>The values.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.ShowDefaultText">
+            <summary>
+            Gets or sets a value indicating whether to draw default text
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.DefaultText">
+            <summary>
+            Gets or sets the default text.
+            </summary>
+            <value>The default text.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.DefaultTextColor">
+            <summary>
+            Gets or sets the default color of the text.
+            </summary>
+            <value>The default color of the text.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vTextBoxBase.DefaultTextFont">
+            <summary>
+            Gets or sets the default text font.
+            </summary>
+            <value>The default text font.</value>
+        </member>
+        <member name="T:VIBlend.Utilities.PaintHelper">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.PaintHelper.CreatePartiallyRoundedPath(System.Drawing.Rectangle,System.Int32,System.Byte)">
+            <summary>
+            CreatePartiallyRoundedPath - Creates a Rounded Rectangle Path with customizable corners
+            </summary>
+            <param name="bounds">Rectangle Bounds</param>
+            <param name="radius">Rounded Corner Radius</param>
+            <param name="roundedCornersBitmask">
+               RoundedCornersBitmask:
+               bit0 = 1 -- topLeft corner is rounded
+               bit1 = 1 -- topRight corner is rounded
+               bit2 = 1 -- bottomLeft corner is rounded
+               bit3 = 1 -- bottomRight corner is rounded
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.PaintHelper.RotateBitmap(System.Drawing.Image,System.Double)">
+            <summary>
+            Rotates the image.
+            </summary>
+            <param name="image">The image.</param>
+            <param name="angle">The angle.</param>
+            <returns></returns>
+        </member>
+        <member name="T:VIBlend.Utilities.GridCellStyle">
+            <summary>
+            Represents a style of a data grid cell
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.GridCellStyle.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.GridCellStyle.#ctor(VIBlend.Utilities.FillStyle,VIBlend.Utilities.FillStyle,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="fillStyle">FillStyle in normal state</param>
+            <param name="fillStyleSelected">FillStyle in selected state</param>
+            <param name="borderColor">Border color in normal state</param>
+            <param name="borderColorSelected">Border color in selected state</param>
+            <param name="textColor">Text color in normal state</param>
+            <param name="textColorSelected">Text color in selected state</param>
+        </member>
+        <member name="M:VIBlend.Utilities.GridCellStyle.#ctor(VIBlend.Utilities.FillStyle,VIBlend.Utilities.FillStyle,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Font)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="fillStyle">FillStyle in normal state</param>
+            <param name="fillStyleSelected">FillStyle in selected state</param>
+            <param name="borderColor">Border color in normal state</param>
+            <param name="borderColorSelected">Border color in selected state</param>
+            <param name="textColor">Text color in normal state</param>
+            <param name="textColorSelected">Text color in selected state</param>
+            <param name="font">Text font</param>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.FillStyle">
+            <summary>
+            FillStyle in normal state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.FillStyleSelected">
+            <summary>
+            FillStyle in selected sate
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.BorderColor">
+            <summary>
+            Border color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.XmlBorderColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.BorderColorSelected">
+            <summary>
+            Border color in selected state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.XmlBorderColorSelected">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.TextColor">
+            <summary>
+            Text color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.XmlTextColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.TextColorSelected">
+            <summary>
+            Text color in selected state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.XmlTextColorSelected">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.Font">
+            <summary>
+            Gets or sets the text font of grid cell
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridCellStyle.XmlFont">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.vColors.#cctor">
+            <summary>
+            Initializes the <see cref="T:VIBlend.Utilities.vColors"/> class.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.ColorName">
+            <summary>
+            Gets or sets the name of the color.
+            </summary>
+            <value>The name of the color.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.Colors">
+            <summary>
+            Gets the colors.
+            </summary>
+            <value>The colors.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.CustomColors">
+            <summary>
+            Gets the custom colors.
+            </summary>
+            <value>The custom colors.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.CustomString">
+            <summary>
+            Gets or sets the custom string.
+            </summary>
+            <value>The custom string.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.LocalizableColors">
+            <summary>
+            Gets the localizable colors.
+            </summary>
+            <value>The localizable colors.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.LocalizableSystemColors">
+            <summary>
+            Gets the localizable system colors.
+            </summary>
+            <value>The localizable system colors.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.OtherString">
+            <summary>
+            Gets or sets the other string.
+            </summary>
+            <value>The other string.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.SystemColors">
+            <summary>
+            Gets the system colors.
+            </summary>
+            <value>The system colors.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.SystemString">
+            <summary>
+            Gets or sets the system string.
+            </summary>
+            <value>The system string.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vColors.WebString">
+            <summary>
+            Gets or sets the web string.
+            </summary>
+            <value>The web string.</value>
+        </member>
+        <member name="T:VIBlend.Utilities.vControlBase">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.IScrollableControlBase">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.vControlBase.OnMouseEnter(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseEnter"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vControlBase.OnMouseLeave(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseLeave"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vControlBase.OnGotFocus(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.GotFocus"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vControlBase.OnLostFocus(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.LostFocus"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="P:VIBlend.Utilities.vControlBase.HoverState">
+            <summary>
+            Gets or sets a value indicating whether [hover state].
+            </summary>
+            <value><c>true</c> if [hover state]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownControlBase.PerformBoundsCalculations(System.Drawing.Rectangle)">
+            <summary>
+            Performs the bounds calculations.
+            </summary>
+            <param name="bounds">The bounds.</param>
+            <returns></returns>
+        </member>
+        <member name="P:VIBlend.Utilities.vDropDownControlBase.ContentControl">
+            <summary>
+            Gets or sets the content control.
+            </summary>
+            <value>The content control.</value>
+        </member>
+        <member name="T:VIBlend.Utilities.ControlThemeDeserializer">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.HierarchyItemStyle">
+            <summary>
+            Represents a style of a HierarchyItem
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.HierarchyItemStyle.Clone">
+            <summary>
+            Creates a new HierarchyItemStyle object with is an exact copy of this HierarchyItemStyle 
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.FillStyle">
+            <summary>
+            Fill style when the item is in normal state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.FillStyleHighlight">
+            <summary>
+            Fill style when the item is highlighted
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.BorderColor">
+            <summary>
+            Border color when the item is in normal state 
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.XmlBorderColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.BorderColorHighlighted">
+            <summary>
+            Border color when the item is highlighted
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.XmlBorderColorHighlighted">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.TextColor">
+            <summary>
+            Text color when the item is in normal state 
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.XmlTextColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.TextColorHighlighed">
+            <summary>
+            Text color when the item is highlighted
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.XmlTextColorHighlighted">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.Font">
+            <summary>
+            Gets or sets the text font of grid cell
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.HierarchyItemStyle.XmlFont">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.AnimationState">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.AnimationManager">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.XmlFont">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.vButtonEditBase">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.vEditorControlBase">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.vEditorControlBase"/> class.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.SetTextBoxControl(VIBlend.Utilities.vTextBoxBase)">
+            <summary>
+            Sets the text box control.
+            </summary>
+            <param name="textBox">The text box.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.InnerRect">
+            <summary>
+            Inners the rect.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnBackColorChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.BackColorChanged"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnClick(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.Click"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnDoubleClick(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.DoubleClick"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnEnabledChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.EnabledChanged"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnGotFocus(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.GotFocus"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnKeyDown(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.KeyDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.KeyEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnKeyPress(System.Windows.Forms.KeyPressEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.KeyPress"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.KeyPressEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnKeyUp(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.KeyUp"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.KeyEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseEnter(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseEnter"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseHover(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseHover"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseLeave(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseLeave"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseMove"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseUp"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.Paint"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnSizeChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.SizeChanged"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.OnTextChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.TextChanged"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vEditorControlBase.PerformEditLayout">
+            <summary>
+            Performs the edit layout.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.TextBoxAutoLayout">
+            <summary>
+            Gets or sets a value indicating whether [text box auto layout].
+            </summary>
+            <value><c>true</c> if [text box auto layout]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.Theme">
+            <summary>
+            Gets or sets the theme.
+            </summary>
+            <value>The theme.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.UseThemeBorderColor">
+            <summary>
+            Gets or sets whether to use the theme's border color.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.UseThemeBackColor">
+            <summary>
+            Gets or sets a value indicating whether to use the theme's background color.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.UseThemeForeColor">
+            <summary>
+            Gets or sets a value indicating whether to use the theme's foreground color.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.UseThemeFont">
+            <summary>
+            Gets or sets a value indicating whether to use the theme's font.
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.OverrideBorderColor">
+            <summary>
+            Gets or sets the color of the override border.
+            </summary>
+            <value>The color of the override border.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.OverrideForeColor">
+            <summary>
+            Gets or sets the color of the override forecolor.
+            </summary>
+            <value>The color of the override fore.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.OverrideBackColor">
+            <summary>
+            Gets or sets the color of the override back color.
+            </summary>
+            <value>The color of the override back.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.OverrideFont">
+            <summary>
+            Gets or sets the override font.
+            </summary>
+            <value>The override font.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.vEditorControlBase.EnableBorderHighlight">
+            <summary>
+            Gets or sets whether the border will be highlighted when the user moves the mouse over the control and when the control has focus
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vButtonEditBase.PerformBoundsCalculations(System.Drawing.Rectangle)">
+            <summary>
+            Performs the bounds calculations.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vButtonEditBase.OnClick(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.Click"/> event.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vButtonEditBase.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseDown"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vButtonEditBase.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseMove"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vButtonEditBase.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Control.MouseUp"/> event.
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.MouseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="P:VIBlend.Utilities.vButtonEditBase.ButtonRectangle">
+            <summary>
+            Gets the button rectangle.
+            </summary>
+            <value>The button rectangle.</value>
+        </member>
+        <member name="T:VIBlend.Utilities.ScrollableControlMiniBase">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.ScrollableControlMiniBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.ScrollableControlMiniBase"/> class.
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.ScrollableControlBase">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.ControlThemeSerializer">
+            <exclude/>
+        </member>
+        <member name="M:vGeneral.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.FillStyle">
+            <summary>
+            Represents a fill style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyle.GetBrush(System.Drawing.Rectangle)">
+            <summary>
+            Gets a brush for painting the fill area
+            </summary>
+            <param name="rect"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyle.CreateBrush">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyle.Clone">
+            <summary>
+            Creates a copy of the fill style object
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyle.ColorsNumber">
+            <summary>
+            Gets the number of fill colors
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyle.Colors">
+            <summary>
+            Gets the fill colors
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.FillStyleSolid">
+            <summary>
+            Represents a solid fill style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleSolid.#ctor">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleSolid.Finalize">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleSolid.#ctor(System.Drawing.Color)">
+            <exclude/>
+        </member>
+        <member name="F:VIBlend.Utilities.FillStyleSolid.brush">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleSolid.XmlColor">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.FillStyleGradient">
+            <summary>
+            Represents a two colors gredient fill style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.#ctor">
+            <summary>
+            Default contrsuctor
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.#ctor(System.Drawing.Color,System.Drawing.Color,System.Drawing.Drawing2D.LinearGradientMode)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="color1">Color1</param>
+            <param name="color2">Color2</param>
+            <param name="gradientMode">Gradient mode</param>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.CreateBrush">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.GetBrush(System.Drawing.Rectangle)">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.Clone">
+            <summary>
+            Creates a copy of the style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradient.op_Implicit(VIBlend.Utilities.FillStyleSolid)~VIBlend.Utilities.FillStyleGradient">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.ColorsNumber">
+            <summary>
+            Gets the number of gradient colors
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.Colors">
+            <summary>
+            Gets the gradient colors
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.Color1">
+            <summary>
+            Start gradient color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.XmlColor1">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.Color2">
+            <summary>
+            End gradient color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.XmlColor2">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradient.LinearGradientMode">
+            <summary>
+            Gets or sets the Gradient mode
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.FillStyleGradientEx">
+            <summary>
+            Represents a four color gradient fill style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.#ctor(System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Single,System.Single,System.Single)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="color1">Color1</param>
+            <param name="color2">Color2</param>
+            <param name="color3">Color3</param>
+            <param name="color4">Color4</param>
+            <param name="gradientAngle">Gradient angle</param>
+            <param name="GradientOffset">Gradient percentage 1</param>
+            <param name="GradientOffset2">Gradient percentage 2</param>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.Finalize">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.CreateBrush">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.GetBrush(System.Drawing.Rectangle)">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.Clone">
+            <summary>
+            Creates a copy of the fill style
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.op_Implicit(VIBlend.Utilities.FillStyleGradient)~VIBlend.Utilities.FillStyleGradientEx">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.FillStyleGradientEx.op_Implicit(VIBlend.Utilities.FillStyleSolid)~VIBlend.Utilities.FillStyleGradientEx">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.ColorsNumber">
+            <summary>
+            Gets the number of colors
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.Colors">
+            <summary>
+            Gets the gradient colors
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.Color1">
+            <summary>
+            Gradient Color1
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.XmlColor1">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.Color2">
+            <summary>
+            Gradient Color2
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.XmlColor2">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.Color3">
+            <summary>
+            Gradient Color3
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.XmlColor3">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.Color4">
+            <summary>
+            Gradient Color4
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.XmlColor4">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.GradientAngle">
+            <summary>
+            Gets or sets the Gradient Angle
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.GradientOffset">
+            <summary>
+            Gets or sets the Gradient Percentage 1
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.FillStyleGradientEx.GradientOffset2">
+            <summary>
+            Gets or sets the Gradient Percentage 2
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.vDropDownForm"/> class.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.#ctor(System.Windows.Forms.Control)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.vDropDownForm"/> class.
+            </summary>
+            <param name="parentControl">The parent control.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.HideFormAndActivateParent">
+            <summary>
+            Hides the form and activate parent.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.CallHideForm(System.EventArgs)">
+            <summary>
+            Calls the hide form.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.CallShowForm(System.EventArgs)">
+            <summary>
+            Calls the show form.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.OnHideForm(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:HideForm"/> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.OnShowForm(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:ShowForm"/> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.vDropDownForm.ShowPopupForm">
+            <summary>
+            Shows the popup form.
+            </summary>
+        </member>
+        <member name="E:VIBlend.Utilities.vDropDownForm.HideForm">
+            <summary>
+            Occurs when form is to be hidden
+            </summary>
+        </member>
+        <member name="E:VIBlend.Utilities.vDropDownForm.ShowForm">
+            <summary>
+            Occurs when form is shown
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.Shapes">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.VisualStyle">
+            <summary>
+            Represents a visual style of a UI element
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.VisualStyle.CreateCopy">
+            <summary>
+            Creates a new VisualStyle object with the exact same property values
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.VisualStyle.LoadFromXmlStream(System.IO.Stream)">
+            <summary>
+            Loads the VisualStyle from a XML stream
+            </summary>
+            <param name="stream">Input XML stream</param>
+            <returns>The method returns true if the load is successful.</returns>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.FillStyle">
+            <summary>
+            Fill property of the visual style
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.BorderColor">
+            <summary>
+            Border color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.XmlBorderColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.TextColor">
+            <summary>
+            Text color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.XmlTextColor">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.TextAlignment">
+            <summary>
+            Text alignment
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.TextWrap">
+            <summary>
+            Text wrap mode
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.Font">
+            <summary>
+            Text font
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.VisualStyle.XmlFont">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.NamedValue">
+            <summary>
+            Represents a Name and Value pair. This class is used to define setter properties in VIBlend themes
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedValue.Name">
+            <summary>
+            String represeting the Name of the NameValue pair
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedValue.Value">
+            <summary>
+            String represeting the Value of the NameValue pair
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.NamedFillStyle">
+            <summary>
+            Represents a Named fill style. This class is used in the VIBlend themes definition
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedFillStyle.Name">
+            <summary>
+            Name of the NamedFillStyle
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedFillStyle.FillStyle">
+            <summary>
+            FillStyle of the NamedFillStyle
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.NamedColor">
+            <summary>
+            Represents a Named Color.  This class is used in the VIBlend themes definition
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedColor.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedColor.Color">
+            <summary>
+            Color
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.NamedColor.XmlColor">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.VIBLEND_THEME">
+            <summary>
+            Enumeration of the standard VIBlend themes 
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICEBLACK">
+            <summary>
+            Office 2007 Black Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE">
+            <summary>
+            Office 2007 Blue Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER">
+            <summary>
+            Office 2007 Silver Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICEGREEN">
+            <summary>
+            Office 2007 Green Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.VISTABLUE">
+            <summary>
+            Vista Blue Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.BLUEBLEND">
+            <summary>
+            Blue Blend Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.ULTRABLUE">
+            <summary>
+            Ultra Blue Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.ORANGEFRESH">
+            <summary>
+            OrangeFresh Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.ECOGREEN">
+            <summary>
+            Office Green Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.BLACKPEARL">
+            <summary>
+            Black Pearl Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2003BLUE">
+            <summary>
+            Office 2003 Blue Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2003OLIVE">
+            <summary>
+            Office 2003 Olive Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2003SILVER">
+            <summary>
+            Office 2003 Silve Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.RETRO">
+            <summary>
+            Retro Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.RETROBLUE">
+            <summary>
+            Retro Blue Theme
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2010BLACK">
+            <summary>
+            Office 2010 Black
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2010BLUE">
+            <summary>
+            Office 2010 Black
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER">
+            <summary>
+            Office 2010 Black
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.NERO">
+            <summary>
+            Nero
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.EXPRESSIONDARK">
+            <summary>
+            ExpressionDark
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.METROBLUE">
+            <summary>
+            Metro Blue
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.METROGREEN">
+            <summary>
+            Metro Green
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.METROORANGE">
+            <summary>
+            Metro Orange
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.VIBLEND_THEME.STEEL">
+            <summary>
+            Steel
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.ColorFormat">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.ThemeCacheKey">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCacheKey.#ctor(System.String,VIBlend.Utilities.VIBLEND_THEME)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VIBlend.Utilities.ThemeCacheKey"/> class.
+            </summary>
+            <param name="styleKey">The style key.</param>
+            <param name="theme">The theme.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCacheKey.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+            	<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            The <paramref name="obj"/> parameter is null.
+            </exception>
+        </member>
+        <member name="P:VIBlend.Utilities.ThemeCacheKey.StyleKey">
+            <summary>
+            Gets or sets the style key.
+            </summary>
+            <value>The style key.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.ThemeCacheKey.Theme">
+            <summary>
+            Gets or sets the theme.
+            </summary>
+            <value>The theme.</value>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCache.ClearCache">
+            <summary>
+            Clears the cache.
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCache.ClearCacheByKey(System.String,VIBlend.Utilities.VIBLEND_THEME)">
+            <summary>
+            Clears the cache by key.
+            </summary>
+            <param name="styleKey">The style key.</param>
+            <param name="theme">The theme.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCache.GetTheme(System.String,VIBlend.Utilities.VIBLEND_THEME)">
+            <summary>
+            Gets the theme.
+            </summary>
+            <param name="styleKey">The style key.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.ThemeCache.GetTheme(System.String,VIBlend.Utilities.VIBLEND_THEME,VIBlend.Utilities.ControlTheme)">
+            <summary>
+            Gets the theme.
+            </summary>
+            <param name="styleKey">The style key.</param>
+            <param name="value">The value.</param>
+            <param name="controlTheme">The control theme.</param>
+            <returns></returns>
+        </member>
+        <member name="T:VIBlend.Utilities.ControlTheme">
+            <summary>
+            Represents a VIBlend control theme
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.GetDefaultTheme(VIBlend.Utilities.VIBLEND_THEME)">
+            <summary>
+            Creates and returns an instance of one of the default VIBlend themes
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.SaveToXml(System.String)">
+            <summary>
+            Saves the theme to a XML file
+            </summary>
+            <param name="fileName">Name of the XML file</param>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.CreateCopy">
+            <summary>
+            Creates a new ControlTheme object which is a copy of the current one
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.LoadFromXmlStream(System.IO.Stream)">
+            <summary>
+            Loads the theme from a XML stream
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.SetFillStyleGradientAngle(System.Int32)">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.LoadFromXml(System.String)">
+            <summary>
+            Loads the Theme from a XML file
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.QueryNamedValueSetter(System.String)">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.QueryFillStyleSetter(System.String)">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.ControlTheme.QueryColorSetter(System.String)">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.StyleNormal">
+            <summary>
+            Visual style for normal state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.StyleHighlight">
+            <summary>
+            Visual style for highlight state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.StylePressed">
+            <summary>
+            Visual style for pressed state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.StyleDisabled">
+            <summary>
+            Visual style for disabled state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.StyleDisabledPressed">
+            <summary>
+            Visual style for disabled state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.Radius">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.ShapeType">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.XmlShapeType">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.Opacity">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.Animated">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.ColorSetter">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.FillStyleSetter">
+            <exclude/>
+        </member>
+        <member name="P:VIBlend.Utilities.ControlTheme.NamedValueSetter">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.RoundedCornersMask">
+            <summary>
+            Enumeration of the rounded cornerners mask values
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.RoundedCornersMask.TOP_LEFT">
+            <summary>
+            Top-left corner
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.RoundedCornersMask.TOP_RIGHT">
+            <summary>
+            Top-right corner
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.RoundedCornersMask.BOTTOM_LEFT">
+            <summary>
+            Bottom-left corner
+            </summary>
+        </member>
+        <member name="F:VIBlend.Utilities.RoundedCornersMask.BOTTOM_RIGHT">
+            <summary>
+            Bottom-right corner
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.ControlState">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.GradientStyles">
+            <exclude/>
+        </member>
+        <member name="T:VIBlend.Utilities.BackgroundElement">
+            <exclude/>
+        </member>
+        <member name="M:VIBlend.Utilities.BackgroundElement.DrawElementTextAndImage(System.Drawing.Graphics,VIBlend.Utilities.ControlState,System.String,System.Drawing.Image,System.Drawing.Rectangle,System.Windows.Forms.TextImageRelation)">
+            <summary>
+            Draws the element text and image.
+            </summary>
+            <param name="g">The g.</param>
+            <param name="stateType">Type of the state.</param>
+            <param name="text">The text.</param>
+            <param name="image">The image.</param>
+            <param name="textBounds">The text bounds.</param>
+            <param name="txtImageRelation">The TXT image relation.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.BackgroundElement.DrawElementTextAndImage(System.Drawing.Graphics,VIBlend.Utilities.ControlState,System.String,System.Drawing.Image,System.Drawing.Rectangle,System.Windows.Forms.TextImageRelation,System.Drawing.Color)">
+            <summary>
+            Draws the element text and image.
+            </summary>
+            <param name="g">The g.</param>
+            <param name="stateType">Type of the state.</param>
+            <param name="text">The text.</param>
+            <param name="image">The image.</param>
+            <param name="textBounds">The text bounds.</param>
+            <param name="txtImageRelation">The TXT image relation.</param>
+            <param name="color">The color.</param>
+        </member>
+        <member name="M:VIBlend.Utilities.BackgroundElement.DrawStandardFill(System.Drawing.Graphics,VIBlend.Utilities.ControlState,VIBlend.Utilities.GradientStyles)">
+            <summary>
+            Draws the standard background fill.
+            </summary>
+            <param name="g">The g.</param>
+            <param name="stateType">Type of the state.</param>
+            <param name="gradientStyle">The gradient style.</param>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.Opacity">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="!:BackGroundElement"/> has opacity.
+            </summary>
+            <value>
+            	<c>true</c> if has opacity draw with opacity; otherwise not, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.IsAnimated">
+            <summary>
+            Gets or sets a value indicating whether this instance is animated.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is animated; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.TextAlignment">
+            <summary>
+            Gets or sets the text alignment.
+            </summary>
+            <value>The text alignment.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.ImageAlignment">
+            <summary>
+            Gets or sets the image alignment.
+            </summary>
+            <value>The image alignment.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.Image">
+            <summary>
+            Gets or sets the image.
+            </summary>
+            <value>The image.</value>
+        </member>
+        <member name="P:VIBlend.Utilities.BackgroundElement.EnableSmoothingMode">
+            <summary>
+            Gets or sets whether the smoothing mode is enabled.
+            </summary>
+        </member>
+        <member name="T:VIBlend.Utilities.GridTheme">
+            <summary>
+            Represents a GridView Theme
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.GridTheme.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:VIBlend.Utilities.GridTheme.SaveToXml(System.String)">
+            <summary>
+            Saves the theme in a XML file
+            </summary>
+            <param name="fileName">The output file name</param>
+            <returns>This method returns true when the theme was successfully saved. Otherwise it returns false </returns>
+        </member>
+        <member name="M:VIBlend.Utilities.GridTheme.LoadFromXmlStream(System.IO.Stream)">
+            <summary>
+            Loads the theme from a XML stream
+            </summary>
+            <param name="stream">The input XML stream which contains the theme definition</param>
+            <returns>True if the load is successful</returns>
+        </member>
+        <member name="M:VIBlend.Utilities.GridTheme.LoadFromXml(System.String)">
+            <summary>
+            Loads the theme from a XML file
+            </summary>
+            <param name="fileName">The name of the XML file which contains the theme definition</param>
+            <returns>True if the load is successful</returns>
+        </member>
+        <member name="M:VIBlend.Utilities.GridTheme.GetDefaultTheme(VIBlend.Utilities.VIBLEND_THEME)">
+            <summary>
+            Creates an instance of one of the default VIBlend themes
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyItemStyleNormal">
+            <summary>
+            The style of HierarchyItems in normal state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyItemStyleSelected">
+            <summary>
+            The style of HierarchyItems in selected state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyItemStyleDisabled">
+            <summary>
+            The style of HierarchyItems in disabled state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyAttributeItemStyleNormal">
+            <summary>
+            The style of summary HierarchyItems in normal state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyAttributeItemStyleSelected">
+            <summary>
+            The style of summary HierarchyItems in selected state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.HierarchyAttributeItemStyleDisabled">
+            <summary>
+            The style of summary HierarchyItems in disabled state
+            </summary>
+        </member>
+        <member name="P:VIBlend.Utilities.GridTheme.GridCellStyle">
+            <summary>
+            The style of the data grid cells
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:VIBlend.Utilities.Licensing" -->
+        <member name="F:VIBlend.Utilities.Licensing.licenseContent">
+            <summary>
+            Gets or sets the license content
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:VIBlend.Utilities.Licensing.LICheck(System.Windows.Forms.Control)" -->
+        <member name="M:VIBlend.Utilities.Licensing.ValidateLicense(System.Windows.Forms.Control)">
+            <summary>
+            Checks if the license status of a control.
+            </summary>
+            <param name="control">Control to check.</param>
+            <returns>True if the control passes the license validation.</returns>
+        </member>
+    </members>
+</doc>
