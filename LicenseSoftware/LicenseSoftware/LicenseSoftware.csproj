@@ -144,9 +144,7 @@
     </Compile>
     <None Include="LicenseSoftware.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="icons\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CustomCtrls\CustomCtrls.csproj">
       <Project>{44CFB46D-C274-45B6-9498-879F9E3AFA44}</Project>
@@ -174,7 +172,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
     <Content Include="package_games_simulation.ico" />
   </ItemGroup>
   <ItemGroup>

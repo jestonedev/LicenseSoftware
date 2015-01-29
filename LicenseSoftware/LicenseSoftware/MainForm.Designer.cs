@@ -30,21 +30,21 @@ namespace LicenseSoftware
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
-            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient8 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient9 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient5 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient10 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient11 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient12 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.ribbon1 = new System.Windows.Forms.Ribbon();
             this.ribbonOrbMenuItemSoftware = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonOrbMenuItemLicenses = new System.Windows.Forms.RibbonOrbMenuItem();
@@ -85,15 +85,15 @@ namespace LicenseSoftware
             this.ribbonButtonTabCopy = new System.Windows.Forms.RibbonButton();
             this.ribbonTabHousing = new System.Windows.Forms.RibbonTab();
             this.ribbonPanel7 = new System.Windows.Forms.RibbonPanel();
+            this.ribbonButtonEmptyLicenseReport = new System.Windows.Forms.RibbonButton();
+            this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
+            this.ribbonButtonEmptyInstallationsReport = new System.Windows.Forms.RibbonButton();
             this.mbStatusStrip1 = new MBToolStrip.MBStatusStrip();
             this.toolStripLabelHelloUser = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripLabelRecordCount = new System.Windows.Forms.ToolStripLabel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.ribbonButtonEmptyLicenseReport = new System.Windows.Forms.RibbonButton();
-            this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
-            this.ribbonButtonEmptyInstallationsReport = new System.Windows.Forms.RibbonButton();
             this.mbStatusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,6 +135,7 @@ namespace LicenseSoftware
             this.ribbon1.Tabs.Add(this.ribbonTabHousing);
             this.ribbon1.TabsMargin = new System.Windows.Forms.Padding(12, 2, 20, 0);
             this.ribbon1.Text = "ribbon1";
+            this.ribbon1.ThemeColor = System.Windows.Forms.RibbonTheme.Blue;
             // 
             // ribbonOrbMenuItemSoftware
             // 
@@ -185,67 +186,67 @@ namespace LicenseSoftware
             // 
             // ribbonRibbonButtonSoftType
             // 
-            this.ribbonRibbonButtonSoftType.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftType.Image")));
-            this.ribbonRibbonButtonSoftType.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftType.SmallImage")));
+            this.ribbonRibbonButtonSoftType.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftType.Image")));
+            this.ribbonRibbonButtonSoftType.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftType.SmallImage")));
             this.ribbonRibbonButtonSoftType.Text = "Виды ПО";
             this.ribbonRibbonButtonSoftType.ToolTip = "При нажатии на данную кнопку будет открыт справочник возможных видов программного" +
     " обеспечения";
-            this.ribbonRibbonButtonSoftType.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftType.ToolTipImage")));
+            this.ribbonRibbonButtonSoftType.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftType.ToolTipImage")));
             this.ribbonRibbonButtonSoftType.ToolTipTitle = "Виды ПО";
             this.ribbonRibbonButtonSoftType.Click += new System.EventHandler(this.ribbonOrbRecentItemSoftType_Click);
             // 
             // ribbonRibbonButtonSuppliers
             // 
-            this.ribbonRibbonButtonSuppliers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSuppliers.Image")));
-            this.ribbonRibbonButtonSuppliers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSuppliers.SmallImage")));
+            this.ribbonRibbonButtonSuppliers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSuppliers.Image")));
+            this.ribbonRibbonButtonSuppliers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSuppliers.SmallImage")));
             this.ribbonRibbonButtonSuppliers.Text = "Поставщики ПО";
             this.ribbonRibbonButtonSuppliers.ToolTip = "При нажатии на данную кнопку будет открыт справочник поставщиков программного обе" +
     "спечения";
-            this.ribbonRibbonButtonSuppliers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSuppliers.ToolTipImage")));
+            this.ribbonRibbonButtonSuppliers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSuppliers.ToolTipImage")));
             this.ribbonRibbonButtonSuppliers.ToolTipTitle = "Поставщики ПО";
             this.ribbonRibbonButtonSuppliers.Click += new System.EventHandler(this.ribbonOrbRecentItemSuppliers_Click);
             // 
             // ribbonRibbonButtonSoftMakers
             // 
-            this.ribbonRibbonButtonSoftMakers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftMakers.Image")));
-            this.ribbonRibbonButtonSoftMakers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftMakers.SmallImage")));
+            this.ribbonRibbonButtonSoftMakers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftMakers.Image")));
+            this.ribbonRibbonButtonSoftMakers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftMakers.SmallImage")));
             this.ribbonRibbonButtonSoftMakers.Text = "Разработчики ПО";
             this.ribbonRibbonButtonSoftMakers.ToolTip = "При нажатии на данную кнопку будет открыт справочник разработчиков программного о" +
     "беспечения";
-            this.ribbonRibbonButtonSoftMakers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemSoftMakers.ToolTipImage")));
+            this.ribbonRibbonButtonSoftMakers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonSoftMakers.ToolTipImage")));
             this.ribbonRibbonButtonSoftMakers.ToolTipTitle = "Разработчики ПО";
             this.ribbonRibbonButtonSoftMakers.Click += new System.EventHandler(this.ribbonOrbRecentItemSoftMakers_Click);
             // 
             // ribbonRibbonButtonDocTypes
             // 
-            this.ribbonRibbonButtonDocTypes.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemDocTypes.Image")));
-            this.ribbonRibbonButtonDocTypes.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemDocTypes.SmallImage")));
+            this.ribbonRibbonButtonDocTypes.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonDocTypes.Image")));
+            this.ribbonRibbonButtonDocTypes.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonDocTypes.SmallImage")));
             this.ribbonRibbonButtonDocTypes.Text = "Виды документов";
             this.ribbonRibbonButtonDocTypes.ToolTip = "При нажатии на данную кнопку будет открыт справочник видов документов-оснований н" +
     "а приобретение лицензии";
-            this.ribbonRibbonButtonDocTypes.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemDocTypes.ToolTipImage")));
+            this.ribbonRibbonButtonDocTypes.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonDocTypes.ToolTipImage")));
             this.ribbonRibbonButtonDocTypes.ToolTipTitle = "Виды документов";
             this.ribbonRibbonButtonDocTypes.Click += new System.EventHandler(this.ribbonOrbRecentItemDocTypes_Click);
             // 
             // ribbonRibbonButtonLicTypes
             // 
-            this.ribbonRibbonButtonLicTypes.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemLicTypes.Image")));
-            this.ribbonRibbonButtonLicTypes.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemLicTypes.SmallImage")));
+            this.ribbonRibbonButtonLicTypes.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonLicTypes.Image")));
+            this.ribbonRibbonButtonLicTypes.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonLicTypes.SmallImage")));
             this.ribbonRibbonButtonLicTypes.Text = "Виды лицензий";
             this.ribbonRibbonButtonLicTypes.ToolTip = "При нажатии на данную кнопку будет открыт справочник видов лицензий на программно" +
     "е обеспечение";
-            this.ribbonRibbonButtonLicTypes.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemLicTypes.ToolTipImage")));
+            this.ribbonRibbonButtonLicTypes.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonLicTypes.ToolTipImage")));
             this.ribbonRibbonButtonLicTypes.ToolTipTitle = "Виды лицензий";
             this.ribbonRibbonButtonLicTypes.Click += new System.EventHandler(this.ribbonOrbRecentItemLicTypes_Click);
             // 
             // ribbonRibbonButtonInstallers
             // 
-            this.ribbonRibbonButtonInstallers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemInstallers.Image")));
-            this.ribbonRibbonButtonInstallers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemInstallers.SmallImage")));
+            this.ribbonRibbonButtonInstallers.Image = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonInstallers.Image")));
+            this.ribbonRibbonButtonInstallers.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonInstallers.SmallImage")));
             this.ribbonRibbonButtonInstallers.Text = "Установщики ПО";
             this.ribbonRibbonButtonInstallers.ToolTip = "При нажатии на данную кнопку будет открыт справочник установщиков программного об" +
     "еспечения";
-            this.ribbonRibbonButtonInstallers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbRecentItemInstallers.ToolTipImage")));
+            this.ribbonRibbonButtonInstallers.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonRibbonButtonInstallers.ToolTipImage")));
             this.ribbonRibbonButtonInstallers.ToolTipTitle = "Установщики ПО";
             this.ribbonRibbonButtonInstallers.Click += new System.EventHandler(this.ribbonOrbRecentItemInstallers_Click);
             // 
@@ -381,13 +382,14 @@ namespace LicenseSoftware
             // 
             // ribbonButtonSearch
             // 
-            this.ribbonButtonSearch.CheckOnClick = true;
             this.ribbonButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSearch.Image")));
             this.ribbonButtonSearch.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
             this.ribbonButtonSearch.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSearch.SmallImage")));
             this.ribbonButtonSearch.Text = "Поиск";
-            this.ribbonButtonSearch.ToolTip = "";
+            this.ribbonButtonSearch.ToolTip = "При нажатии на данную кнопку будет открыто диалоговое окно для настройки критерие" +
+    "в поиска данных";
             this.ribbonButtonSearch.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSearch.ToolTipImage")));
+            this.ribbonButtonSearch.ToolTipTitle = "Фильтрация/поиск (Ctrl+F)";
             this.ribbonButtonSearch.Click += new System.EventHandler(this.ribbonButtonSearch_Click);
             // 
             // ribbonButtonLast
@@ -529,6 +531,25 @@ namespace LicenseSoftware
             this.ribbonPanel7.Items.Add(this.ribbonButtonEmptyLicenseReport);
             this.ribbonPanel7.Text = "Отчеты по лицензиям";
             // 
+            // ribbonButtonEmptyLicenseReport
+            // 
+            this.ribbonButtonEmptyLicenseReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.Image")));
+            this.ribbonButtonEmptyLicenseReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.SmallImage")));
+            this.ribbonButtonEmptyLicenseReport.Text = "Шаблон кнопки отчета";
+            this.ribbonButtonEmptyLicenseReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.ToolTipImage")));
+            // 
+            // ribbonPanel4
+            // 
+            this.ribbonPanel4.Items.Add(this.ribbonButtonEmptyInstallationsReport);
+            this.ribbonPanel4.Text = "Отчеты по установкам";
+            // 
+            // ribbonButtonEmptyInstallationsReport
+            // 
+            this.ribbonButtonEmptyInstallationsReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.Image")));
+            this.ribbonButtonEmptyInstallationsReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.SmallImage")));
+            this.ribbonButtonEmptyInstallationsReport.Text = "Шаблон кнопки";
+            this.ribbonButtonEmptyInstallationsReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.ToolTipImage")));
+            // 
             // mbStatusStrip1
             // 
             this.mbStatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
@@ -581,72 +602,53 @@ namespace LicenseSoftware
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.ShowDocumentIcon = true;
             this.dockPanel.Size = new System.Drawing.Size(1008, 598);
-            dockPanelGradient1.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            dockPanelGradient1.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
-            tabGradient1.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            tabGradient1.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            tabGradient1.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            autoHideStripSkin1.TabGradient = tabGradient1;
-            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
-            tabGradient2.EndColor = System.Drawing.Color.White;
-            tabGradient2.StartColor = System.Drawing.Color.White;
-            tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-            dockPanelGradient2.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            dockPanelGradient2.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
-            tabGradient3.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            tabGradient3.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient3.StartColor = System.Drawing.Color.White;
-            tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
-            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-            tabGradient4.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            tabGradient4.TextColor = System.Drawing.Color.Black;
-            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
-            tabGradient5.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            tabGradient5.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            tabGradient5.TextColor = System.Drawing.Color.Black;
-            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
-            dockPanelGradient3.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            dockPanelGradient3.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
-            tabGradient6.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient6.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            tabGradient6.TextColor = System.Drawing.Color.Black;
-            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
-            tabGradient7.EndColor = System.Drawing.Color.Transparent;
-            tabGradient7.StartColor = System.Drawing.Color.Transparent;
-            tabGradient7.TextColor = System.Drawing.Color.Gray;
-            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
-            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
-            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-            this.dockPanel.Skin = dockPanelSkin1;
+            dockPanelGradient4.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            dockPanelGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
+            tabGradient8.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            tabGradient8.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            tabGradient8.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            autoHideStripSkin2.TabGradient = tabGradient8;
+            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
+            tabGradient9.EndColor = System.Drawing.Color.White;
+            tabGradient9.StartColor = System.Drawing.Color.White;
+            tabGradient9.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
+            dockPanelGradient5.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            dockPanelGradient5.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
+            tabGradient10.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            tabGradient10.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient10.StartColor = System.Drawing.Color.White;
+            tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
+            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
+            tabGradient11.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient11.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            tabGradient11.TextColor = System.Drawing.Color.Black;
+            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
+            tabGradient12.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            tabGradient12.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            tabGradient12.TextColor = System.Drawing.Color.Black;
+            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
+            dockPanelGradient6.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            dockPanelGradient6.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
+            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
+            tabGradient13.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient13.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            tabGradient13.TextColor = System.Drawing.Color.Black;
+            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
+            tabGradient14.EndColor = System.Drawing.Color.Transparent;
+            tabGradient14.StartColor = System.Drawing.Color.Transparent;
+            tabGradient14.TextColor = System.Drawing.Color.Gray;
+            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
+            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
+            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
+            this.dockPanel.Skin = dockPanelSkin2;
             this.dockPanel.TabIndex = 5;
             this.dockPanel.ActiveDocumentChanged += new System.EventHandler(this.dockPanel_ActiveDocumentChanged);
-            // 
-            // ribbonButtonEmptyLicenseReport
-            // 
-            this.ribbonButtonEmptyLicenseReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.Image")));
-            this.ribbonButtonEmptyLicenseReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.SmallImage")));
-            this.ribbonButtonEmptyLicenseReport.Text = "Шаблон кнопки отчета";
-            this.ribbonButtonEmptyLicenseReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.ToolTipImage")));
-            // 
-            // ribbonPanel4
-            // 
-            this.ribbonPanel4.Items.Add(this.ribbonButtonEmptyInstallationsReport);
-            this.ribbonPanel4.Text = "Отчеты по установкам";
-            // 
-            // ribbonButtonEmptyInstallationsReport
-            // 
-            this.ribbonButtonEmptyInstallationsReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.Image")));
-            this.ribbonButtonEmptyInstallationsReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.SmallImage")));
-            this.ribbonButtonEmptyInstallationsReport.Text = "Шаблон кнопки";
-            this.ribbonButtonEmptyInstallationsReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.ToolTipImage")));
             // 
             // MainForm
             // 

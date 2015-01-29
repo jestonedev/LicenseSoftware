@@ -13,7 +13,7 @@ namespace LicenseSoftware.Viewport
             switch (viewportType)
             {
                 case ViewportType.SoftwareViewport:
-                    break;
+                    return new SoftwareViewport(menuCallback);
                 case ViewportType.LicensesViewport:
                     break;
                 case ViewportType.InstallationsViewport:

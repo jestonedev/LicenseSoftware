@@ -18,12 +18,14 @@ namespace LicenseSoftware.DataModels
         private static string selectQuery = "SELECT * FROM Software WHERE Deleted = 0";
         private static string deleteQuery = "UPDATE Software SET Deleted = 1 WHERE [ID Software] = @IDSoftware";
         private static string insertQuery = @"INSERT INTO Software
-                            ([ID SoftType], [ID SoftMaker], Software)
-                            VALUES (@IDSoftType, @IDSoftMaker, @Software)";
+                            ([ID SoftType], [ID SoftMaker], Software, [Version])
+                            VALUES (@IDSoftType, @IDSoftMaker, @Software, @Version)";
         private static string updateQuery = 
-                @"UPDATE Software SET [ID SoftType] = @IDSoftType, [ID SoftMaker] = @IDSoftMaker, Software = @Software WHERE [ID Software] = @IDSoftware";
+                @"UPDATE Software SET [ID SoftType] = @IDSoftType, [ID SoftMaker] = @IDSoftMaker, Software = @Software, [Version] = @Version 
+                  WHERE [ID Software] = @IDSoftware";
         private static string tableName = "Software";
 
+        public bool EditingNewRecord { get; set; }
         private SoftwareDataModel(ToolStripProgressBar progressBar, int incrementor): base(progressBar, incrementor, selectQuery, tableName)
         {   
         }
@@ -81,6 +83,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", software.IdSoftType));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftMaker", software.IdSoftMaker));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("Software", software.SoftwareName));
+                command.Parameters.Add(DBConnection.CreateParameter<string>("Version", software.Version));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftware", software.IdSoftware));
                 try
                 {
@@ -113,6 +116,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IdSoftType", software.IdSoftType));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IdSoftMaker", software.IdSoftMaker));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("Software", software.SoftwareName));
+                command.Parameters.Add(DBConnection.CreateParameter<string>("Version", software.Version));
 
                 try
                 {

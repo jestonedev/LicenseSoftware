@@ -8,28 +8,34 @@ using System.Data.Common;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace Security
 {
     public static class AccessControl
     {
         private static uint priveleges;
-        private static string query = @"SELECT dbo.f_user_privileges()";
+        private static string queryUser = @"SELECT TOP 1 Privilege
+                                        FROM
+                                            dbo.ACLUsers
+                                        WHERE
+                                            UserName = suser_sname()";
 
         public static void LoadPriveleges()
         {
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
-                command.CommandText = query;
                 try
                 {
+                    command.CommandText = queryUser;
                     DataTable table = connection.SqlSelectTable("privileges", command);
                     if (table.Rows.Count == 0)
                     {
                         MessageBox.Show("Запрос не вернул привелегии для данного пользователя", "Неизвестная ошибка",
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                         priveleges = 0;
+                        return;
                     }
                     priveleges = Convert.ToUInt32(table.Rows[0][0], CultureInfo.InvariantCulture);
                 }

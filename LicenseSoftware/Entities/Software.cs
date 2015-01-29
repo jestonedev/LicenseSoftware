@@ -10,7 +10,8 @@ namespace LicenseSoftware.Entities
         public int? IdSoftware { get; set; }
         public int? IdSoftType { get; set; }
         public int? IdSoftMaker { get; set; }
-        public string SoftwareName { get; set; } 
+        public string SoftwareName { get; set; }
+        public string Version { get; set; } 
 
         public override bool Equals(object obj)
         {
@@ -31,9 +32,10 @@ namespace LicenseSoftware.Entities
                     return false;
                 else
             return first.IdSoftware == second.IdSoftware &&
-                first.SoftwareName == second.SoftwareName &&
+                first.IdSoftType == second.IdSoftType &&
                 first.IdSoftMaker == second.IdSoftMaker &&
-                first.SoftwareName == second.SoftwareName;
+                first.SoftwareName == second.SoftwareName &&
+                first.Version == second.Version;
         }
 
         public static bool operator !=(Software first, Software second)

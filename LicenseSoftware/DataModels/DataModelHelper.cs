@@ -29,5 +29,17 @@ namespace LicenseSoftware.DataModels
                 else
                     return list2;
         }
+
+        public static IEnumerable<int> GetDepartmentSubUnits(int department)
+        {
+            DepartmentsDataModel departments = DepartmentsDataModel.GetInstance();
+            List<int> departmentIDs = new List<int>();
+            foreach (DataRow row in departments.Select().Rows)
+                if (row["ID Parent Department"] != DBNull.Value && (int)row["ID Parent Department"] == department)
+                    departmentIDs.Add((int)row["ID Department"]);
+            foreach (int departmentID in departmentIDs)
+                departmentIDs.Union(GetDepartmentSubUnits(departmentID));
+            return departmentIDs;
+        }
     }
 }

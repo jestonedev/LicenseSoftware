@@ -235,32 +235,32 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        public bool HasAssocLicenses()
+        public virtual bool HasAssocLicenses()
         {
             return false;
         }
 
-        public bool HasAssocInstallations()
+        public virtual bool HasAssocInstallations()
         {
             return false;
         }
 
-        public bool HasAssocLicKeys()
+        public virtual bool HasAssocLicKeys()
         {
             return false;
         }
 
-        public void ShowAssocLicenses()
+        public virtual void ShowAssocLicenses()
         {
             throw new ViewportException("Не реализовано");
         }
 
-        public void ShowAssocInstallations()
+        public virtual void ShowAssocInstallations()
         {
             throw new ViewportException("Не реализовано");
         }
 
-        public void ShowAssocLicKeys()
+        public virtual void ShowAssocLicKeys()
         {
             throw new ViewportException("Не реализовано");
         }

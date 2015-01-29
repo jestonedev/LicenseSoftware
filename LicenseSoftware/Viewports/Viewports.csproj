@@ -105,7 +105,7 @@
     <Compile Include="SoftLicDocTypesViewport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SoftSuppliers.cs">
+    <Compile Include="SoftSuppliersViewport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SoftMakersViewport.cs">
@@ -115,6 +115,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SoftTypesViewport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SoftwareViewport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Viewport.cs">
@@ -167,8 +170,8 @@
     <EmbeddedResource Include="SoftLicDocTypesViewport.resx">
       <DependentUpon>SoftLicDocTypesViewport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SoftSuppliers.resx">
-      <DependentUpon>SoftSuppliers.cs</DependentUpon>
+    <EmbeddedResource Include="SoftSuppliersViewport.resx">
+      <DependentUpon>SoftSuppliersViewport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SoftMakersViewport.resx">
       <DependentUpon>SoftMakersViewport.cs</DependentUpon>
@@ -178,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SoftTypesViewport.resx">
       <DependentUpon>SoftTypesViewport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SoftwareViewport.resx">
+      <DependentUpon>SoftwareViewport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Viewport.resx">
       <DependentUpon>Viewport.cs</DependentUpon>
