@@ -21,7 +21,7 @@
       <Value Profile="(Default)">cp866</Value>
     </Setting>
     <Setting Name="ActivityManagerConfigsPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\nas\media$\ActivityManager\templates\registry</Value>
+      <Value Profile="(Default)">\\nas\media$\ActivityManager\templates\software_licenses</Value>
     </Setting>
     <Setting Name="DataModelsCallbackUpdateTimeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>

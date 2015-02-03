@@ -29,13 +29,13 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += "[ID SoftType] = '" + comboBoxSoftwareType.SelectedValue.ToString() + "'";
+                filter += String.Format(CultureInfo.InvariantCulture, "[ID SoftType] = '{0}'", comboBoxSoftwareType.SelectedValue.ToString());
             }
             if ((checkBoxSoftwareMakerEnable.Checked) && (comboBoxSoftwareMaker.SelectedValue != null))
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += "[ID SoftMaker] = '" + comboBoxSoftwareMaker.SelectedValue.ToString() + "'";
+                filter += String.Format(CultureInfo.InvariantCulture, "[ID SoftMaker] = '{0}'", comboBoxSoftwareMaker.SelectedValue.ToString());
             }
             if (checkBoxSoftwareNameEnable.Checked)
             {
@@ -85,11 +85,11 @@ namespace LicenseSoftware.SearchForms
 
         private void vButtonSearch_Click(object sender, EventArgs e)
         {
-            if ((checkBoxSoftwareMakerEnable.Checked) && (comboBoxSoftwareMaker.SelectedValue == null))
+            if ((checkBoxSoftwareNameEnable.Checked) && String.IsNullOrEmpty(textBoxSoftwareName.Text.Trim()))
             {
-                MessageBox.Show("Выберите разработчика ПО или уберите галочку поиска по разработчику ПО", "Ошибка", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                comboBoxSoftwareMaker.Focus();
+                MessageBox.Show("Введите наименование ПО или уберите галочку поиска по наименованию ПО",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                textBoxSoftwareName.Focus();
                 return;
             }
             if ((checkBoxSoftwareTypeEnable.Checked) && (comboBoxSoftwareType.SelectedValue == null))
@@ -99,11 +99,11 @@ namespace LicenseSoftware.SearchForms
                 comboBoxSoftwareType.Focus();
                 return;
             }
-            if ((checkBoxSoftwareNameEnable.Checked) && String.IsNullOrEmpty(textBoxSoftwareName.Text.Trim()))
+            if ((checkBoxSoftwareMakerEnable.Checked) && (comboBoxSoftwareMaker.SelectedValue == null))
             {
-                MessageBox.Show("Введите наименование ПО или уберите галочку поиска по наименованию ПО",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                textBoxSoftwareName.Focus();
+                MessageBox.Show("Выберите разработчика ПО или уберите галочку поиска по разработчику ПО", "Ошибка", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                comboBoxSoftwareMaker.Focus();
                 return;
             }
             this.DialogResult = System.Windows.Forms.DialogResult.OK;

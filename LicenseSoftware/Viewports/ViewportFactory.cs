@@ -15,11 +15,11 @@ namespace LicenseSoftware.Viewport
                 case ViewportType.SoftwareViewport:
                     return new SoftwareViewport(menuCallback);
                 case ViewportType.LicensesViewport:
-                    break;
+                    return new LicensesViewport(menuCallback);
                 case ViewportType.InstallationsViewport:
                     break;
                 case ViewportType.LicenseKeysViewport:
-                    break;
+                    return new SoftLicKeysViewport(menuCallback);
                 case ViewportType.InstallatorsViewport:
                     return new InstallatorsViewport(menuCallback);
                 case ViewportType.SoftLicDocTypesViewport:

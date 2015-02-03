@@ -93,6 +93,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="SearchLicensesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchLicensesForm.Designer.cs">
+      <DependentUpon>SearchLicensesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchSoftwareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     <Compile Include="SoftLicDocTypesViewport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SoftLicKeysViewport.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SoftSuppliersViewport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +124,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SoftTypesViewport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LicensesViewport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SoftwareViewport.cs">
@@ -159,6 +171,9 @@
     <EmbeddedResource Include="InstallatorsViewport.resx">
       <DependentUpon>InstallatorsViewport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SearchLicensesForm.resx">
+      <DependentUpon>SearchLicensesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SearchSoftwareForm.resx">
       <DependentUpon>SearchSoftwareForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SoftLicDocTypesViewport.resx">
       <DependentUpon>SoftLicDocTypesViewport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SoftLicKeysViewport.resx">
+      <DependentUpon>SoftLicKeysViewport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SoftSuppliersViewport.resx">
       <DependentUpon>SoftSuppliersViewport.cs</DependentUpon>
@@ -181,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SoftTypesViewport.resx">
       <DependentUpon>SoftTypesViewport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LicensesViewport.resx">
+      <DependentUpon>LicensesViewport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SoftwareViewport.resx">
       <DependentUpon>SoftwareViewport.cs</DependentUpon>

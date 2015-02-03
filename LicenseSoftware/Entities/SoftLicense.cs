@@ -15,8 +15,8 @@ namespace LicenseSoftware.Entities
         public int? IdDepartment { get; set; }
         public string DocNumber { get; set; }
         public int? InstallationsCount { get; set; }
-        public DateTime? BuyLicenseData { get; set; }
-        public DateTime? ExpireLicenseData { get; set; }
+        public DateTime? BuyLicenseDate { get; set; }
+        public DateTime? ExpireLicenseDate { get; set; }
         public string Description { get; set; }
         
 
@@ -44,8 +44,11 @@ namespace LicenseSoftware.Entities
                         first.IdDocType == second.IdDocType &&
                         first.IdSupplier == second.IdSupplier &&
                         first.IdDepartment == second.IdDepartment &&
-                        first.BuyLicenseData == second.BuyLicenseData &&
-                        first.ExpireLicenseData == second.ExpireLicenseData;
+                        first.BuyLicenseDate == second.BuyLicenseDate &&
+                        first.ExpireLicenseDate == second.ExpireLicenseDate &&
+                        first.DocNumber == second.DocNumber &&
+                        first.InstallationsCount == second.InstallationsCount &&
+                        first.Description == second.Description;
         }
 
         public static bool operator !=(SoftLicense first, SoftLicense second)

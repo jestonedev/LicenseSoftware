@@ -38,6 +38,7 @@ namespace LicenseSoftware.DataModels
         protected override void ConfigureTable()
         {
             Table.PrimaryKey = new DataColumn[] { Table.Columns["ID License"] };
+            Table.Columns["InstallationsCount"].DefaultValue = 1;
         }
 
         public static SoftLicensesDataModel GetInstance()
@@ -92,8 +93,8 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDDepartment", softLicense.IdDepartment));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("DocNumber", softLicense.DocNumber));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("InstallationsCount", softLicense.InstallationsCount));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("BuyLicenseDate", softLicense.BuyLicenseData));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("ExpireLicenseDate", softLicense.ExpireLicenseData));
+                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("BuyLicenseDate", softLicense.BuyLicenseDate));
+                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("ExpireLicenseDate", softLicense.ExpireLicenseDate));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("Description", softLicense.Description));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softLicense.IdLicense));
                 try
@@ -131,8 +132,8 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDDepartment", softLicense.IdDepartment));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("DocNumber", softLicense.DocNumber));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("InstallationsCount", softLicense.InstallationsCount));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("BuyLicenseDate", softLicense.BuyLicenseData));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("ExpireLicenseDate", softLicense.ExpireLicenseData));
+                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("BuyLicenseDate", softLicense.BuyLicenseDate));
+                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("ExpireLicenseDate", softLicense.ExpireLicenseDate));
                 command.Parameters.Add(DBConnection.CreateParameter<string>("Description", softLicense.Description));
                 try
                 {

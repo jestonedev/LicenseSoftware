@@ -15,7 +15,7 @@ namespace LicenseSoftware.DataModels
     public sealed class DepartmentsDataModel : DataModel
     {
         private static DepartmentsDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM Departments";
+        private static string selectQuery = "SELECT * FROM Departments ORDER BY [ID Parent Department], Department";
         private static string accessQuery = @"SELECT ISNULL(d.[ID Department],0) AS [ID Department], d1.[ID Parent Department]
                                                 FROM
                                                   dbo.ACLUsers u
@@ -50,6 +50,8 @@ namespace LicenseSoftware.DataModels
             resultDepartments.Columns.Add("ID Parent Department").DataType = typeof(int);
             resultDepartments.Columns.Add("Department").DataType = typeof(string);
             resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
+            resultDepartments.Columns.Add("Level").DataType = typeof(int);
+            resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
@@ -87,7 +89,8 @@ namespace LicenseSoftware.DataModels
                         row["ID Department"],
                         row["ID Parent Department"],
                         row["Department"],
-                        true
+                        true,
+                        0
                     });
                 else
                     if (parentDepartmentsIDs.Contains((int)row["ID Department"]))
@@ -95,8 +98,80 @@ namespace LicenseSoftware.DataModels
                         row["ID Department"],
                         row["ID Parent Department"],
                         row["Department"],
-                        false
+                        false,
+                        0
                     });
+            return TabulateResultDepartments(SortResultDepartments(resultDepartments));
+        }
+
+        private DataTable TabulateResultDepartments(DataTable departments)
+        {
+            foreach (DataRow department in departments.Rows)
+            {
+                DataRow currentRow = department;
+                int level = 0;
+                while (true)
+                {
+                    if (currentRow["ID Parent Department"] == DBNull.Value)
+                        break;
+                    currentRow = departments.Rows.Find(currentRow["ID Parent Department"]);
+                    level += 1;
+                }
+                department["Level"] = level;
+            }
+            foreach (DataRow department in departments.Rows)
+            {
+                int level = (int)department["Level"];
+                for (int i = 0; i < level; i++)
+                    department["Department"] = "     "+department["Department"];
+            }
+            return departments;
+        }
+
+        private DataTable SortResultDepartments(DataTable departments)
+        {
+            DataTable resultDepartments = new DataTable("Departments");
+            resultDepartments.Columns.Add("ID Department").DataType = typeof(int);
+            resultDepartments.Columns.Add("ID Parent Department").DataType = typeof(int);
+            resultDepartments.Columns.Add("Department").DataType = typeof(string);
+            resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
+            resultDepartments.Columns.Add("Level").DataType = typeof(int);
+            resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
+            foreach (DataRow department in departments.Rows)
+            {
+                int index =  -1;  //По умолчанию вставляем в конец
+                int parentIndex = -1;
+                for (int i = 0; i < resultDepartments.Rows.Count; i ++ )
+                {
+                    //Ищем точку, в которую необходимо вставить запись
+                    if (department["ID Parent Department"] == DBNull.Value)
+                        break;
+                    if ((int)department["ID Parent Department"] == (int)resultDepartments.Rows[i]["ID Department"])
+                        parentIndex = i;
+                    else
+                        if (parentIndex != -1 &&
+                            (resultDepartments.Rows[i]["ID Parent Department"] == DBNull.Value ||
+                            (int)resultDepartments.Rows[i]["ID Parent Department"] != (int)resultDepartments.Rows[parentIndex]["ID Department"]))
+                        {
+                            index = i;
+                            break;
+                        }
+                }
+                DataRow row = resultDepartments.NewRow();
+                row["ID Department"] = department["ID Department"];
+                row["ID Parent Department"] = department["ID Parent Department"];
+                row["Department"] = department["Department"];
+                row["AllowSelect"] = department["AllowSelect"];
+                row["Level"] = department["Level"];
+                if (index == -1 && parentIndex == -1)
+                    resultDepartments.Rows.Add(row);
+                else
+                    if (index == -1 && parentIndex != -1)
+                        resultDepartments.Rows.InsertAt(row, parentIndex + 1);
+                    else
+                        if (index != -1)
+                            resultDepartments.Rows.InsertAt(row, index);
+            }
             return resultDepartments;
         }
 

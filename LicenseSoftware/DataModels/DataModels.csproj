@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalcDataModelsUpdater.cs" />
+    <Compile Include="CalcDataModels\CalcDataModelSoftwareConcat.cs" />
     <Compile Include="DataModelsCallbackUpdater.cs" />
     <Compile Include="DataModelHelper.cs" />
     <Compile Include="DataModels\SoftTypesDataModel.cs" />

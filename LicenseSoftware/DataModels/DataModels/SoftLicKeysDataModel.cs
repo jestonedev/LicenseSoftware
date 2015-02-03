@@ -54,7 +54,7 @@ namespace LicenseSoftware.DataModels
             using (DbCommand command = DBConnection.CreateCommand())
             {
                 command.CommandText = deleteQuery;
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("ID LicenseKey", id));
+                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicenseKey", id));
                 try
                 {
                     return connection.SqlModifyQuery(command);

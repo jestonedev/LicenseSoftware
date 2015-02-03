@@ -70,8 +70,6 @@ namespace LicenseSoftware
             SoftMakersDataModel.GetInstance(toolStripProgressBar, 1);
             SoftSuppliersDataModel.GetInstance(toolStripProgressBar, 1);
             SoftTypesDataModel.GetInstance(toolStripProgressBar, 1);
-
-            DepartmentsDataModel.GetInstance().SelectVisibleDepartments();
         }
 
         private void ribbonButtonTabClose_Click(object sender, EventArgs e)
