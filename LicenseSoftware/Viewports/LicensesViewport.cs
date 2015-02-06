@@ -491,6 +491,7 @@ namespace LicenseSoftware.Viewport
             softLicDocTypes.Select();
             softSuppliers.Select();
             licenses.Select();
+            softwareDM.Select();
 
             DataSet ds = DataSetManager.DataSet;
 
@@ -510,12 +511,44 @@ namespace LicenseSoftware.Viewport
             v_departments.DataSource = departments.SelectVisibleDepartments();
 
             v_software = new BindingSource();
-            v_software.DataSource = softwareDM.Select();
+            v_software.DataMember = "SoftwareConcat";
+            v_software.DataSource = ds;
 
             v_licenses = new BindingSource();
             v_licenses.CurrentItemChanged += new EventHandler(v_licenses_CurrentItemChanged);
             v_licenses.DataMember = "SoftLicenses";
             v_licenses.DataSource = ds;
+            RebuildFilter();
+
+            DataBind();
+
+            licenses.Select().RowChanged += LicensesViewport_RowChanged;
+            licenses.Select().RowDeleted += LicensesViewport_RowDeleted;
+            departments.Select().RowChanged += Departments_RowChanged;
+            departments.Select().RowDeleted += Departments_RowDeleted;
+
+            dataGridView.RowCount = v_licenses.Count;
+            SetViewportCaption();
+
+            softwareDM.RefreshEvent += softwareDM_RefreshEvent;
+            ViewportHelper.SetDoubleBuffered(dataGridView);
+            is_editable = true;
+        }
+
+        private void Departments_RowDeleted(object sender, DataRowChangeEventArgs e)
+        {
+            v_departments.DataSource = departments.SelectVisibleDepartments();
+            RebuildFilter();
+        }
+
+        private void Departments_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            v_departments.DataSource = departments.SelectVisibleDepartments();
+            RebuildFilter();
+        }
+
+        private void RebuildFilter()
+        {
             string Filter = StaticFilter;
             // Фильтрация по правам на департаменты
             if (!String.IsNullOrEmpty(Filter))
@@ -524,23 +557,12 @@ namespace LicenseSoftware.Viewport
             for (int i = 0; i < v_departments.Count; i++)
                 if ((bool)((DataRowView)v_departments[i])["AllowSelect"])
                     Filter += ((DataRowView)v_departments[i])["ID Department"] + ",";
+            Filter = Filter.TrimEnd(',');
             Filter += ")";
             if (!String.IsNullOrEmpty(Filter) && !String.IsNullOrEmpty(DynamicFilter))
                 Filter += " AND ";
             Filter += DynamicFilter;
             v_licenses.Filter = Filter;
-
-            DataBind();
-
-            licenses.Select().RowChanged += LicensesViewport_RowChanged;
-            licenses.Select().RowDeleted += LicensesViewport_RowDeleted;
-
-            dataGridView.RowCount = v_licenses.Count;
-            SetViewportCaption();
-
-            softwareDM.RefreshEvent += softwareDM_RefreshEvent;
-            ViewportHelper.SetDoubleBuffered(dataGridView);
-            is_editable = true;
         }
 
         public override bool CanSearchRecord()
@@ -586,9 +608,6 @@ namespace LicenseSoftware.Viewport
         void softwareDM_RefreshEvent(object sender, EventArgs e)
         {
             dataGridView.Refresh();
-            if (v_licenses.Position > -1 &&
-                (((DataRowView)v_licenses[v_licenses.Position])["ID Software"] != DBNull.Value))
-            comboBoxSoftwareID.SelectedValue = ((DataRowView)v_licenses[v_licenses.Position])["ID Software"];
         }
 
         public override bool CanInsertRecord()
@@ -644,6 +663,8 @@ namespace LicenseSoftware.Viewport
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.ForceCloseDetachedViewports();
             }
+            if (CalcDataModelLicensesConcat.HasInstance())
+                CalcDataModelLicensesConcat.GetInstance().Refresh(EntityType.License, (int)((DataRowView)v_licenses.Current)["ID License"], true);
         }
 
         public override bool CanDeleteRecord()
@@ -727,6 +748,8 @@ namespace LicenseSoftware.Viewport
             viewportState = ViewportState.ReadState;
             MenuCallback.EditingStateUpdate();
             SetViewportCaption();
+            if (CalcDataModelLicensesConcat.HasInstance())
+                CalcDataModelLicensesConcat.GetInstance().Refresh(EntityType.License, softLicense.IdLicense, true);
         }
 
         public override void CancelRecord()
@@ -806,6 +829,8 @@ namespace LicenseSoftware.Viewport
                 e.Cancel = true;
             licenses.Select().RowChanged -= LicensesViewport_RowChanged;
             licenses.Select().RowDeleted -= LicensesViewport_RowDeleted;
+            departments.Select().RowChanged -= Departments_RowChanged;
+            departments.Select().RowDeleted -= Departments_RowDeleted;
             softwareDM.RefreshEvent -= softwareDM_RefreshEvent;
         }
 
@@ -815,6 +840,8 @@ namespace LicenseSoftware.Viewport
                 licenses.EditingNewRecord = false;
             licenses.Select().RowChanged -= LicensesViewport_RowChanged;
             licenses.Select().RowDeleted -= LicensesViewport_RowDeleted;
+            departments.Select().RowChanged -= Departments_RowChanged;
+            departments.Select().RowDeleted -= Departments_RowDeleted;
             softwareDM.RefreshEvent -= softwareDM_RefreshEvent;
             base.Close();
         }
@@ -902,7 +929,7 @@ namespace LicenseSoftware.Viewport
             CheckViewportModifications();
         }
 
-        private void comboBoxSoftwareID_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxSoftwareID_SelectedValueChanged(object sender, EventArgs e)
         {
             CheckViewportModifications();
         }
@@ -1366,8 +1393,8 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftwareID.Name = "comboBoxSoftwareID";
             this.comboBoxSoftwareID.Size = new System.Drawing.Size(220, 23);
             this.comboBoxSoftwareID.TabIndex = 0;
-            this.comboBoxSoftwareID.SelectedIndexChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedIndexChanged);
             this.comboBoxSoftwareID.DropDownClosed += new System.EventHandler(this.comboBoxSoftwareID_DropDownClosed);
+            this.comboBoxSoftwareID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedValueChanged);
             this.comboBoxSoftwareID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxSoftwareID_KeyUp);
             this.comboBoxSoftwareID.Leave += new System.EventHandler(this.comboBoxSoftwareID_Leave);
             // 

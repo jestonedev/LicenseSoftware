@@ -21,6 +21,7 @@ namespace LicenseSoftware.SearchForms
         SoftLicTypesDataModel softLicTypes = null;
         DepartmentsDataModel departments = null;
         SoftLicDocTypesDataModel softLicDocTypes = null;
+        CalcDataModelSoftwareConcat software = null;
 
 
         BindingSource v_software = null;
@@ -57,13 +58,17 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID Department] = '{0}'", comboBoxDepartmentID.SelectedValue.ToString());
+                IEnumerable<int> subUnits = DataModelHelper.GetDepartmentSubUnits((int)comboBoxDepartmentID.SelectedValue);
+                filter += "[ID Department] IN (" + comboBoxDepartmentID.SelectedValue.ToString()+",";
+                foreach (int id in subUnits)
+                    filter += id.ToString(CultureInfo.InvariantCulture) + ",";
+                filter = filter.TrimEnd(new char[] { ',' }) + ")";
             }
             if (checkBoxDocNumberEnable.Checked)
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "DocNumber = '{0}'", textBoxDocNumber.Text.Trim().Replace("'", ""));
+                filter += String.Format(CultureInfo.InvariantCulture, "DocNumber LIKE'%{0}%'", textBoxDocNumber.Text.Trim().Replace("'", ""));
             }
             if ((checkBoxSoftwareNameEnable.Checked) && (comboBoxSoftwareName.SelectedValue != null))
             {
@@ -120,29 +125,20 @@ namespace LicenseSoftware.SearchForms
             softLicTypes = SoftLicTypesDataModel.GetInstance();
             softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
             departments = DepartmentsDataModel.GetInstance();
+            software = CalcDataModelSoftwareConcat.GetInstance();
+
+            // Ожидаем дозагрузки, если это необходимо
+            softMakers.Select();
+            softTypes.Select();
+            softSuppliers.Select();
+            softLicTypes.Select();
+            softLicDocTypes.Select();
+            departments.Select();
+            software.Select();
 
             v_software = new BindingSource();
-            var result = from software_row in DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select())
-                                    select new
-                                    {
-                                        id_software = software_row.Field<int>("ID Software"),
-                                        software = software_row.Field<string>("Software") +
-                                               (software_row.Field<string>("Version") == null ? "" : " " + software_row.Field<string>("Version"))
-                                    }; 
-            DataTable table = new DataTable();
-            table.Locale = CultureInfo.InvariantCulture;
-            table.Columns.Add("ID Software").DataType = typeof(int);
-            table.Columns.Add("Software").DataType = typeof(string);
-            table.PrimaryKey = new DataColumn[] { table.Columns["ID Software"] };
-            table.BeginLoadData();
-            result.ToList().ForEach((x) =>
-            {
-                table.Rows.Add(new object[] { 
-                    x.id_software, 
-                    x.software });
-            });
-            table.EndLoadData();
-            v_software.DataSource = table;
+            v_software.DataMember = "SoftwareConcat";
+            v_software.DataSource = DataSetManager.DataSet;
 
             v_softMakers = new BindingSource();
             v_softMakers.DataMember = "SoftMakers";
@@ -247,13 +243,6 @@ namespace LicenseSoftware.SearchForms
                 MessageBox.Show("Выберите вид лицензии или уберите галочку поиска по виду лицензии", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicType.Focus();
-                return;
-            }
-            if ((checkBoxDepartmentEnable.Checked) && (comboBoxDepartmentID.SelectedValue == null))
-            {
-                MessageBox.Show("Выберите департамент-заказчик или уберите галочку поиска по департаменту", "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                comboBoxDepartmentID.Focus();
                 return;
             }
             if ((checkBoxDepartmentEnable.Checked) && (comboBoxDepartmentID.SelectedValue == null))

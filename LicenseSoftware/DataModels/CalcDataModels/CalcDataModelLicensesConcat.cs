@@ -9,13 +9,13 @@ using System.Text;
 
 namespace LicenseSoftware.CalcDataModels
 {
-    public sealed class CalcDataModelSoftwareConcat: CalcDataModel
+    public sealed class CalcDataModelLicensesConcat: CalcDataModel
     {
-        private static CalcDataModelSoftwareConcat dataModel = null;
+        private static CalcDataModelLicensesConcat dataModel = null;
 
-        private static string tableName = "SoftwareConcat";
+        private static string tableName = "LicensesConcat";
 
-        private CalcDataModelSoftwareConcat()
+        private CalcDataModelLicensesConcat()
             : base()
         {
             Table = InitializeTable();
@@ -26,9 +26,11 @@ namespace LicenseSoftware.CalcDataModels
         {
             DataTable table = new DataTable(tableName);
             table.Locale = CultureInfo.InvariantCulture;
+            table.Columns.Add("ID License").DataType = typeof(int);
             table.Columns.Add("ID Software").DataType = typeof(int);
-            table.Columns.Add("Software").DataType = typeof(string);
-            table.PrimaryKey = new DataColumn[] { table.Columns["ID Software"] };
+            table.Columns.Add("ID Department").DataType = typeof(int);
+            table.Columns.Add("License").DataType = typeof(string);
+            table.PrimaryKey = new DataColumn[] { table.Columns["ID License"] };
             return table;
         }
 
@@ -36,17 +38,21 @@ namespace LicenseSoftware.CalcDataModels
         {
             DMLoadState = DataModelLoadState.Loading;
             if (e == null)
-                throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelSoftwareConcat");
+                throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelLicensesConcat");
             CalcAsyncConfig config = (CalcAsyncConfig)e.Argument;
             // Фильтруем удаленные строки
-            var software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), config.Entity, config.IdObject);
+            var licenses = DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select(), config.Entity, config.IdObject);
             // Вычисляем агрегационную информацию
-            var result = from software_row in software
+            var result = from licenses_row in licenses
                          select new
                          {
-                             id_software = software_row.Field<int>("ID Software"),
-                             software = software_row.Field<string>("Software") + 
-                                    (software_row.Field<string>("Version") == null ? "" : " " + software_row.Field<string>("Version"))
+                             id_license = licenses_row.Field<int>("ID License"),
+                             id_software = licenses_row.Field<int>("ID Software"),
+                             id_department = licenses_row.Field<int>("ID Department"),
+                             license = "Документ: " + licenses_row.Field<string>("DocNumber") + "; Срок действия с " +
+                                    licenses_row.Field<DateTime>("BuyLicenseDate").ToString("dd.MM.yyyy",CultureInfo.InvariantCulture) +
+                                    (licenses_row.Field<DateTime?>("ExpireLicenseDate") == null ? " (бессрочно)" :
+                                    " по " + licenses_row.Field<DateTime>("ExpireLicenseDate").ToString("dd.MM.yyyy", CultureInfo.InvariantCulture))
                          };
             // Заполняем таблицу изменений
             DataTable table = InitializeTable();
@@ -54,8 +60,10 @@ namespace LicenseSoftware.CalcDataModels
             result.ToList().ForEach((x) =>
             {
                 table.Rows.Add(new object[] { 
+                    x.id_license, 
                     x.id_software, 
-                    x.software });
+                    x.id_department,
+                    x.license });
             });
             table.EndLoadData();
             if (!DataSetManager.DataSet.Tables.Contains(tableName))
@@ -66,10 +74,10 @@ namespace LicenseSoftware.CalcDataModels
             e.Result = table;
         }
 
-        public static CalcDataModelSoftwareConcat GetInstance()
+        public static CalcDataModelLicensesConcat GetInstance()
         {
             if (dataModel == null)
-                dataModel = new CalcDataModelSoftwareConcat();
+                dataModel = new CalcDataModelLicensesConcat();
             return dataModel;
         }
 

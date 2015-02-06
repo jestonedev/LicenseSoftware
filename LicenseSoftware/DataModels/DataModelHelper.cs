@@ -77,5 +77,29 @@ namespace LicenseSoftware.DataModels
                    where computer_row.Field<int>("ID Department") == idDepartment
                    select computer_row.Field<int>("ID Device");
         }
+
+        public static IEnumerable<int> GetLicenseIDsByCondition(Func<DataRow, bool> condition, EntityType entity)
+        {
+            var software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select());
+            var departments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                              where departments_row.Field<bool>("AllowSelect")
+                              select departments_row.Field<int>("ID Department");
+            var licenses = from licenses_row in DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select())
+                           where departments.Contains(licenses_row.Field<int>("ID Department"))
+                           select licenses_row;
+            var result = from software_row in software
+                         join licenses_row in licenses
+                         on software_row.Field<int>("ID Software") equals licenses_row.Field<int>("ID Software")
+                         where entity == EntityType.Software ? condition(software_row) : (entity == EntityType.License ? condition(licenses_row) : false)
+                         select licenses_row.Field<int>("ID License");
+            return result;
+        }
+
+        public static bool KeyIsFree(int idKey)
+        {
+            return (from installation_row in DataModelHelper.FilterRows(SoftInstallationsDataModel.GetInstance().Select())
+                   where installation_row.Field<int?>("ID LicenseKey") == idKey
+                   select installation_row).Count() == 0;
+        }
     }
 }

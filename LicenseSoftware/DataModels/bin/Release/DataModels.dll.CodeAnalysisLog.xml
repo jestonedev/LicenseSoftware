@@ -4,7 +4,7 @@
  <Namespaces>
   <Namespace Name="LicenseSoftware.CalcDataModels">
    <Messages>
-    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
      <Issue Certainty="50" Level="Warning">Consider merging the types defined in 'LicenseSoftware.CalcDataModels' with another namespace.</Issue>
     </Message>
    </Messages>
@@ -19,15 +19,33 @@
        <Types>
         <Type Name="CalcDataModel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
            <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'CalcDataModel' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModel.cs" Line="75">Modify 'CalcDataModel.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CalcDataModelLicensesConcat" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#GetInstance()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
+             <Issue Certainty="50" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModelLicensesConcat.cs" Line="79">Change 'CalcDataModelLicensesConcat.GetInstance()' to a property if appropriate.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#InitializeTable()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
+             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModelLicensesConcat.cs" Line="27">In method 'CalcDataModelLicensesConcat.InitializeTable()', object 'table' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'table' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -37,14 +55,14 @@
          <Members>
           <Member Name="#GetInstance()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
-             <Issue Certainty="50" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModelSoftwareConcat.cs" Line="67">Change 'CalcDataModelSoftwareConcat.GetInstance()' to a property if appropriate.</Issue>
+            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
+             <Issue Certainty="50" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModelSoftwareConcat.cs" Line="71">Change 'CalcDataModelSoftwareConcat.GetInstance()' to a property if appropriate.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#InitializeTable()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\CalcDataModels" File="CalcDataModelSoftwareConcat.cs" Line="27">In method 'CalcDataModelSoftwareConcat.InitializeTable()', object 'table' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'table' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
@@ -59,7 +77,7 @@
          <Members>
           <Member Name="#Run()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="CalcDataModelsUpdater.cs" Line="16">The 'this' parameter (or 'Me' in Visual Basic) of 'CalcDataModelsUpdater.Run()' is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Issue>
             </Message>
            </Messages>
@@ -70,14 +88,14 @@
          <Members>
           <Member Name="#.ctor(System.Windows.Forms.ToolStripProgressBar,System.Int32,System.String,System.String)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DataModel.cs" Line="45">The query string passed to 'DbCommand.CommandText.set(string)' in 'DataModel.DataModel(ToolStripProgressBar, int, string, string)' could contain the following variables 'this.CS$&lt;&gt;8__locals3.selectQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Select()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="Select" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message Id="Select" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DataModel.cs" Line="96">Rename virtual/interface member 'DataModel.Select()' so that it no longer conflicts with the reserved language keyword 'Select'. Using a reserved keyword as the name of a virtual/interface member makes it harder for consumers in other languages to override/implement the member.</Issue>
             </Message>
            </Messages>
@@ -88,28 +106,35 @@
          <Members>
           <Member Name="#GetComputerIDsByDepartment(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="MemberAbbreviation" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelHelper.cs" Line="76">Correct the casing of 'IDs' in member name 'DataModelHelper.GetComputerIDsByDepartment(int)' by changing it to 'Ids'. 'Ids' is an abbreviation and therefore is not subject to acronym casing guidelines.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetDepartmentSubUnits(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="SubUnits" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message Id="SubUnits" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="MemberShouldBeDiscreteTerm" Certainty="80" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelHelper.cs" Line="45">The compound word 'SubUnits' in member name 'DataModelHelper.GetDepartmentSubUnits(int)' exists as a discrete term. If your usage is intended to be single word, case it as 'Subunits' or strip the first token entirely if it represents any sort of Hungarian notation.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GetLicenseIDsByCondition(System.Func`2&lt;System.Data.DataRow,System.Boolean&gt;,LicenseSoftware.Entities.EntityType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
+             <Issue Name="MemberAbbreviation" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelHelper.cs" Line="83">Correct the casing of 'IDs' in member name 'DataModelHelper.GetLicenseIDsByCondition(Func&lt;DataRow, bool&gt;, EntityType)' by changing it to 'Ids'. 'Ids' is an abbreviation and therefore is not subject to acronym casing guidelines.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetSoftwareIDsBySoftMaker(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="MemberAbbreviation" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelHelper.cs" Line="69">Correct the casing of 'IDs' in member name 'DataModelHelper.GetSoftwareIDsBySoftMaker(int)' by changing it to 'Ids'. 'Ids' is an abbreviation and therefore is not subject to acronym casing guidelines.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetSoftwareIDsBySoftType(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message Id="IDs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Name="MemberAbbreviation" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelHelper.cs" Line="62">Correct the casing of 'IDs' in member name 'DataModelHelper.GetSoftwareIDsBySoftType(int)' by changing it to 'Ids'. 'Ids' is an abbreviation and therefore is not subject to acronym casing guidelines.</Issue>
             </Message>
            </Messages>
@@ -120,34 +145,34 @@
          <Members>
           <Member Name="#CalcDataModelsUpdate(System.String,System.String,System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="field_name" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message Id="field_name" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="188">Parameter 'field_name' of 'DataModelsCallbackUpdater.CalcDataModelsUpdate(string, string, string)' is never used. Remove the parameter or use it in the method body.</Issue>
             </Message>
-            <Message Id="operation_type" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message Id="operation_type" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="188">Parameter 'operation_type' of 'DataModelsCallbackUpdater.CalcDataModelsUpdate(string, string, string)' is never used. Remove the parameter or use it in the method body.</Issue>
             </Message>
-            <Message Id="table" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message Id="table" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="188">Parameter 'table' of 'DataModelsCallbackUpdater.CalcDataModelsUpdate(string, string, string)' is never used. Remove the parameter or use it in the method body.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetInstance()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="Breaking">
+            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="Breaking">
              <Issue Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="249">Change 'DataModelsCallbackUpdater.GetInstance()' to a property if appropriate.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Initialize()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="34">The query string passed to 'DbCommand.CommandText.set(string)' in 'DataModelsCallbackUpdater.Initialize()' could contain the following variables 'DataModelsCallbackUpdater.initQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Run()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataModelsCallbackUpdater.cs" Line="89">The query string passed to 'DbCommand.CommandText.set(string)' in 'DataModelsCallbackUpdater.Run()' could contain the following variables 'DataModelsCallbackUpdater.query'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -158,7 +183,7 @@
          <Members>
           <Member Name="#.cctor()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataSetManager.cs" Line="13">Be sure to set the DataSet Locale property wherever 'DataSetManager.DataSetManager()' creates an instance of that type.</Issue>
             </Message>
            </Messages>
@@ -169,7 +194,7 @@
          <Members>
           <Member Name="#SqlSelectTable(System.String,System.Data.Common.DbCommand)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DBConnection.cs" Line="81">In method 'DBConnection.SqlSelectTable(string, DbCommand)', object 'dt' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'dt' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
@@ -180,33 +205,33 @@
          <Members>
           <Member Name="#SelectVisibleDepartments()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="NonExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="48">In method 'DepartmentsDataModel.SelectVisibleDepartments()', call System.IDisposable.Dispose on object 'resultDepartments' before all references to it are out of scope.</Issue>
             </Message>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="58">The query string passed to 'DbCommand.CommandText.set(string)' in 'DepartmentsDataModel.SelectVisibleDepartments()' could contain the following variables 'DepartmentsDataModel.accessQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
-            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="48">Be sure to set the DataTable Locale property wherever 'DepartmentsDataModel.SelectVisibleDepartments()' creates an instance of that type.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SortResultDepartments(System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="133">In method 'DepartmentsDataModel.SortResultDepartments(DataTable)', object 'resultDepartments' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'resultDepartments' before all references to it are out of scope.</Issue>
             </Message>
-            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="133">The 'this' parameter (or 'Me' in Visual Basic) of 'DepartmentsDataModel.SortResultDepartments(DataTable)' is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Issue>
             </Message>
-            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="133">Be sure to set the DataTable Locale property wherever 'DepartmentsDataModel.SortResultDepartments(DataTable)' creates an instance of that type.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#TabulateResultDepartments(System.Data.DataTable)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="NonBreaking">
+            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="NonBreaking">
              <Issue Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="DepartmentsDataModel.cs" Line="109">The 'this' parameter (or 'Me' in Visual Basic) of 'DepartmentsDataModel.TabulateResultDepartments(DataTable)' is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Issue>
             </Message>
            </Messages>
@@ -217,21 +242,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallationsDataModel.cs" Line="58">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallationsDataModel.Delete(int)' could contain the following variables 'SoftInstallationsDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftInstallation)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallationsDataModel.cs" Line="113">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallationsDataModel.Insert(SoftInstallation)' could contain the following variables 'SoftInstallationsDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftInstallation)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallationsDataModel.cs" Line="79">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallationsDataModel.Update(SoftInstallation)' could contain the following variables 'SoftInstallationsDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -242,21 +267,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallatorsDataModel.cs" Line="55">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallatorsDataModel.Delete(int)' could contain the following variables 'SoftInstallatorsDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftInstallator)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallatorsDataModel.cs" Line="108">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallatorsDataModel.Insert(SoftInstallator)' could contain the following variables 'SoftInstallatorsDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftInstallator)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftInstallatorsDataModel.cs" Line="76">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftInstallatorsDataModel.Update(SoftInstallator)' could contain the following variables 'SoftInstallatorsDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -267,21 +292,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicDocTypesDataModel.cs" Line="51">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicDocTypesDataModel.Delete(int)' could contain the following variables 'SoftLicDocTypesDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftLicDocType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicDocTypesDataModel.cs" Line="102">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicDocTypesDataModel.Insert(SoftLicDocType)' could contain the following variables 'SoftLicDocTypesDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftLicDocType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicDocTypesDataModel.cs" Line="72">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicDocTypesDataModel.Update(SoftLicDocType)' could contain the following variables 'SoftLicDocTypesDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -292,21 +317,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicensesDataModel.cs" Line="61">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicensesDataModel.Delete(int)' could contain the following variables 'SoftLicensesDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftLicense)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicensesDataModel.cs" Line="121">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicensesDataModel.Insert(SoftLicense)' could contain the following variables 'SoftLicensesDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftLicense)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicensesDataModel.cs" Line="82">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicensesDataModel.Update(SoftLicense)' could contain the following variables 'SoftLicensesDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -317,21 +342,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicKeysDataModel.cs" Line="56">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicKeysDataModel.Delete(int)' could contain the following variables 'SoftLicKeysDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftLicKey)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicKeysDataModel.cs" Line="108">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicKeysDataModel.Insert(SoftLicKey)' could contain the following variables 'SoftLicKeysDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftLicKey)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicKeysDataModel.cs" Line="77">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicKeysDataModel.Update(SoftLicKey)' could contain the following variables 'SoftLicKeysDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -342,21 +367,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicTypesDataModel.cs" Line="51">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicTypesDataModel.Delete(int)' could contain the following variables 'SoftLicTypesDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftLicType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicTypesDataModel.cs" Line="102">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicTypesDataModel.Insert(SoftLicType)' could contain the following variables 'SoftLicTypesDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftLicType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftLicTypesDataModel.cs" Line="72">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftLicTypesDataModel.Update(SoftLicType)' could contain the following variables 'SoftLicTypesDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -367,21 +392,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftMakersDataModel.cs" Line="51">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftMakersDataModel.Delete(int)' could contain the following variables 'SoftMakersDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftMaker)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftMakersDataModel.cs" Line="102">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftMakersDataModel.Insert(SoftMaker)' could contain the following variables 'SoftMakersDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftMaker)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftMakersDataModel.cs" Line="72">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftMakersDataModel.Update(SoftMaker)' could contain the following variables 'SoftMakersDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -392,21 +417,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftSuppliersDataModel.cs" Line="51">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftSuppliersDataModel.Delete(int)' could contain the following variables 'SoftSuppliersDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftSupplier)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftSuppliersDataModel.cs" Line="102">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftSuppliersDataModel.Insert(SoftSupplier)' could contain the following variables 'SoftSuppliersDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftSupplier)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftSuppliersDataModel.cs" Line="72">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftSuppliersDataModel.Update(SoftSupplier)' could contain the following variables 'SoftSuppliersDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -417,21 +442,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftTypesDataModel.cs" Line="51">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftTypesDataModel.Delete(int)' could contain the following variables 'SoftTypesDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.SoftType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftTypesDataModel.cs" Line="102">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftTypesDataModel.Insert(SoftType)' could contain the following variables 'SoftTypesDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.SoftType)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftTypesDataModel.cs" Line="72">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftTypesDataModel.Update(SoftType)' could contain the following variables 'SoftTypesDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -442,21 +467,21 @@
          <Members>
           <Member Name="#Delete(System.Int32)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftwareDataModel.cs" Line="55">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftwareDataModel.Delete(int)' could contain the following variables 'SoftwareDataModel.deleteQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Insert(LicenseSoftware.Entities.Software)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftwareDataModel.cs" Line="109">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftwareDataModel.Insert(Software)' could contain the following variables 'SoftwareDataModel.insertQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Update(LicenseSoftware.Entities.Software)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-03 08:53:34Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:05Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\DataModels\DataModels" File="SoftwareDataModel.cs" Line="76">The query string passed to 'DbCommand.CommandText.set(string)' in 'SoftwareDataModel.Update(Software)' could contain the following variables 'SoftwareDataModel.updateQuery'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>

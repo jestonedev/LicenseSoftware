@@ -86,7 +86,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softInstallation.IdLicense));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDComputer", softInstallation.IdComputer));
                 command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("InstallationDate", softInstallation.InstallationDate));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicensesKey", softInstallation.IdLicenseKey));
+                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicenseKey", softInstallation.IdLicenseKey));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", softInstallation.IdInstallator));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallation", softInstallation.IdInstallation));
                 try
@@ -120,7 +120,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softInstallation.IdLicense));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDComputer", softInstallation.IdComputer));
                 command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("InstallationDate", softInstallation.InstallationDate));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicensesKey", softInstallation.IdLicenseKey));
+                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicenseKey", softInstallation.IdLicenseKey));
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", softInstallation.IdInstallator));
 
                 try

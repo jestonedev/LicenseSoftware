@@ -496,8 +496,8 @@ namespace LicenseSoftware.Viewport
                 viewportState = ViewportState.ReadState;
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.ForceCloseDetachedViewports();
-                CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Software, 
-                    (int)((DataRowView)v_software.Current)["ID Software"], true);
+                if (CalcDataModelSoftwareConcat.HasInstance())
+                    CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Software, (int)((DataRowView)v_software.Current)["ID Software"], true);
             }
         }
 

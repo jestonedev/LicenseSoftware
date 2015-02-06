@@ -12,21 +12,21 @@
          <Members>
           <Member Name="#LDAPPassword" Kind="Property" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="Breaking">
+            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Settings" File="LicenseSoftwareSettings.cs" Line="61">Correct the casing of 'LDAP' in member name 'LicenseSoftwareSettings.LDAPPassword' by changing it to 'Ldap'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#LDAPUserName" Kind="Property" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="Breaking">
+            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Settings" File="LicenseSoftwareSettings.cs" Line="47">Correct the casing of 'LDAP' in member name 'LicenseSoftwareSettings.LDAPUserName' by changing it to 'Ldap'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#UseLDAP" Kind="Property" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="Breaking">
+            <Message Id="LDAP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Settings" File="LicenseSoftwareSettings.cs" Line="88">Correct the casing of 'LDAP' in member name 'LicenseSoftwareSettings.UseLDAP' by changing it to 'Ldap'.</Issue>
             </Message>
            </Messages>
@@ -39,7 +39,7 @@
            <Accessors>
             <Accessor Name="#get_Current()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
              <Messages>
-              <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="NonBreaking">
+              <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="NonBreaking">
                <Issue Certainty="95" Level="CriticalError" Path="e:\LicenseSoftware\LicenseSoftware\Settings" File="UserDomain.cs" Line="32">Modify 'UserDomain.Current.get()' to catch a more specific exception than 'object' or rethrow the exception.</Issue>
               </Message>
              </Messages>
@@ -48,14 +48,14 @@
           </Member>
           <Member Name="#GetUserDomain(System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="login" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="Breaking">
+            <Message Id="login" TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="Breaking">
              <Issue Name="MemberParameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Settings" File="UserDomain.cs" Line="51">In member 'UserDomain.GetUserDomain(string)', replace the term 'login' in parameter name 'login' with the preferred alternate 'logOn'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#sAMAccountName" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="s" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-03 08:53:29Z" FixCategory="Breaking">
+            <Message Id="s" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-04 00:57:18Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 's' in member name 'UserDomain.sAMAccountName' by changing it to 'S'.</Issue>
             </Message>
            </Messages>

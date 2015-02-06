@@ -48,6 +48,8 @@ namespace LicenseSoftware.DataModels
             DataSetManager.AddRelation("Devices", "ID Device", "SoftInstallations", "ID Computer", true);
             DataSetManager.AddRelation("Departments", "ID Department", "SoftLicenses", "ID Department", true);
             DataSetManager.AddRelation("Departments", "ID Department", "Departments", "ID Parent Department", true);
+            DataSetManager.AddRelation("Software", "ID Software", "SoftwareConcat", "ID Software", true);
+            DataSetManager.AddRelation("SoftLicenses", "ID License", "LicensesConcat", "ID License", true);
         }
 
         private static void AddRelation(string master_table_name, string master_column_name, string slave_table_name, 
