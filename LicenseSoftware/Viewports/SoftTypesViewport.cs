@@ -316,7 +316,6 @@ namespace LicenseSoftware.Viewport
                 }
                 else
                 {
-
                     if (RowToSoftType(row) == list[i])
                         continue;
                     if (SoftTypesDataModel.Update(list[i]) == -1)

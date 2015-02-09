@@ -10,14 +10,14 @@
        <Types>
         <Type Name="AccessControl" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+          <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
            <Issue Name="System" Certainty="95" Level="Error">The type name 'AccessControl' conflicts in whole or in part with the namespace name 'System.Security.AccessControl' defined in the .NET Framework. Rename the type to eliminate the conflict.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#LoadPriveleges()" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="DependsOnFix">
+            <Message TypeName="Review SQL queries for security vulnerabilities" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="DependsOnFix">
              <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Security" File="AccessControl.cs" Line="31">The query string passed to 'DbCommand.CommandText.set(string)' in 'AccessControl.LoadPriveleges()' could contain the following variables 'AccessControl.queryUser'. If any of these variables could come from user input, consider using a stored procedure or a parameterized SQL query instead of building the query with string concatenations.</Issue>
             </Message>
            </Messages>
@@ -26,114 +26,114 @@
         </Type>
         <Type Name="Priveleges" Kind="Enum" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="DoNotMarkEnumsWithFlags" Category="Microsoft.Usage" CheckId="CA2217" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="NonBreaking">
+          <Message TypeName="DoNotMarkEnumsWithFlags" Category="Microsoft.Usage" CheckId="CA2217" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="NonBreaking">
            <Issue Certainty="50" Level="Error">'Priveleges' is marked with FlagsAttribute but a discrete member cannot be found for every settable bit that is used across the range of enum values. Remove FlagsAttribute from the type or define new members for the following (currently missing) values: 0x2, 0x8, 0x20</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#ALL_PRIVELEGES" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="ALL" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="ALL" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'ALL' in member name 'Priveleges.ALL_PRIVELEGES' by changing it to 'All'.</Issue>
             </Message>
-            <Message Id="PRIVELEGES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="PRIVELEGES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'PRIVELEGES' in member name 'Priveleges.ALL_PRIVELEGES' by changing it to 'Priveleges'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.ALL_PRIVELEGES'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#DIRECTORIES_READ" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="DIRECTORIES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="DIRECTORIES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'DIRECTORIES' in member name 'Priveleges.DIRECTORIES_READ' by changing it to 'Directories'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.DIRECTORIES_READ' by changing it to 'Read'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.DIRECTORIES_READ'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#DIRECTORIES_READ_WRITE" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="DIRECTORIES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="DIRECTORIES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'DIRECTORIES' in member name 'Priveleges.DIRECTORIES_READ_WRITE' by changing it to 'Directories'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.DIRECTORIES_READ_WRITE' by changing it to 'Read'.</Issue>
             </Message>
-            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'WRITE' in member name 'Priveleges.DIRECTORIES_READ_WRITE' by changing it to 'Write'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.DIRECTORIES_READ_WRITE'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#INSTALLATIONS_READ" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="INSTALLATIONS" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="INSTALLATIONS" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'INSTALLATIONS' in member name 'Priveleges.INSTALLATIONS_READ' by changing it to 'Installations'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.INSTALLATIONS_READ' by changing it to 'Read'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.INSTALLATIONS_READ'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#INSTALLATIONS_READ_WRITE" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="INSTALLATIONS" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="INSTALLATIONS" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'INSTALLATIONS' in member name 'Priveleges.INSTALLATIONS_READ_WRITE' by changing it to 'Installations'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.INSTALLATIONS_READ_WRITE' by changing it to 'Read'.</Issue>
             </Message>
-            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'WRITE' in member name 'Priveleges.INSTALLATIONS_READ_WRITE' by changing it to 'Write'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.INSTALLATIONS_READ_WRITE'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#LICENSES_READ" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="LICENSES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="LICENSES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'LICENSES' in member name 'Priveleges.LICENSES_READ' by changing it to 'Licenses'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.LICENSES_READ' by changing it to 'Read'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.LICENSES_READ'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#LICENSES_READ_WRITE" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="LICENSES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="LICENSES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'LICENSES' in member name 'Priveleges.LICENSES_READ_WRITE' by changing it to 'Licenses'.</Issue>
             </Message>
-            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="READ" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'READ' in member name 'Priveleges.LICENSES_READ_WRITE' by changing it to 'Read'.</Issue>
             </Message>
-            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="WRITE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'WRITE' in member name 'Priveleges.LICENSES_READ_WRITE' by changing it to 'Write'.</Issue>
             </Message>
-            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="95" Level="Error">Remove the underscores from member name 'Priveleges.LICENSES_READ_WRITE'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#NONE" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message Id="NONE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-06 04:38:22Z" FixCategory="Breaking">
+            <Message Id="NONE" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2015-02-09 07:51:24Z" FixCategory="Breaking">
              <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'NONE' in member name 'Priveleges.NONE' by changing it to 'None'.</Issue>
             </Message>
            </Messages>

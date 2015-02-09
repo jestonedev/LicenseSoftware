@@ -35,6 +35,8 @@ namespace LicenseSoftware.SearchForms
         BindingSource v_departmentsLic = null;
         BindingSource v_departmentsInstall = null;
         BindingSource v_devices = null;
+        BindingSource v_devicesInvNum = null;
+        BindingSource v_devicesSerialNum = null;
         BindingSource v_softLicDocTypes = null;
         BindingSource v_softLicKeys = null;
         BindingSource v_softInstallators = null;
@@ -158,6 +160,18 @@ namespace LicenseSoftware.SearchForms
                     filter += " AND ";
                 filter += String.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxComputer.SelectedValue.ToString());
             }
+            if ((checkBoxInvNumEnable.Checked) && (comboBoxInvNum.SelectedValue != null))
+            {
+                if (!String.IsNullOrEmpty(filter.Trim()))
+                    filter += " AND ";
+                filter += String.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxInvNum.SelectedValue.ToString());
+            }
+            if ((checkBoxSerialNumEnable.Checked) && (comboBoxSerialNum.SelectedValue != null))
+            {
+                if (!String.IsNullOrEmpty(filter.Trim()))
+                    filter += " AND ";
+                filter += String.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxSerialNum.SelectedValue.ToString());
+            }
             if ((checkBoxDepartmentInstallEnable.Checked) && (comboBoxDepartmentInstallID.SelectedValue != null))
             {
                 IEnumerable<int> computerIds = DataModelHelper.GetComputerIDsByDepartment((int)comboBoxDepartmentInstallID.SelectedValue);
@@ -245,6 +259,16 @@ namespace LicenseSoftware.SearchForms
             v_devices.DataSource = DataSetManager.DataSet;
             v_devices.Filter = DepartmentFilter();
 
+            v_devicesInvNum = new BindingSource();
+            v_devicesInvNum.DataMember = "Devices";
+            v_devicesInvNum.DataSource = DataSetManager.DataSet;
+            v_devicesInvNum.Filter = DepartmentFilter();
+
+            v_devicesSerialNum = new BindingSource();
+            v_devicesSerialNum.DataMember = "Devices";
+            v_devicesSerialNum.DataSource = DataSetManager.DataSet;
+            v_devicesSerialNum.Filter = DepartmentFilter();
+
             v_softInstallators = new BindingSource();
             v_softInstallators.DataMember = "SoftInstallators";
             v_softInstallators.DataSource = DataSetManager.DataSet;
@@ -292,6 +316,14 @@ namespace LicenseSoftware.SearchForms
             comboBoxComputer.DataSource = v_devices;
             comboBoxComputer.ValueMember = "ID Device";
             comboBoxComputer.DisplayMember = "Device Name";
+
+            comboBoxSerialNum.DataSource = v_devicesSerialNum;
+            comboBoxSerialNum.ValueMember = "ID Device";
+            comboBoxSerialNum.DisplayMember = "SerialNumber";
+
+            comboBoxInvNum.DataSource = v_devicesInvNum;
+            comboBoxInvNum.ValueMember = "ID Device";
+            comboBoxInvNum.DisplayMember = "InventoryNumber";
 
             comboBoxOpBuyLicenseDate.SelectedIndex = 0;
             comboBoxOpExpireLicenseDate.SelectedIndex = 0;
@@ -394,6 +426,20 @@ namespace LicenseSoftware.SearchForms
                 comboBoxComputer.Focus();
                 return;
             }
+            if ((checkBoxInvNumEnable.Checked) && (comboBoxInvNum.SelectedValue == null))
+            {
+                MessageBox.Show("Укажите инвентарный номер компьютера или уберите галочку поиска по инвентарному номеру",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                comboBoxInvNum.Focus();
+                return;
+            }
+            if ((checkBoxSerialNumEnable.Checked) && (comboBoxSerialNum.SelectedValue == null))
+            {
+                MessageBox.Show("Укажите серийный номер компьютера или уберите галочку поиска по серийному номеру",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                comboBoxSerialNum.Focus();
+                return;
+            }
             if ((checkBoxLicKeyEnable.Checked) && (comboBoxLicKey.SelectedValue == null))
             {
                 MessageBox.Show("Выберите лицензионный ключ или уберите галочку поиска по лицензионному ключу",
@@ -483,6 +529,16 @@ namespace LicenseSoftware.SearchForms
             comboBoxComputer.Enabled = checkBoxComputerEnable.Checked;
         }
 
+        private void checkBoxSerialNumEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxSerialNum.Enabled = checkBoxSerialNumEnable.Checked;
+        }
+
+        private void checkBoxInvNumEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxInvNum.Enabled = checkBoxInvNumEnable.Checked;
+        }
+
         private void checkBoxLicKeyEnable_CheckedChanged(object sender, EventArgs e)
         {
             comboBoxLicKey.Enabled = checkBoxLicKeyEnable.Checked;
@@ -568,6 +624,78 @@ namespace LicenseSoftware.SearchForms
         {
             if (comboBoxComputer.Items.Count == 0)
                 comboBoxComputer.SelectedIndex = -1;
+        }
+
+        private void comboBoxInvNum_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxInvNum.Items.Count > 0)
+            {
+                if (comboBoxInvNum.SelectedItem == null)
+                    comboBoxInvNum.SelectedItem = v_devicesInvNum[v_devicesInvNum.Position];
+                comboBoxInvNum.Text = ((DataRowView)v_devicesInvNum[v_devicesInvNum.Position])["InventoryNumber"].ToString();
+            }
+            if (comboBoxInvNum.SelectedItem == null)
+            {
+                comboBoxInvNum.Text = "";
+                v_devicesInvNum.Filter = "";
+            }
+        }
+
+        private void comboBoxInvNum_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                string text = comboBoxInvNum.Text;
+                int selectionStart = comboBoxInvNum.SelectionStart;
+                int selectionLength = comboBoxInvNum.SelectionLength;
+                v_devicesInvNum.Filter = "[InventoryNumber] like '%" + comboBoxInvNum.Text + "%'";
+                comboBoxInvNum.Text = text;
+                comboBoxInvNum.SelectionStart = selectionStart;
+                comboBoxInvNum.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxInvNum_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxInvNum.Items.Count == 0)
+                comboBoxInvNum.SelectedIndex = -1;
+        }
+
+        private void comboBoxSerialNum_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSerialNum.Items.Count > 0)
+            {
+                if (comboBoxSerialNum.SelectedItem == null)
+                    comboBoxSerialNum.SelectedItem = v_devicesSerialNum[v_devicesSerialNum.Position];
+                comboBoxSerialNum.Text = ((DataRowView)v_devicesSerialNum[v_devicesSerialNum.Position])["SerialNumber"].ToString();
+            }
+            if (comboBoxSerialNum.SelectedItem == null)
+            {
+                comboBoxSerialNum.Text = "";
+                v_devicesSerialNum.Filter = "";
+            }
+        }
+
+        private void comboBoxSerialNum_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                string text = comboBoxSerialNum.Text;
+                int selectionStart = comboBoxSerialNum.SelectionStart;
+                int selectionLength = comboBoxSerialNum.SelectionLength;
+                v_devicesSerialNum.Filter = "[SerialNumber] like '%" + comboBoxSerialNum.Text + "%'";
+                comboBoxSerialNum.Text = text;
+                comboBoxSerialNum.SelectionStart = selectionStart;
+                comboBoxSerialNum.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxSerialNum_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxSerialNum.Items.Count == 0)
+                comboBoxSerialNum.SelectedIndex = -1;
         }
 
         private void comboBoxLicKey_Leave(object sender, EventArgs e)

@@ -20,7 +20,7 @@ namespace LicenseSoftware.DataModels
 
         private DevicesDataModel(ToolStripProgressBar progressBar, int incrementor)
             : base(progressBar, incrementor, selectQuery, tableName)
-        {     
+        {
         }
 
         protected override void ConfigureTable()

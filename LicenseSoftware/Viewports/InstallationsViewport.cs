@@ -64,6 +64,8 @@ namespace LicenseSoftware.Viewport
         private DataGridViewTextBoxColumn software;
         private DataGridViewTextBoxColumn department;
         private DataGridViewTextBoxColumn computer;
+        private DataGridViewTextBoxColumn serialNum;
+        private DataGridViewTextBoxColumn invNum;
         private DataGridViewTextBoxColumn installationDate;
         private DataGridViewTextBoxColumn license;
         private DataGridViewTextBoxColumn licKey;
@@ -522,6 +524,7 @@ namespace LicenseSoftware.Viewport
             v_softInstallators = new BindingSource();
             v_softInstallators.DataMember = "SoftInstallators";
             v_softInstallators.DataSource = ds;
+            v_softInstallators.Filter = "Inactive = 0";
 
             v_softInstallations = new BindingSource();
             v_softInstallations.CurrentItemChanged += new EventHandler(v_softInstallations_CurrentItemChanged);
@@ -1136,6 +1139,16 @@ namespace LicenseSoftware.Viewport
                     if (row != null)
                         e.Value = row["Device Name"];
                     break;
+                case "invNum":
+                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    if (row != null)
+                        e.Value = row["InventoryNumber"];
+                    break;
+                case "serialNum":
+                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    if (row != null)
+                        e.Value = row["SerialNumber"];
+                    break;
                 case "license":
                     row = licenses.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID License"]);
                     if (row != null)
@@ -1209,6 +1222,8 @@ namespace LicenseSoftware.Viewport
             this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -1232,7 +1247,7 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel14.RowCount = 2;
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 119F));
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 89F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(650, 316);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(1019, 435);
             this.tableLayoutPanel14.TabIndex = 0;
             // 
             // dataGridView
@@ -1258,6 +1273,8 @@ namespace LicenseSoftware.Viewport
             this.software,
             this.department,
             this.computer,
+            this.serialNum,
+            this.invNum,
             this.installationDate,
             this.license,
             this.licKey});
@@ -1268,7 +1285,7 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(644, 191);
+            this.dataGridView.Size = new System.Drawing.Size(1013, 310);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.VirtualMode = true;
             this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
@@ -1287,7 +1304,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(319, 113);
+            this.groupBox1.Size = new System.Drawing.Size(503, 113);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Сведения о лицензии";
@@ -1299,7 +1316,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicenseID.FormattingEnabled = true;
             this.comboBoxLicenseID.Location = new System.Drawing.Point(161, 51);
             this.comboBoxLicenseID.Name = "comboBoxLicenseID";
-            this.comboBoxLicenseID.Size = new System.Drawing.Size(146, 23);
+            this.comboBoxLicenseID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxLicenseID.TabIndex = 1;
             this.comboBoxLicenseID.DropDownClosed += new System.EventHandler(this.comboBoxLicenseID_DropDownClosed);
             this.comboBoxLicenseID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicenseID_SelectedValueChanged);
@@ -1322,7 +1339,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicKeysID.FormattingEnabled = true;
             this.comboBoxLicKeysID.Location = new System.Drawing.Point(161, 80);
             this.comboBoxLicKeysID.Name = "comboBoxLicKeysID";
-            this.comboBoxLicKeysID.Size = new System.Drawing.Size(146, 23);
+            this.comboBoxLicKeysID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxLicKeysID.TabIndex = 2;
             this.comboBoxLicKeysID.DropDownClosed += new System.EventHandler(this.comboBoxLicKeysID_DropDownClosed);
             this.comboBoxLicKeysID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicKeysID_SelectedValueChanged);
@@ -1345,7 +1362,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftwareID.FormattingEnabled = true;
             this.comboBoxSoftwareID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxSoftwareID.Name = "comboBoxSoftwareID";
-            this.comboBoxSoftwareID.Size = new System.Drawing.Size(146, 23);
+            this.comboBoxSoftwareID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxSoftwareID.TabIndex = 0;
             this.comboBoxSoftwareID.DropDownClosed += new System.EventHandler(this.comboBoxSoftwareID_DropDownClosed);
             this.comboBoxSoftwareID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedValueChanged);
@@ -1371,9 +1388,9 @@ namespace LicenseSoftware.Viewport
             this.groupBox2.Controls.Add(this.dateTimePickerInstallDate);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(328, 3);
+            this.groupBox2.Location = new System.Drawing.Point(512, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(319, 113);
+            this.groupBox2.Size = new System.Drawing.Size(504, 113);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Сведения об установке";
@@ -1385,7 +1402,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxComputerID.FormattingEnabled = true;
             this.comboBoxComputerID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxComputerID.Name = "comboBoxComputerID";
-            this.comboBoxComputerID.Size = new System.Drawing.Size(145, 23);
+            this.comboBoxComputerID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxComputerID.TabIndex = 0;
             this.comboBoxComputerID.DropDownClosed += new System.EventHandler(this.comboBoxComputerID_DropDownClosed);
             this.comboBoxComputerID.SelectedValueChanged += new System.EventHandler(this.comboBoxComputerID_SelectedValueChanged);
@@ -1418,7 +1435,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxInstallatorID.FormattingEnabled = true;
             this.comboBoxInstallatorID.Location = new System.Drawing.Point(161, 80);
             this.comboBoxInstallatorID.Name = "comboBoxInstallatorID";
-            this.comboBoxInstallatorID.Size = new System.Drawing.Size(145, 23);
+            this.comboBoxInstallatorID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxInstallatorID.TabIndex = 2;
             this.comboBoxInstallatorID.SelectedIndexChanged += new System.EventHandler(this.comboBoxInstallatorID_SelectedIndexChanged);
             // 
@@ -1428,7 +1445,7 @@ namespace LicenseSoftware.Viewport
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerInstallDate.Location = new System.Drawing.Point(161, 53);
             this.dateTimePickerInstallDate.Name = "dateTimePickerInstallDate";
-            this.dateTimePickerInstallDate.Size = new System.Drawing.Size(145, 21);
+            this.dateTimePickerInstallDate.Size = new System.Drawing.Size(330, 21);
             this.dateTimePickerInstallDate.TabIndex = 1;
             this.dateTimePickerInstallDate.ValueChanged += new System.EventHandler(this.dateTimePickerInstallationDate_ValueChanged);
             // 
@@ -1470,12 +1487,26 @@ namespace LicenseSoftware.Viewport
             // 
             // computer
             // 
-            this.computer.HeaderText = "Компьютер";
+            this.computer.HeaderText = "Имя ПК";
             this.computer.MinimumWidth = 200;
             this.computer.Name = "computer";
             this.computer.ReadOnly = true;
             this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // serialNum
+            // 
+            this.serialNum.HeaderText = "Серийный №";
+            this.serialNum.MinimumWidth = 150;
+            this.serialNum.Name = "serialNum";
+            this.serialNum.ReadOnly = true;
+            // 
+            // invNum
+            // 
+            this.invNum.HeaderText = "Инвентарный №";
+            this.invNum.MinimumWidth = 150;
+            this.invNum.Name = "invNum";
+            this.invNum.ReadOnly = true;
             // 
             // installationDate
             // 
@@ -1503,7 +1534,7 @@ namespace LicenseSoftware.Viewport
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(650, 300);
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(652, 322);
+            this.ClientSize = new System.Drawing.Size(1025, 441);
             this.Controls.Add(this.tableLayoutPanel14);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -20,12 +20,17 @@ namespace LicenseSoftware.DataModels
                 {
                     context.Send(__ =>
                     {
-                        /* Макет
-                        if (CalcDataModelBuildingsCurrentFunds.HasInstance() && CalcDataModelBuildingsCurrentFunds.GetInstance().DefferedUpdate)
+
+                        if (CalcDataModelLicensesConcat.HasInstance() && CalcDataModelLicensesConcat.GetInstance().DefferedUpdate)
                         {
-                            CalcDataModelBuildingsCurrentFunds.GetInstance().Refresh(EntityType.Unknown, null, true);
-                            CalcDataModelBuildingsCurrentFunds.GetInstance().DefferedUpdate = false;
-                        }*/
+                            CalcDataModelLicensesConcat.GetInstance().Refresh(EntityType.Unknown, null, true);
+                            CalcDataModelLicensesConcat.GetInstance().DefferedUpdate = false;
+                        }
+                        if (CalcDataModelSoftwareConcat.HasInstance() && CalcDataModelSoftwareConcat.GetInstance().DefferedUpdate)
+                        {
+                            CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Unknown, null, true);
+                            CalcDataModelSoftwareConcat.GetInstance().DefferedUpdate = false;
+                        }
                     }, null);
                     //Обновление делаем примерно каждые CalcDataModelsUpdateTimeout милисекунд
                     Thread.Sleep(LicenseSoftwareSettings.CalcDataModelsUpdateTimeout);

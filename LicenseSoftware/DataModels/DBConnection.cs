@@ -84,7 +84,7 @@ namespace LicenseSoftware.DataModels
             return dt;
         }
 
-        public int SqlModifyQuery(DbCommand command)
+        public int SqlExecuteNonQuery(DbCommand command)
         {
             if (command == null)
                 throw new DataModelException("Не передана ссылка на исполняемую команду SQL");
@@ -96,6 +96,26 @@ namespace LicenseSoftware.DataModels
             try
             {
                 return command.ExecuteNonQuery();
+            }
+            catch (SqlException)
+            {
+                SqlRollbackTransaction();
+                throw;
+            }
+        }
+
+        public object SqlExecuteScalar(DbCommand command)
+        {
+            if (command == null)
+                throw new DataModelException("Не передана ссылка на исполняемую команду SQL");
+            command.Connection = connection;
+            if (transaction != null)
+                command.Transaction = transaction;
+            if (connection.State == ConnectionState.Closed)
+                throw new DataModelException("Соединение прервано по неизвестным причинам");
+            try
+            {
+                return command.ExecuteScalar();
             }
             catch (SqlException)
             {

@@ -19,7 +19,7 @@ namespace LicenseSoftware.DataModels
         private static string deleteQuery = "UPDATE SoftLicenses SET Deleted = 1 WHERE [ID License] = @IDLicense";
         private static string insertQuery = @"INSERT INTO SoftLicenses
                             ([ID Software], [ID LicType], [ID DocType], [ID Supplier], [ID Department], DocNumber, InstallationsCount, BuyLicenseDate, ExpireLicenseDate, Description)
-                            VALUES (@IDSoftware, @IDLicType, @IDDocType, @IDSupplier, @IDDepartment, @DocNumber, @InstallationsCount, @BuyLicenseDate, @ExpireLicenseDate, @Description)";
+                            VALUES (@IDSoftware, @IDLicType, @IDDocType, @IDSupplier, @IDDepartment, @DocNumber, @InstallationsCount, @BuyLicenseDate, @ExpireLicenseDate, @Description); SELECT CONVERT(int, SCOPE_IDENTITY());";
         private static string updateQuery = @"UPDATE SoftLicenses SET [ID Software] = @IDSoftware, [ID LicType] = @IDLicType, [ID DocType] = @IDDocType,
                                                 [ID Supplier] = @IDSupplier, [ID Department] = @IDDepartment, DocNumber = @DocNumber, 
                                                 InstallationsCount = @InstallationsCount, BuyLicenseDate = @BuyLicenseDate, ExpireLicenseDate = @ExpireLicenseDate,
@@ -62,7 +62,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", id));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -99,7 +99,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softLicense.IdLicense));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -115,9 +115,7 @@ namespace LicenseSoftware.DataModels
         {
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
-            using (DbCommand last_id_command = DBConnection.CreateCommand())
             {
-                last_id_command.CommandText = "SELECT @@IDENTITY";
                 command.CommandText = insertQuery;
                 if (softLicense == null)
                 {
@@ -137,17 +135,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<string>("Description", softLicense.Description));
                 try
                 {
-                    connection.SqlBeginTransaction();
-                    connection.SqlModifyQuery(command);
-                    DataTable last_id = connection.SqlSelectTable("last_id", last_id_command);
-                    connection.SqlCommitTransaction();
-                    if (last_id.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Запрос не вернул идентификатор ключа", "Неизвестная ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        return -1;
-                    }
-                    return Convert.ToInt32(last_id.Rows[0][0], CultureInfo.InvariantCulture);
+                    return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);
                 }
                 catch (SqlException e)
                 {

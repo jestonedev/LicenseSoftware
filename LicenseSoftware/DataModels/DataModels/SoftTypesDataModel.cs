@@ -17,7 +17,7 @@ namespace LicenseSoftware.DataModels
         private static SoftTypesDataModel dataModel = null;
         private static string selectQuery = "SELECT * FROM SoftTypes WHERE Deleted = 0";
         private static string deleteQuery = "UPDATE SoftTypes SET Deleted = 1 WHERE [ID SoftType] = @IDSoftType";
-        private static string insertQuery = @"INSERT INTO SoftTypes (SoftType) VALUES (@SoftType)";
+        private static string insertQuery = @"INSERT INTO SoftTypes (SoftType) VALUES (@SoftType); SELECT CONVERT(int, SCOPE_IDENTITY());";
         private static string updateQuery = @"UPDATE SoftTypes SET SoftType = @SoftType WHERE [ID SoftType] = @IDSoftType";
         private static string tableName = "SoftTypes";
 
@@ -52,7 +52,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", id));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -80,7 +80,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", softType.IdSoftType));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -96,9 +96,7 @@ namespace LicenseSoftware.DataModels
         {
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
-            using (DbCommand last_id_command = DBConnection.CreateCommand())
             {
-                last_id_command.CommandText = "SELECT @@IDENTITY";
                 command.CommandText = insertQuery;
                 if (softType == null)
                 {
@@ -109,17 +107,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<string>("SoftType", softType.SoftTypeName));
                 try
                 {
-                    connection.SqlBeginTransaction();
-                    connection.SqlModifyQuery(command);
-                    DataTable last_id = connection.SqlSelectTable("last_id", last_id_command);
-                    connection.SqlCommitTransaction();
-                    if (last_id.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Запрос не вернул идентификатор ключа", "Неизвестная ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        return -1;
-                    }
-                    return Convert.ToInt32(last_id.Rows[0][0], CultureInfo.InvariantCulture);
+                    return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);
                 }
                 catch (SqlException e)
                 {

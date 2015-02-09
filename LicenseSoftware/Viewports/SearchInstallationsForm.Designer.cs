@@ -79,6 +79,12 @@
             this.checkBoxInstallDateEnable = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.dateTimePickerInstallDate = new System.Windows.Forms.DateTimePicker();
+            this.comboBoxInvNum = new System.Windows.Forms.ComboBox();
+            this.checkBoxInvNumEnable = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.comboBoxSerialNum = new System.Windows.Forms.ComboBox();
+            this.checkBoxSerialNumEnable = new System.Windows.Forms.CheckBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxSoftwareType
@@ -115,11 +121,11 @@
             this.vButtonCancel.AllowAnimations = true;
             this.vButtonCancel.BackColor = System.Drawing.Color.Transparent;
             this.vButtonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.vButtonCancel.Location = new System.Drawing.Point(257, 663);
+            this.vButtonCancel.Location = new System.Drawing.Point(839, 399);
             this.vButtonCancel.Name = "vButtonCancel";
             this.vButtonCancel.RoundedCornersMask = ((byte)(15));
             this.vButtonCancel.Size = new System.Drawing.Size(117, 35);
-            this.vButtonCancel.TabIndex = 34;
+            this.vButtonCancel.TabIndex = 38;
             this.vButtonCancel.Text = "Отмена";
             this.vButtonCancel.UseVisualStyleBackColor = false;
             this.vButtonCancel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -128,11 +134,11 @@
             // 
             this.vButtonSearch.AllowAnimations = true;
             this.vButtonSearch.BackColor = System.Drawing.Color.Transparent;
-            this.vButtonSearch.Location = new System.Drawing.Point(119, 663);
+            this.vButtonSearch.Location = new System.Drawing.Point(701, 399);
             this.vButtonSearch.Name = "vButtonSearch";
             this.vButtonSearch.RoundedCornersMask = ((byte)(15));
             this.vButtonSearch.Size = new System.Drawing.Size(117, 35);
-            this.vButtonSearch.TabIndex = 33;
+            this.vButtonSearch.TabIndex = 37;
             this.vButtonSearch.Text = "Поиск";
             this.vButtonSearch.UseVisualStyleBackColor = false;
             this.vButtonSearch.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -188,8 +194,6 @@
             // 
             // comboBoxDepartmentLicID
             // 
-            this.comboBoxDepartmentLicID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxDepartmentLicID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentLicID.Enabled = false;
             this.comboBoxDepartmentLicID.FormattingEnabled = true;
@@ -200,8 +204,6 @@
             // 
             // comboBoxSupplierID
             // 
-            this.comboBoxSupplierID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSupplierID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSupplierID.Enabled = false;
             this.comboBoxSupplierID.FormattingEnabled = true;
@@ -212,8 +214,6 @@
             // 
             // comboBoxSoftwareName
             // 
-            this.comboBoxSoftwareName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSoftwareName.Enabled = false;
             this.comboBoxSoftwareName.FormattingEnabled = true;
             this.comboBoxSoftwareName.Location = new System.Drawing.Point(43, 25);
@@ -226,8 +226,6 @@
             // 
             // comboBoxLicType
             // 
-            this.comboBoxLicType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLicType.Enabled = false;
             this.comboBoxLicType.FormattingEnabled = true;
@@ -341,8 +339,6 @@
             // 
             // comboBoxLicDocType
             // 
-            this.comboBoxLicDocType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicDocType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLicDocType.Enabled = false;
             this.comboBoxLicDocType.FormattingEnabled = true;
@@ -362,8 +358,6 @@
             // 
             // dateTimePickerBuyLicenseDate
             // 
-            this.dateTimePickerBuyLicenseDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerBuyLicenseDate.Enabled = false;
             this.dateTimePickerBuyLicenseDate.Location = new System.Drawing.Point(108, 369);
             this.dateTimePickerBuyLicenseDate.Name = "dateTimePickerBuyLicenseDate";
@@ -429,8 +423,6 @@
             // 
             // dateTimePickerExpireLicenseDate
             // 
-            this.dateTimePickerExpireLicenseDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerExpireLicenseDate.Enabled = false;
             this.dateTimePickerExpireLicenseDate.Location = new System.Drawing.Point(108, 411);
             this.dateTimePickerExpireLicenseDate.Name = "dateTimePickerExpireLicenseDate";
@@ -440,7 +432,7 @@
             // checkBoxDepartmentInstallEnable
             // 
             this.checkBoxDepartmentInstallEnable.AutoSize = true;
-            this.checkBoxDepartmentInstallEnable.Location = new System.Drawing.Point(18, 459);
+            this.checkBoxDepartmentInstallEnable.Location = new System.Drawing.Point(499, 30);
             this.checkBoxDepartmentInstallEnable.Name = "checkBoxDepartmentInstallEnable";
             this.checkBoxDepartmentInstallEnable.Size = new System.Drawing.Size(15, 14);
             this.checkBoxDepartmentInstallEnable.TabIndex = 22;
@@ -450,7 +442,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 436);
+            this.label8.Location = new System.Drawing.Point(491, 7);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(362, 15);
             this.label8.TabIndex = 94;
@@ -458,26 +450,22 @@
             // 
             // comboBoxDepartmentInstallID
             // 
-            this.comboBoxDepartmentInstallID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxDepartmentInstallID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentInstallID.Enabled = false;
             this.comboBoxDepartmentInstallID.FormattingEnabled = true;
-            this.comboBoxDepartmentInstallID.Location = new System.Drawing.Point(43, 454);
+            this.comboBoxDepartmentInstallID.Location = new System.Drawing.Point(524, 25);
             this.comboBoxDepartmentInstallID.Name = "comboBoxDepartmentInstallID";
             this.comboBoxDepartmentInstallID.Size = new System.Drawing.Size(436, 23);
             this.comboBoxDepartmentInstallID.TabIndex = 23;
             // 
             // comboBoxLicKey
             // 
-            this.comboBoxLicKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicKey.Enabled = false;
             this.comboBoxLicKey.FormattingEnabled = true;
-            this.comboBoxLicKey.Location = new System.Drawing.Point(43, 540);
+            this.comboBoxLicKey.Location = new System.Drawing.Point(524, 199);
             this.comboBoxLicKey.Name = "comboBoxLicKey";
             this.comboBoxLicKey.Size = new System.Drawing.Size(436, 23);
-            this.comboBoxLicKey.TabIndex = 27;
+            this.comboBoxLicKey.TabIndex = 31;
             this.comboBoxLicKey.DropDownClosed += new System.EventHandler(this.comboBoxLicKey_DropDownClosed);
             this.comboBoxLicKey.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicKey_KeyUp);
             this.comboBoxLicKey.Leave += new System.EventHandler(this.comboBoxLicKey_Leave);
@@ -485,17 +473,17 @@
             // checkBoxLicKeyEnable
             // 
             this.checkBoxLicKeyEnable.AutoSize = true;
-            this.checkBoxLicKeyEnable.Location = new System.Drawing.Point(18, 544);
+            this.checkBoxLicKeyEnable.Location = new System.Drawing.Point(499, 203);
             this.checkBoxLicKeyEnable.Name = "checkBoxLicKeyEnable";
             this.checkBoxLicKeyEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxLicKeyEnable.TabIndex = 26;
+            this.checkBoxLicKeyEnable.TabIndex = 30;
             this.checkBoxLicKeyEnable.UseVisualStyleBackColor = true;
             this.checkBoxLicKeyEnable.CheckedChanged += new System.EventHandler(this.checkBoxLicKeyEnable_CheckedChanged);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(10, 523);
+            this.label13.Location = new System.Drawing.Point(491, 182);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(124, 15);
             this.label13.TabIndex = 100;
@@ -504,17 +492,17 @@
             // checkBoxInstallatorEnable
             // 
             this.checkBoxInstallatorEnable.AutoSize = true;
-            this.checkBoxInstallatorEnable.Location = new System.Drawing.Point(17, 590);
+            this.checkBoxInstallatorEnable.Location = new System.Drawing.Point(498, 249);
             this.checkBoxInstallatorEnable.Name = "checkBoxInstallatorEnable";
             this.checkBoxInstallatorEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxInstallatorEnable.TabIndex = 28;
+            this.checkBoxInstallatorEnable.TabIndex = 32;
             this.checkBoxInstallatorEnable.UseVisualStyleBackColor = true;
             this.checkBoxInstallatorEnable.CheckedChanged += new System.EventHandler(this.checkBoxInstallatorEnable_CheckedChanged);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(9, 567);
+            this.label14.Location = new System.Drawing.Point(490, 226);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(99, 15);
             this.label14.TabIndex = 103;
@@ -522,23 +510,19 @@
             // 
             // comboBoxInstallator
             // 
-            this.comboBoxInstallator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxInstallator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInstallator.Enabled = false;
             this.comboBoxInstallator.FormattingEnabled = true;
-            this.comboBoxInstallator.Location = new System.Drawing.Point(42, 585);
+            this.comboBoxInstallator.Location = new System.Drawing.Point(523, 244);
             this.comboBoxInstallator.Name = "comboBoxInstallator";
             this.comboBoxInstallator.Size = new System.Drawing.Size(436, 23);
-            this.comboBoxInstallator.TabIndex = 29;
+            this.comboBoxInstallator.TabIndex = 33;
             // 
             // comboBoxComputer
             // 
-            this.comboBoxComputer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxComputer.Enabled = false;
             this.comboBoxComputer.FormattingEnabled = true;
-            this.comboBoxComputer.Location = new System.Drawing.Point(43, 497);
+            this.comboBoxComputer.Location = new System.Drawing.Point(524, 68);
             this.comboBoxComputer.Name = "comboBoxComputer";
             this.comboBoxComputer.Size = new System.Drawing.Size(436, 23);
             this.comboBoxComputer.TabIndex = 25;
@@ -549,7 +533,7 @@
             // checkBoxComputerEnable
             // 
             this.checkBoxComputerEnable.AutoSize = true;
-            this.checkBoxComputerEnable.Location = new System.Drawing.Point(18, 501);
+            this.checkBoxComputerEnable.Location = new System.Drawing.Point(499, 72);
             this.checkBoxComputerEnable.Name = "checkBoxComputerEnable";
             this.checkBoxComputerEnable.Size = new System.Drawing.Size(15, 14);
             this.checkBoxComputerEnable.TabIndex = 24;
@@ -559,7 +543,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(10, 480);
+            this.label15.Location = new System.Drawing.Point(491, 51);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(310, 15);
             this.label15.TabIndex = 106;
@@ -574,25 +558,25 @@
             "=",
             "≥",
             "≤"});
-            this.comboBoxOpInstallDate.Location = new System.Drawing.Point(41, 628);
+            this.comboBoxOpInstallDate.Location = new System.Drawing.Point(522, 287);
             this.comboBoxOpInstallDate.Name = "comboBoxOpInstallDate";
             this.comboBoxOpInstallDate.Size = new System.Drawing.Size(55, 23);
-            this.comboBoxOpInstallDate.TabIndex = 31;
+            this.comboBoxOpInstallDate.TabIndex = 35;
             // 
             // checkBoxInstallDateEnable
             // 
             this.checkBoxInstallDateEnable.AutoSize = true;
-            this.checkBoxInstallDateEnable.Location = new System.Drawing.Point(16, 632);
+            this.checkBoxInstallDateEnable.Location = new System.Drawing.Point(497, 291);
             this.checkBoxInstallDateEnable.Name = "checkBoxInstallDateEnable";
             this.checkBoxInstallDateEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxInstallDateEnable.TabIndex = 30;
+            this.checkBoxInstallDateEnable.TabIndex = 34;
             this.checkBoxInstallDateEnable.UseVisualStyleBackColor = true;
             this.checkBoxInstallDateEnable.CheckedChanged += new System.EventHandler(this.checkBoxInstallDateEnable_CheckedChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(9, 611);
+            this.label10.Location = new System.Drawing.Point(490, 270);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(120, 15);
             this.label10.TabIndex = 110;
@@ -600,20 +584,86 @@
             // 
             // dateTimePickerInstallDate
             // 
-            this.dateTimePickerInstallDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerInstallDate.Enabled = false;
-            this.dateTimePickerInstallDate.Location = new System.Drawing.Point(107, 628);
+            this.dateTimePickerInstallDate.Location = new System.Drawing.Point(588, 287);
             this.dateTimePickerInstallDate.Name = "dateTimePickerInstallDate";
             this.dateTimePickerInstallDate.Size = new System.Drawing.Size(371, 21);
-            this.dateTimePickerInstallDate.TabIndex = 32;
+            this.dateTimePickerInstallDate.TabIndex = 36;
+            // 
+            // comboBoxInvNum
+            // 
+            this.comboBoxInvNum.Enabled = false;
+            this.comboBoxInvNum.FormattingEnabled = true;
+            this.comboBoxInvNum.Location = new System.Drawing.Point(525, 111);
+            this.comboBoxInvNum.Name = "comboBoxInvNum";
+            this.comboBoxInvNum.Size = new System.Drawing.Size(436, 23);
+            this.comboBoxInvNum.TabIndex = 27;
+            this.comboBoxInvNum.DropDownClosed += new System.EventHandler(this.comboBoxInvNum_DropDownClosed);
+            this.comboBoxInvNum.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxInvNum_KeyUp);
+            this.comboBoxInvNum.Leave += new System.EventHandler(this.comboBoxInvNum_Leave);
+            // 
+            // checkBoxInvNumEnable
+            // 
+            this.checkBoxInvNumEnable.AutoSize = true;
+            this.checkBoxInvNumEnable.Location = new System.Drawing.Point(500, 115);
+            this.checkBoxInvNumEnable.Name = "checkBoxInvNumEnable";
+            this.checkBoxInvNumEnable.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxInvNumEnable.TabIndex = 26;
+            this.checkBoxInvNumEnable.UseVisualStyleBackColor = true;
+            this.checkBoxInvNumEnable.CheckedChanged += new System.EventHandler(this.checkBoxInvNumEnable_CheckedChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(492, 94);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(358, 15);
+            this.label16.TabIndex = 113;
+            this.label16.Text = "Инвентарный № ПК, на который произведена установка ПО";
+            // 
+            // comboBoxSerialNum
+            // 
+            this.comboBoxSerialNum.Enabled = false;
+            this.comboBoxSerialNum.FormattingEnabled = true;
+            this.comboBoxSerialNum.Location = new System.Drawing.Point(526, 155);
+            this.comboBoxSerialNum.Name = "comboBoxSerialNum";
+            this.comboBoxSerialNum.Size = new System.Drawing.Size(436, 23);
+            this.comboBoxSerialNum.TabIndex = 29;
+            this.comboBoxSerialNum.DropDownClosed += new System.EventHandler(this.comboBoxSerialNum_DropDownClosed);
+            this.comboBoxSerialNum.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxSerialNum_KeyUp);
+            this.comboBoxSerialNum.Leave += new System.EventHandler(this.comboBoxSerialNum_Leave);
+            // 
+            // checkBoxSerialNumEnable
+            // 
+            this.checkBoxSerialNumEnable.AutoSize = true;
+            this.checkBoxSerialNumEnable.Location = new System.Drawing.Point(501, 159);
+            this.checkBoxSerialNumEnable.Name = "checkBoxSerialNumEnable";
+            this.checkBoxSerialNumEnable.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxSerialNumEnable.TabIndex = 28;
+            this.checkBoxSerialNumEnable.UseVisualStyleBackColor = true;
+            this.checkBoxSerialNumEnable.CheckedChanged += new System.EventHandler(this.checkBoxSerialNumEnable_CheckedChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(493, 138);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(336, 15);
+            this.label17.TabIndex = 116;
+            this.label17.Text = "Серийный № ПК, на который произведена установка ПО";
             // 
             // SearchInstallationsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            this.ClientSize = new System.Drawing.Size(493, 709);
+            this.ClientSize = new System.Drawing.Size(968, 445);
+            this.Controls.Add(this.comboBoxSerialNum);
+            this.Controls.Add(this.checkBoxSerialNumEnable);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.comboBoxInvNum);
+            this.Controls.Add(this.checkBoxInvNumEnable);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.comboBoxOpInstallDate);
             this.Controls.Add(this.checkBoxInstallDateEnable);
             this.Controls.Add(this.label10);
@@ -729,6 +779,12 @@
         private System.Windows.Forms.CheckBox checkBoxInstallDateEnable;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.DateTimePicker dateTimePickerInstallDate;
+        private System.Windows.Forms.ComboBox comboBoxInvNum;
+        private System.Windows.Forms.CheckBox checkBoxInvNumEnable;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ComboBox comboBoxSerialNum;
+        private System.Windows.Forms.CheckBox checkBoxSerialNumEnable;
+        private System.Windows.Forms.Label label17;
 
     }
 }

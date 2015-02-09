@@ -17,7 +17,7 @@ namespace LicenseSoftware.DataModels
         private static SoftMakersDataModel dataModel = null;
         private static string selectQuery = "SELECT * FROM SoftMakers WHERE Deleted = 0";
         private static string deleteQuery = "UPDATE SoftMakers SET Deleted = 1 WHERE [ID SoftMaker] = @IDSoftMaker";
-        private static string insertQuery = @"INSERT INTO SoftMakers (SoftMaker) VALUES (@SoftMaker)";
+        private static string insertQuery = @"INSERT INTO SoftMakers (SoftMaker) VALUES (@SoftMaker); SELECT CONVERT(int, SCOPE_IDENTITY());";
         private static string updateQuery = @"UPDATE SoftMakers SET SoftMaker = @SoftMaker WHERE [ID SoftMaker] = @IDSoftMaker";
         private static string tableName = "SoftMakers";
 
@@ -52,7 +52,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftMaker", id));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -80,7 +80,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftMaker", softMaker.IdSoftMaker));
                 try
                 {
-                    return connection.SqlModifyQuery(command);
+                    return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
@@ -96,9 +96,7 @@ namespace LicenseSoftware.DataModels
         {
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
-            using (DbCommand last_id_command = DBConnection.CreateCommand())
             {
-                last_id_command.CommandText = "SELECT @@IDENTITY";
                 command.CommandText = insertQuery;
                 if (softMaker == null)
                 {
@@ -109,17 +107,7 @@ namespace LicenseSoftware.DataModels
                 command.Parameters.Add(DBConnection.CreateParameter<string>("SoftMaker", softMaker.SoftMakerName));
                 try
                 {
-                    connection.SqlBeginTransaction();
-                    connection.SqlModifyQuery(command);
-                    DataTable last_id = connection.SqlSelectTable("last_id", last_id_command);
-                    connection.SqlCommitTransaction();
-                    if (last_id.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Запрос не вернул идентификатор ключа", "Неизвестная ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        return -1;
-                    }
-                    return Convert.ToInt32(last_id.Rows[0][0], CultureInfo.InvariantCulture);
+                    return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);
                 }
                 catch (SqlException e)
                 {

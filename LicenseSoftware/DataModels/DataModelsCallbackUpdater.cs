@@ -177,14 +177,17 @@ namespace LicenseSoftware.DataModels
 
         private static void CalcDataModelsUpdate(string table, string field_name, string operation_type)
         {
-            /* Макет
             switch (table)
             {
-                case "restrictions":
-                    if (CalcDataModelBuildingsPremisesSumArea.HasInstance())
-                        CalcDataModelBuildingsPremisesSumArea.GetInstance().DefferedUpdate = true;
+                case "Software":
+                    if (CalcDataModelSoftwareConcat.HasInstance())
+                        CalcDataModelSoftwareConcat.GetInstance().DefferedUpdate = true;
                     break;
-            }*/
+                case "SoftLicenses":
+                    if (CalcDataModelLicensesConcat.HasInstance())
+                        CalcDataModelLicensesConcat.GetInstance().DefferedUpdate = true;
+                    break;
+            }
         }
 
         private static void SetValue(DataRow row, string field_name, string field_value, string operation_type)
@@ -202,7 +205,11 @@ namespace LicenseSoftware.DataModels
             }
             else
             {
-                object value = Convert.ChangeType(field_value, row.Table.Columns[field_name].DataType, CultureInfo.InvariantCulture);
+                object value = DBNull.Value;
+                if (row.Table.Columns[field_name].DataType == typeof(Boolean))
+                    value = field_value == "1" ? true : false;
+                else
+                    value = Convert.ChangeType(field_value, row.Table.Columns[field_name].DataType, CultureInfo.InvariantCulture);
                 if (!row[field_name].Equals(value))
                 {
                     row[field_name] = value;
@@ -215,9 +222,11 @@ namespace LicenseSoftware.DataModels
         {
             switch (table)
             {
+                case "Software":
+                    return SoftwareDataModel.GetInstance().EditingNewRecord;
                 case "SoftLicenses": 
                     return SoftLicensesDataModel.GetInstance().EditingNewRecord;
-                case "SoftInstalllations":
+                case "SoftInstallations":
                     return SoftInstallationsDataModel.GetInstance().EditingNewRecord;
                 default:
                     return false;
