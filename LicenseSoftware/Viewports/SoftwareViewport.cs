@@ -136,6 +136,11 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
+            if (!AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE))
+            {
+                viewportState = ViewportState.ReadState;
+                return true;
+            }
             switch (state)
             {
                 case ViewportState.ReadState:

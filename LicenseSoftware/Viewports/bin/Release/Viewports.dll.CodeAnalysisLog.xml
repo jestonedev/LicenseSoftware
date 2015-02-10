@@ -4,7 +4,7 @@
  <Namespaces>
   <Namespace Name="LicenseSoftware.SearchForms">
    <Messages>
-    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="Breaking">
+    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="Breaking">
      <Issue Certainty="50" Level="Warning">Consider merging the types defined in 'LicenseSoftware.SearchForms' with another namespace.</Issue>
     </Message>
    </Messages>
@@ -15,7 +15,7 @@
    <Modules>
     <Module Name="viewports.dll">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'Viewports.dll' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -26,13 +26,13 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="CriticalWarning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 75. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Method" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 17. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
             </Message>
-            <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="93">Because the behavior of 'string.ToUpper()' could vary based on the current user's locale settings, replace this call in 'SearchInstallationsForm.GetFilter()' with a call to 'string.ToUpper(CultureInfo)'. If the result of 'string.ToUpper(CultureInfo)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'CultureInfo' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
              <Issue Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="93">Because the behavior of 'string.ToUpper()' could vary based on the current user's locale settings, replace this call in 'SearchInstallationsForm.GetFilter()' with a call to 'string.ToUpper(CultureInfo)'. If the result of 'string.ToUpper(CultureInfo)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'CultureInfo' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>
@@ -40,7 +40,7 @@
           </Member>
           <Member Name="#vButtonSearch_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="359">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
@@ -51,7 +51,7 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="37">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 32. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
@@ -62,21 +62,21 @@
          <Members>
           <Member Name="#softMakers" Kind="Field" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning">It appears that field 'SearchSoftwareForm.softMakers' is never used or is only ever assigned to. Use this field or remove it.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#softTypes" Kind="Field" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning">It appears that field 'SearchSoftwareForm.softTypes' is never used or is only ever assigned to. Use this field or remove it.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#softwares" Kind="Field" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning">It appears that field 'SearchSoftwareForm.softwares' is never used or is only ever assigned to. Use this field or remove it.</Issue>
             </Message>
            </Messages>
@@ -91,7 +91,7 @@
          <Members>
           <Member Name="#GetRecordCount()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="Breaking">
+            <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="Breaking">
              <Issue Certainty="50" Level="Warning">Change 'IMenuController.GetRecordCount()' to a property if appropriate.</Issue>
             </Message>
            </Messages>
@@ -102,15 +102,15 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
-             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="704">In method 'InstallationsViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
+             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="709">In method 'InstallationsViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idInstallation" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="725">'idInstallation', a variable declared in 'InstallationsViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="idInstallation" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="730">'idInstallation', a variable declared in 'InstallationsViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -120,14 +120,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallatorsViewport.cs" Line="346">In method 'InstallatorsViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idInstallator" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idInstallator" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="InstallatorsViewport.cs" Line="280">'idInstallator', a variable declared in 'InstallatorsViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -138,8 +138,8 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
-             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="684">In method 'LicensesViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
+             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="689">In method 'LicensesViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -147,7 +147,7 @@
         </Type>
         <Type Name="ParentTypeEnum" Kind="Enum" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="Breaking">
+          <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="Breaking">
            <Issue Name="TypeNoAlternate" Certainty="95" Level="CriticalError">Rename type name 'ParentTypeEnum' so that it does not end in 'Enum'.</Issue>
           </Message>
          </Messages>
@@ -156,14 +156,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicDocTypesViewport.cs" Line="360">In method 'SoftLicDocTypesViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftLicDocType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idSoftLicDocType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicDocTypesViewport.cs" Line="296">'idSoftLicDocType', a variable declared in 'SoftLicDocTypesViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -174,21 +174,21 @@
          <Members>
           <Member Name="#dataGridView_CellValidated(System.Object,System.Windows.Forms.DataGridViewCellEventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="IsNullOrEmpty" Certainty="95" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicKeysViewport.cs" Line="424">Replace the call to 'string.operator ==(string, string)' in 'SoftLicKeysViewport.dataGridView_CellValidated(object, DataGridViewCellEventArgs)' with a call to 'String.IsNullOrEmpty'.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicKeysViewport.cs" Line="368">In method 'SoftLicKeysViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ValidateSoftLicKeys(System.Collections.Generic.List`1&lt;LicenseSoftware.Entities.SoftLicKey&gt;)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="softLicKeys" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="softLicKeys" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicKeysViewport.cs" Line="92">'softLicKeys', a parameter declared in 'SoftLicKeysViewport.ValidateSoftLicKeys(List&lt;SoftLicKey&gt;)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -199,14 +199,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicTypesViewport.cs" Line="360">In method 'SoftLicTypesViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftLicType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idSoftLicType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftLicTypesViewport.cs" Line="296">'idSoftLicType', a variable declared in 'SoftLicTypesViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -217,14 +217,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftMakersViewport.cs" Line="360">In method 'SoftMakersViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftMaker" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idSoftMaker" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftMakersViewport.cs" Line="296">'idSoftMaker', a variable declared in 'SoftMakersViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -235,14 +235,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftSuppliersViewport.cs" Line="360">In method 'SoftSuppliersViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftSupplier" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idSoftSupplier" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftSuppliersViewport.cs" Line="296">'idSoftSupplier', a variable declared in 'SoftSuppliersViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -253,14 +253,14 @@
          <Members>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftTypesViewport.cs" Line="359">In method 'SoftTypesViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="idSoftType" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftTypesViewport.cs" Line="296">'idSoftType', a variable declared in 'SoftTypesViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -271,53 +271,53 @@
          <Members>
           <Member Name="#CopyRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="474">'software', a variable declared in 'SoftwareViewport.CopyRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="479">'software', a variable declared in 'SoftwareViewport.CopyRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#Duplicate()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
-             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="518">In method 'SoftwareViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
+             <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="523">In method 'SoftwareViewport.Duplicate()', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SaveRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="idSoftware" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="539">'idSoftware', a variable declared in 'SoftwareViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="idSoftware" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="544">'idSoftware', a variable declared in 'SoftwareViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="539">'software', a variable declared in 'SoftwareViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="544">'software', a variable declared in 'SoftwareViewport.SaveRecord()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SoftwareFromView()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="252">'software', a variable declared in 'SoftwareViewport.SoftwareFromView()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="257">'software', a variable declared in 'SoftwareViewport.SoftwareFromView()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#SoftwareFromViewport()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="238">'software', a variable declared in 'SoftwareViewport.SoftwareFromViewport()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="243">'software', a variable declared in 'SoftwareViewport.SoftwareFromViewport()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ValidateSoftware(LicenseSoftware.Entities.Software)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="276">'software', a parameter declared in 'SoftwareViewport.ValidateSoftware(Software)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="281">'software', a parameter declared in 'SoftwareViewport.ValidateSoftware(Software)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ViewportFromSoftware(LicenseSoftware.Entities.Software)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
-             <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="230">'software', a parameter declared in 'SoftwareViewport.ViewportFromSoftware(Software)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="software" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SoftwareViewport.cs" Line="235">'software', a parameter declared in 'SoftwareViewport.ViewportFromSoftware(Software)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -325,17 +325,17 @@
         </Type>
         <Type Name="Viewport" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="Breaking">
+          <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="Breaking">
            <Issue Certainty="95" Level="Error">The type name 'Viewport' conflicts in whole or in part with the namespace name 'LicenseSoftware.Viewport'. Change either name to eliminate the conflict.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#ShowAssocViewport(LicenseSoftware.Viewport.IMenuCallback,LicenseSoftware.Viewport.ViewportType,System.String,System.Data.DataRow,LicenseSoftware.Viewport.ParentTypeEnum)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="DependsOnFix">
+            <Message TypeName="Dispose objects before losing scope" Category="Microsoft.Reliability" CheckId="CA2000" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="DependsOnFix">
              <Issue Name="ExceptionEdge" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="Viewport.cs" Line="161">In method 'Viewport.ShowAssocViewport(IMenuCallback, ViewportType, string, DataRow, ParentTypeEnum)', object 'viewport' is not disposed along all exception paths. Call System.IDisposable.Dispose on object 'viewport' before all references to it are out of scope.</Issue>
             </Message>
-            <Message Id="menuCallback" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message Id="menuCallback" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Name="Parameter" Certainty="95" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="Viewport.cs" Line="159">'menuCallback', a parameter declared in 'Viewport.ShowAssocViewport(IMenuCallback, ViewportType, string, DataRow, ParentTypeEnum)', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -346,28 +346,28 @@
          <Members>
           <Member Name="#ValueOrDefault(System.Nullable`1&lt;System.Boolean&gt;)" Kind="Method" Static="True" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="ViewportHelper.cs" Line="47">'ViewportHelper.ValueOrDefault(bool?)' appears to have no upstream public or protected callers.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ValueOrDefault(System.Nullable`1&lt;System.Decimal&gt;)" Kind="Method" Static="True" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="ViewportHelper.cs" Line="55">'ViewportHelper.ValueOrDefault(decimal?)' appears to have no upstream public or protected callers.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ValueOrDefault(System.Nullable`1&lt;System.Double&gt;)" Kind="Method" Static="True" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="ViewportHelper.cs" Line="31">'ViewportHelper.ValueOrDefault(double?)' appears to have no upstream public or protected callers.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ValueOrNull(System.Windows.Forms.ComboBox)" Kind="Method" Static="True" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-09 08:44:59Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Active" Created="2015-02-10 06:17:43Z" FixCategory="NonBreaking">
              <Issue Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="ViewportHelper.cs" Line="79">'ViewportHelper.ValueOrNull(ComboBox)' appears to have no upstream public or protected callers.</Issue>
             </Message>
            </Messages>

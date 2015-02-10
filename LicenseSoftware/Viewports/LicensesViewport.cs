@@ -210,6 +210,11 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
+            if (!AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE))
+            {
+                viewportState = ViewportState.ReadState;
+                return true;
+            }
             switch (state)
             {
                 case ViewportState.ReadState:
@@ -596,9 +601,9 @@ namespace LicenseSoftware.Viewport
 
         public override void ClearSearch()
         {
-            v_licenses.Filter = StaticFilter;
-            dataGridView.RowCount = v_licenses.Count;
             DynamicFilter = "";
+            RebuildFilter();
+            dataGridView.RowCount = v_licenses.Count;
             MenuCallback.EditingStateUpdate();
             MenuCallback.StatusBarStateUpdate();
             MenuCallback.RelationsStateUpdate();

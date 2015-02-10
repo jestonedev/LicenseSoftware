@@ -227,6 +227,11 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
+            if (!AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE))
+            {
+                viewportState = ViewportState.ReadState;
+                return true;
+            }
             switch (state)
             {
                 case ViewportState.ReadState:
@@ -621,9 +626,9 @@ namespace LicenseSoftware.Viewport
 
         public override void ClearSearch()
         {
-            v_softInstallations.Filter = StaticFilter;
-            dataGridView.RowCount = v_softInstallations.Count;
             DynamicFilter = "";
+            RebuildFilter();
+            dataGridView.RowCount = v_softInstallations.Count;
             MenuCallback.EditingStateUpdate();
             MenuCallback.StatusBarStateUpdate();
             MenuCallback.NavigationStateUpdate();
@@ -1500,6 +1505,7 @@ namespace LicenseSoftware.Viewport
             this.serialNum.MinimumWidth = 150;
             this.serialNum.Name = "serialNum";
             this.serialNum.ReadOnly = true;
+            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // invNum
             // 
@@ -1507,6 +1513,7 @@ namespace LicenseSoftware.Viewport
             this.invNum.MinimumWidth = 150;
             this.invNum.Name = "invNum";
             this.invNum.ReadOnly = true;
+            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // installationDate
             // 
@@ -1521,6 +1528,7 @@ namespace LicenseSoftware.Viewport
             this.license.MinimumWidth = 250;
             this.license.Name = "license";
             this.license.ReadOnly = true;
+            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // licKey
             // 
@@ -1528,6 +1536,7 @@ namespace LicenseSoftware.Viewport
             this.licKey.MinimumWidth = 150;
             this.licKey.Name = "licKey";
             this.licKey.ReadOnly = true;
+            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // InstallationsViewport
             // 
