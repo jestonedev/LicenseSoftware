@@ -16,7 +16,7 @@ namespace LicenseSoftware.DataModels
     {
         private static DataModelsCallbackUpdater instance;
         private static string query = @"SELECT [ID Record], [Table], [ID Key], [Field Name], [Field New Value], [Operation Type] 
-                                        FROM Log WHERE [ID Record] > @IDRecord AND ([Operation Type] = 'UPDATE' OR ([Operation Type] IN ('DELETE','INSERT') AND ([User Name] <> @UserName)))";
+                                        FROM Log WHERE [ID Record] > @IDRecord AND ([Operation Type] = 'UPDATE' OR ([Operation Type] IN ('DELETE','INSERT') AND ([User Name] <> @UserName)) OR [Table] IN ('Departments','Devices'))";
         private static string initQuery = @"SELECT ISNULL(MAX([ID Record]), 0) AS [ID Record], suser_sname() AS [User Name] FROM Log";
         private int idRecord = -1;
         private string userName = "";
