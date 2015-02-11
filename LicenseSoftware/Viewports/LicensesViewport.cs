@@ -71,6 +71,7 @@ namespace LicenseSoftware.Viewport
         private DataGridViewTextBoxColumn department;
         private DataGridViewTextBoxColumn buyLicenseDate;
         private DataGridViewTextBoxColumn expireLicenseDate;
+        private CheckBox checkBoxInstallCountEnable;
 
 
         private SearchForm sSearchForm = null;
@@ -180,6 +181,13 @@ namespace LicenseSoftware.Viewport
                 dateTimePickerExpireLicenseDate.Value = DateTime.Now.Date;
                 dateTimePickerExpireLicenseDate.Checked = false;
             }
+            if ((v_licenses.Position >= 0) && (row["InstallationsCount"] != DBNull.Value))
+                checkBoxInstallCountEnable.Checked = true;
+            else
+            {
+                numericUpDownInstallationsCount.Value = 0;
+                checkBoxInstallCountEnable.Checked = false;
+            }
         }
 
         private void CheckViewportModifications()
@@ -210,7 +218,7 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
-            if (!AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE))
+            if (!AccessControl.HasPrivelege(Priveleges.LicensesReadWrite))
             {
                 viewportState = ViewportState.ReadState;
                 return true;
@@ -334,7 +342,10 @@ namespace LicenseSoftware.Viewport
             softLicense.Description = ViewportHelper.ValueOrNull(textBoxDescription);
             softLicense.BuyLicenseDate = ViewportHelper.ValueOrNull(dateTimePickerBuyLicenseDate);
             softLicense.ExpireLicenseDate = ViewportHelper.ValueOrNull(dateTimePickerExpireLicenseDate);
-            softLicense.InstallationsCount = (int)numericUpDownInstallationsCount.Value;
+            if (checkBoxInstallCountEnable.Checked)
+                softLicense.InstallationsCount = (int)numericUpDownInstallationsCount.Value;
+            else
+                softLicense.InstallationsCount = null;
             return softLicense;
         }
 
@@ -617,7 +628,7 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanInsertRecord()
         {
-            return (!licenses.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+            return (!licenses.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void InsertRecord()
@@ -637,7 +648,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanCopyRecord()
         {
             return (v_licenses.Position != -1) && (!licenses.EditingNewRecord)
-                && AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void CopyRecord()
@@ -676,7 +687,7 @@ namespace LicenseSoftware.Viewport
         {
             return (v_licenses.Position > -1)
                 && (viewportState != ViewportState.NewRowState)
-                && AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override bool CanDuplicate()
@@ -702,7 +713,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanSaveRecord()
         {
             return ((viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState))
-                && AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void SaveRecord()
@@ -792,7 +803,7 @@ namespace LicenseSoftware.Viewport
         public override bool HasAssocInstallations()
         {
             return (v_licenses.Position > -1) &&
-                AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ);
+                AccessControl.HasPrivelege(Priveleges.InstallationsRead);
         }
 
         public override bool HasAssocLicKeys()
@@ -1000,6 +1011,12 @@ namespace LicenseSoftware.Viewport
             CheckViewportModifications();
         }
 
+        private void checkBoxInstallCountEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDownInstallationsCount.Enabled = checkBoxInstallCountEnable.Checked;
+            CheckViewportModifications();
+        }
+
         void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;
@@ -1094,6 +1111,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftwareID = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxInstallCountEnable = new System.Windows.Forms.CheckBox();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDownInstallationsCount = new System.Windows.Forms.NumericUpDown();
@@ -1414,6 +1432,7 @@ namespace LicenseSoftware.Viewport
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBoxInstallCountEnable);
             this.groupBox2.Controls.Add(this.textBoxDescription);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.numericUpDownInstallationsCount);
@@ -1428,6 +1447,16 @@ namespace LicenseSoftware.Viewport
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Общие сведения о лицензии";
             // 
+            // checkBoxInstallCountEnable
+            // 
+            this.checkBoxInstallCountEnable.AutoSize = true;
+            this.checkBoxInstallCountEnable.Location = new System.Drawing.Point(165, 55);
+            this.checkBoxInstallCountEnable.Name = "checkBoxInstallCountEnable";
+            this.checkBoxInstallCountEnable.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxInstallCountEnable.TabIndex = 1;
+            this.checkBoxInstallCountEnable.UseVisualStyleBackColor = true;
+            this.checkBoxInstallCountEnable.CheckedChanged += new System.EventHandler(this.checkBoxInstallCountEnable_CheckedChanged);
+            // 
             // textBoxDescription
             // 
             this.textBoxDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1436,7 +1465,7 @@ namespace LicenseSoftware.Viewport
             this.textBoxDescription.MaxLength = 500;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.Size = new System.Drawing.Size(220, 21);
-            this.textBoxDescription.TabIndex = 2;
+            this.textBoxDescription.TabIndex = 3;
             this.textBoxDescription.TextChanged += new System.EventHandler(this.textBoxDescription_TextChanged);
             // 
             // label7
@@ -1452,15 +1481,16 @@ namespace LicenseSoftware.Viewport
             // 
             this.numericUpDownInstallationsCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDownInstallationsCount.Location = new System.Drawing.Point(161, 51);
+            this.numericUpDownInstallationsCount.Enabled = false;
+            this.numericUpDownInstallationsCount.Location = new System.Drawing.Point(186, 51);
             this.numericUpDownInstallationsCount.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.numericUpDownInstallationsCount.Name = "numericUpDownInstallationsCount";
-            this.numericUpDownInstallationsCount.Size = new System.Drawing.Size(220, 21);
-            this.numericUpDownInstallationsCount.TabIndex = 1;
+            this.numericUpDownInstallationsCount.Size = new System.Drawing.Size(195, 21);
+            this.numericUpDownInstallationsCount.TabIndex = 2;
             this.numericUpDownInstallationsCount.Value = new decimal(new int[] {
             1,
             0,

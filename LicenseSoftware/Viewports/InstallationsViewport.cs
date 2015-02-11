@@ -227,7 +227,7 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
-            if (!AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE))
+            if (!AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite))
             {
                 viewportState = ViewportState.ReadState;
                 return true;
@@ -636,7 +636,7 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanInsertRecord()
         {
-            return (!softInstallations.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE);
+            return (!softInstallations.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
         public override void InsertRecord()
@@ -659,7 +659,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanCopyRecord()
         {
             return (v_softInstallations.Position != -1) && (!softInstallations.EditingNewRecord)
-                && AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
         public override void CopyRecord()
@@ -696,7 +696,7 @@ namespace LicenseSoftware.Viewport
         {
             return (v_softInstallations.Position > -1)
                 && (viewportState != ViewportState.NewRowState)
-                && AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
         public override bool CanDuplicate()
@@ -722,7 +722,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanSaveRecord()
         {
             return ((viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState))
-                && AccessControl.HasPrivelege(Priveleges.INSTALLATIONS_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
         public override void SaveRecord()

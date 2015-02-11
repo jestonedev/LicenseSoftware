@@ -14,7 +14,6 @@ namespace LicenseSoftware.SearchForms
 {
     internal partial class SearchSoftwareForm : SearchForm
     {
-
         SoftwareDataModel softwares = null;
         SoftTypesDataModel softTypes = null;
         SoftMakersDataModel softMakers = null;
@@ -52,6 +51,10 @@ namespace LicenseSoftware.SearchForms
             softwares = SoftwareDataModel.GetInstance();
             softMakers = SoftMakersDataModel.GetInstance();
             softTypes = SoftTypesDataModel.GetInstance();
+
+            softwares.Select();
+            softMakers.Select();
+            softTypes.Select();
 
             v_softMakers = new BindingSource();
             v_softMakers.DataMember = "SoftMakers";

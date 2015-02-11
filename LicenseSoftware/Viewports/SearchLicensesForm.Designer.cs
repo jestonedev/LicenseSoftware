@@ -63,6 +63,9 @@
             this.checkBoxExpireLicenseDateEnable = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dateTimePickerExpireLicenseDate = new System.Windows.Forms.DateTimePicker();
+            this.comboBoxLicKey = new System.Windows.Forms.ComboBox();
+            this.checkBoxLicKeyEnable = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxSoftwareType
@@ -99,11 +102,11 @@
             this.vButtonCancel.AllowAnimations = true;
             this.vButtonCancel.BackColor = System.Drawing.Color.Transparent;
             this.vButtonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.vButtonCancel.Location = new System.Drawing.Point(257, 444);
+            this.vButtonCancel.Location = new System.Drawing.Point(257, 487);
             this.vButtonCancel.Name = "vButtonCancel";
             this.vButtonCancel.RoundedCornersMask = ((byte)(15));
             this.vButtonCancel.Size = new System.Drawing.Size(117, 35);
-            this.vButtonCancel.TabIndex = 23;
+            this.vButtonCancel.TabIndex = 25;
             this.vButtonCancel.Text = "Отмена";
             this.vButtonCancel.UseVisualStyleBackColor = false;
             this.vButtonCancel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -112,11 +115,11 @@
             // 
             this.vButtonSearch.AllowAnimations = true;
             this.vButtonSearch.BackColor = System.Drawing.Color.Transparent;
-            this.vButtonSearch.Location = new System.Drawing.Point(119, 444);
+            this.vButtonSearch.Location = new System.Drawing.Point(119, 487);
             this.vButtonSearch.Name = "vButtonSearch";
             this.vButtonSearch.RoundedCornersMask = ((byte)(15));
             this.vButtonSearch.Size = new System.Drawing.Size(117, 35);
-            this.vButtonSearch.TabIndex = 22;
+            this.vButtonSearch.TabIndex = 24;
             this.vButtonSearch.Text = "Поиск";
             this.vButtonSearch.UseVisualStyleBackColor = false;
             this.vButtonSearch.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -338,7 +341,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(10, 353);
+            this.label9.Location = new System.Drawing.Point(10, 395);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(182, 15);
             this.label9.TabIndex = 87;
@@ -349,18 +352,18 @@
             this.dateTimePickerBuyLicenseDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerBuyLicenseDate.Enabled = false;
-            this.dateTimePickerBuyLicenseDate.Location = new System.Drawing.Point(108, 370);
+            this.dateTimePickerBuyLicenseDate.Location = new System.Drawing.Point(108, 412);
             this.dateTimePickerBuyLicenseDate.Name = "dateTimePickerBuyLicenseDate";
             this.dateTimePickerBuyLicenseDate.Size = new System.Drawing.Size(371, 21);
-            this.dateTimePickerBuyLicenseDate.TabIndex = 18;
+            this.dateTimePickerBuyLicenseDate.TabIndex = 20;
             // 
             // checkBoxBuyLicenseDateEnable
             // 
             this.checkBoxBuyLicenseDateEnable.AutoSize = true;
-            this.checkBoxBuyLicenseDateEnable.Location = new System.Drawing.Point(17, 374);
+            this.checkBoxBuyLicenseDateEnable.Location = new System.Drawing.Point(17, 416);
             this.checkBoxBuyLicenseDateEnable.Name = "checkBoxBuyLicenseDateEnable";
             this.checkBoxBuyLicenseDateEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxBuyLicenseDateEnable.TabIndex = 16;
+            this.checkBoxBuyLicenseDateEnable.TabIndex = 18;
             this.checkBoxBuyLicenseDateEnable.UseVisualStyleBackColor = true;
             this.checkBoxBuyLicenseDateEnable.CheckedChanged += new System.EventHandler(this.checkBoxBuyLicenseDateEnable_CheckedChanged);
             // 
@@ -373,10 +376,10 @@
             "=",
             "≥",
             "≤"});
-            this.comboBoxOpBuyLicenseDate.Location = new System.Drawing.Point(42, 370);
+            this.comboBoxOpBuyLicenseDate.Location = new System.Drawing.Point(42, 412);
             this.comboBoxOpBuyLicenseDate.Name = "comboBoxOpBuyLicenseDate";
             this.comboBoxOpBuyLicenseDate.Size = new System.Drawing.Size(55, 23);
-            this.comboBoxOpBuyLicenseDate.TabIndex = 17;
+            this.comboBoxOpBuyLicenseDate.TabIndex = 19;
             // 
             // comboBoxOpExpireLicenseDate
             // 
@@ -387,25 +390,25 @@
             "=",
             "≥",
             "≤"});
-            this.comboBoxOpExpireLicenseDate.Location = new System.Drawing.Point(42, 412);
+            this.comboBoxOpExpireLicenseDate.Location = new System.Drawing.Point(42, 454);
             this.comboBoxOpExpireLicenseDate.Name = "comboBoxOpExpireLicenseDate";
             this.comboBoxOpExpireLicenseDate.Size = new System.Drawing.Size(55, 23);
-            this.comboBoxOpExpireLicenseDate.TabIndex = 20;
+            this.comboBoxOpExpireLicenseDate.TabIndex = 22;
             // 
             // checkBoxExpireLicenseDateEnable
             // 
             this.checkBoxExpireLicenseDateEnable.AutoSize = true;
-            this.checkBoxExpireLicenseDateEnable.Location = new System.Drawing.Point(17, 416);
+            this.checkBoxExpireLicenseDateEnable.Location = new System.Drawing.Point(17, 458);
             this.checkBoxExpireLicenseDateEnable.Name = "checkBoxExpireLicenseDateEnable";
             this.checkBoxExpireLicenseDateEnable.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxExpireLicenseDateEnable.TabIndex = 19;
+            this.checkBoxExpireLicenseDateEnable.TabIndex = 21;
             this.checkBoxExpireLicenseDateEnable.UseVisualStyleBackColor = true;
             this.checkBoxExpireLicenseDateEnable.CheckedChanged += new System.EventHandler(this.checkBoxExpireLicenseDateEnable_CheckedChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(10, 395);
+            this.label6.Location = new System.Drawing.Point(10, 437);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(195, 15);
             this.label6.TabIndex = 91;
@@ -416,17 +419,50 @@
             this.dateTimePickerExpireLicenseDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerExpireLicenseDate.Enabled = false;
-            this.dateTimePickerExpireLicenseDate.Location = new System.Drawing.Point(108, 412);
+            this.dateTimePickerExpireLicenseDate.Location = new System.Drawing.Point(108, 454);
             this.dateTimePickerExpireLicenseDate.Name = "dateTimePickerExpireLicenseDate";
             this.dateTimePickerExpireLicenseDate.Size = new System.Drawing.Size(371, 21);
-            this.dateTimePickerExpireLicenseDate.TabIndex = 21;
+            this.dateTimePickerExpireLicenseDate.TabIndex = 23;
+            // 
+            // comboBoxLicKey
+            // 
+            this.comboBoxLicKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxLicKey.Enabled = false;
+            this.comboBoxLicKey.FormattingEnabled = true;
+            this.comboBoxLicKey.Location = new System.Drawing.Point(45, 369);
+            this.comboBoxLicKey.Name = "comboBoxLicKey";
+            this.comboBoxLicKey.Size = new System.Drawing.Size(436, 23);
+            this.comboBoxLicKey.TabIndex = 17;
+            // 
+            // checkBoxLicKeyEnable
+            // 
+            this.checkBoxLicKeyEnable.AutoSize = true;
+            this.checkBoxLicKeyEnable.Location = new System.Drawing.Point(20, 373);
+            this.checkBoxLicKeyEnable.Name = "checkBoxLicKeyEnable";
+            this.checkBoxLicKeyEnable.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxLicKeyEnable.TabIndex = 16;
+            this.checkBoxLicKeyEnable.UseVisualStyleBackColor = true;
+            this.checkBoxLicKeyEnable.CheckedChanged += new System.EventHandler(this.checkBoxLicKeyEnable_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 352);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(124, 15);
+            this.label8.TabIndex = 94;
+            this.label8.Text = "Лицензионный ключ";
             // 
             // SearchLicensesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            this.ClientSize = new System.Drawing.Size(493, 487);
+            this.ClientSize = new System.Drawing.Size(493, 529);
+            this.Controls.Add(this.comboBoxLicKey);
+            this.Controls.Add(this.checkBoxLicKeyEnable);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.comboBoxOpExpireLicenseDate);
             this.Controls.Add(this.checkBoxExpireLicenseDateEnable);
             this.Controls.Add(this.label6);
@@ -510,6 +546,9 @@
         private System.Windows.Forms.CheckBox checkBoxExpireLicenseDateEnable;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker dateTimePickerExpireLicenseDate;
+        private System.Windows.Forms.ComboBox comboBoxLicKey;
+        private System.Windows.Forms.CheckBox checkBoxLicKeyEnable;
+        private System.Windows.Forms.Label label8;
 
     }
 }

@@ -255,7 +255,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanInsertRecord()
         {
             return (ParentType == ParentTypeEnum.License) && (ParentRow != null) &&
-                AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void InsertRecord()
@@ -270,7 +270,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanDeleteRecord()
         {
             return (v_snapshotSoftLicKeys.Position != -1) &&
-                AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void DeleteRecord()
@@ -294,7 +294,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanSaveRecord()
         {
             return SnapshotHasChanges() &&
-                AccessControl.HasPrivelege(Priveleges.LICENSES_READ_WRITE);
+                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
         }
 
         public override void SaveRecord()
@@ -421,7 +421,7 @@ namespace LicenseSoftware.Viewport
             switch (cell.OwningColumn.Name)
             {
                 case "LicKey":
-                    if (cell.Value == null || cell.Value.ToString().Trim() == "")
+                    if (cell.Value == null || String.IsNullOrEmpty(cell.Value.ToString().Trim()))
                         cell.ErrorText = "Номер лицензионного ключа не может быть пустым";
                     else
                     if (cell.Value.ToString().Trim().Length > 200)

@@ -21,6 +21,7 @@ namespace LicenseSoftware.SearchForms
         SoftLicTypesDataModel softLicTypes = null;
         DepartmentsDataModel departments = null;
         SoftLicDocTypesDataModel softLicDocTypes = null;
+        SoftLicKeysDataModel softLicKeys = null;
         CalcDataModelSoftwareConcat software = null;
 
 
@@ -31,6 +32,7 @@ namespace LicenseSoftware.SearchForms
         BindingSource v_softLicTypes = null;
         BindingSource v_departments = null;
         BindingSource v_softLicDocTypes = null;
+        BindingSource v_softLicKeys = null;
 
         internal override string GetFilter()
         {
@@ -58,7 +60,7 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                IEnumerable<int> subUnits = DataModelHelper.GetDepartmentSubUnits((int)comboBoxDepartmentID.SelectedValue);
+                IEnumerable<int> subUnits = DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentID.SelectedValue);
                 filter += "[ID Department] IN (" + comboBoxDepartmentID.SelectedValue.ToString()+",";
                 foreach (int id in subUnits)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
@@ -104,6 +106,12 @@ namespace LicenseSoftware.SearchForms
                 IEnumerable<int> ids = DataModelHelper.GetSoftwareIDsBySoftType((int)comboBoxSoftwareType.SelectedValue);
                 included_ids = DataModelHelper.Intersect(included_ids, ids);
             }
+            if (checkBoxLicKeyEnable.Checked && (comboBoxLicKey.SelectedValue != null))
+            {
+                if (!String.IsNullOrEmpty(filter.Trim()))
+                    filter += " AND ";
+                filter += String.Format(CultureInfo.InvariantCulture, "[ID License] = '{0}'", comboBoxLicKey.SelectedValue.ToString());
+            }
             if (included_ids != null)
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
@@ -126,6 +134,7 @@ namespace LicenseSoftware.SearchForms
             softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
             departments = DepartmentsDataModel.GetInstance();
             software = CalcDataModelSoftwareConcat.GetInstance();
+            softLicKeys = SoftLicKeysDataModel.GetInstance();
 
             // Ожидаем дозагрузки, если это необходимо
             softMakers.Select();
@@ -135,6 +144,7 @@ namespace LicenseSoftware.SearchForms
             softLicDocTypes.Select();
             departments.Select();
             software.Select();
+            softLicKeys.Select();
 
             v_software = new BindingSource();
             v_software.DataMember = "SoftwareConcat";
@@ -159,6 +169,10 @@ namespace LicenseSoftware.SearchForms
             v_softLicDocTypes = new BindingSource();
             v_softLicDocTypes.DataMember = "SoftLicDocTypes";
             v_softLicDocTypes.DataSource = DataSetManager.DataSet;
+
+            v_softLicKeys = new BindingSource();
+            v_softLicKeys.DataMember = "SoftLicKeys";
+            v_softLicKeys.DataSource = DataSetManager.DataSet;
 
             v_departments = new BindingSource();
             v_departments.DataSource = departments.SelectVisibleDepartments();
@@ -190,6 +204,10 @@ namespace LicenseSoftware.SearchForms
             comboBoxDepartmentID.DataSource = v_departments;
             comboBoxDepartmentID.ValueMember = "ID Department";
             comboBoxDepartmentID.DisplayMember = "Department";
+
+            comboBoxLicKey.DataSource = v_softLicKeys;
+            comboBoxLicKey.ValueMember = "ID License";
+            comboBoxLicKey.DisplayMember = "LicKey";
 
             comboBoxOpBuyLicenseDate.SelectedIndex = 0;
             comboBoxOpExpireLicenseDate.SelectedIndex = 0;
@@ -266,6 +284,13 @@ namespace LicenseSoftware.SearchForms
                 comboBoxLicDocType.Focus();
                 return;
             }
+            if ((checkBoxLicKeyEnable.Checked) && (comboBoxLicKey.SelectedValue == null))
+            {
+                MessageBox.Show("Выберите лицензионный ключ или уберите галочку поиска по лицензионному ключу", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                comboBoxLicKey.Focus();
+                return;
+            }
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
         }
 
@@ -319,6 +344,11 @@ namespace LicenseSoftware.SearchForms
         private void checkBoxLicDocTypeEnable_CheckedChanged(object sender, EventArgs e)
         {
             comboBoxLicDocType.Enabled = checkBoxLicDocTypeEnable.Checked;
+        }
+
+        private void checkBoxLicKeyEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxLicKey.Enabled = checkBoxLicKeyEnable.Checked;
         }
 
         private void checkBoxBuyLicenseDateEnable_CheckedChanged(object sender, EventArgs e)

@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessControl.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Priveleges.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -90,8 +90,9 @@ namespace LicenseSoftware.SearchForms
             if ((checkBoxDocNumberEnable.Checked) && (!String.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))
             {
                 IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<string>("DocNumber").ToUpper()
-                        .Contains(textBoxDocNumber.Text.Trim().ToUpper()); }, Entities.EntityType.License);
+                    (row) => { return row.Field<string>("DocNumber").ToUpper(CultureInfo.InvariantCulture)
+                        .Contains(textBoxDocNumber.Text.Trim().ToUpper(CultureInfo.InvariantCulture));
+                    }, Entities.EntityType.License);
                 included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
             }
             if (checkBoxExpireLicenseDateEnable.Checked)

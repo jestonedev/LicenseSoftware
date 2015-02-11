@@ -40,7 +40,7 @@ namespace LicenseSoftware.DataModels
                     return list2;
         }
 
-        public static IEnumerable<int> GetDepartmentSubUnits(int department)
+        public static IEnumerable<int> GetDepartmentSubunits(int department)
         {
             DepartmentsDataModel departments = DepartmentsDataModel.GetInstance();
             IEnumerable<int> departmentIDs = new List<int>();
@@ -51,7 +51,7 @@ namespace LicenseSoftware.DataModels
                     ((List<int>)departmentIDs).Add((int)row["ID Department"]);
             List<IEnumerable<int>> subUnits = new List<IEnumerable<int>>();
             foreach (int departmentID in departmentIDs)
-                subUnits.Add(GetDepartmentSubUnits(departmentID));
+                subUnits.Add(GetDepartmentSubunits(departmentID));
             foreach (IEnumerable<int> subUnit in subUnits)
                 departmentIDs = departmentIDs.Union(subUnit);
             return departmentIDs;

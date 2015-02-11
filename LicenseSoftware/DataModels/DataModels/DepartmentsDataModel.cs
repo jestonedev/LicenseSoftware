@@ -52,6 +52,7 @@ namespace LicenseSoftware.DataModels
             resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
             resultDepartments.Columns.Add("Level").DataType = typeof(int);
             resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
+            resultDepartments.Locale = CultureInfo.InvariantCulture;
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
@@ -81,7 +82,7 @@ namespace LicenseSoftware.DataModels
                             organizationRoot = true;
                     }
                 }
-                allowDepartmentsIDs = allowDepartmentsIDs.Union(DataModelHelper.GetDepartmentSubUnits((int)accessDepartment["ID Department"]));
+                allowDepartmentsIDs = allowDepartmentsIDs.Union(DataModelHelper.GetDepartmentSubunits((int)accessDepartment["ID Department"]));
             }
             foreach (DataRow row in departments.Rows)
                 if (allowDepartmentsIDs.Contains((int)row["ID Department"]))
@@ -137,6 +138,7 @@ namespace LicenseSoftware.DataModels
             resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
             resultDepartments.Columns.Add("Level").DataType = typeof(int);
             resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
+            resultDepartments.Locale = CultureInfo.InvariantCulture;
             foreach (DataRow department in departments.Rows)
             {
                 int index =  -1;  //По умолчанию вставляем в конец

@@ -136,7 +136,7 @@ namespace LicenseSoftware.Viewport
 
         private bool ChangeViewportStateTo(ViewportState state)
         {
-            if (!AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE))
+            if (!AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite))
             {
                 viewportState = ViewportState.ReadState;
                 return true;
@@ -453,7 +453,7 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanInsertRecord()
         {
-            return (!softwareDM.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE);
+            return (!softwareDM.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void InsertRecord()
@@ -471,7 +471,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanCopyRecord()
         {
             return (v_software.Position != -1) && (!softwareDM.EditingNewRecord)
-                && AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void CopyRecord()
@@ -510,7 +510,7 @@ namespace LicenseSoftware.Viewport
         {
             return (v_software.Position > -1)
                 && (viewportState != ViewportState.NewRowState)
-                && AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override bool CanDuplicate()
@@ -536,7 +536,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanSaveRecord()
         {
             return ((viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState))
-                && AccessControl.HasPrivelege(Priveleges.DIRECTORIES_READ_WRITE);
+                && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void SaveRecord()
@@ -623,7 +623,7 @@ namespace LicenseSoftware.Viewport
         public override bool HasAssocLicenses()
         {
             return (v_software.Position > -1) &&
-                AccessControl.HasPrivelege(Priveleges.LICENSES_READ);
+                AccessControl.HasPrivelege(Priveleges.LicensesRead);
         }
 
         public override void ShowAssocLicenses()
