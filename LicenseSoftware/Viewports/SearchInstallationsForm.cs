@@ -138,7 +138,7 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "InstallationDate {0} '{1}'",
+                filter += String.Format(CultureInfo.InvariantCulture, "InstallationDate {0} #{1}#",
                     ConvertDisplayEqExprToSql(
                         comboBoxOpInstallDate.SelectedItem.ToString()),
                         dateTimePickerInstallDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));

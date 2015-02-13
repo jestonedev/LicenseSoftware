@@ -82,7 +82,7 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "BuyLicenseDate {0} '{1}'",
+                filter += String.Format(CultureInfo.InvariantCulture, "BuyLicenseDate {0} #{1}#",
                     ConvertDisplayEqExprToSql(
                         comboBoxOpBuyLicenseDate.SelectedItem.ToString()),
                         dateTimePickerBuyLicenseDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
@@ -91,7 +91,7 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "ExpireLicenseDate {0} '{1}'",
+                filter += String.Format(CultureInfo.InvariantCulture, "ExpireLicenseDate {0} #{1}#",
                     ConvertDisplayEqExprToSql(
                         comboBoxOpExpireLicenseDate.SelectedItem.ToString()),
                         dateTimePickerExpireLicenseDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
