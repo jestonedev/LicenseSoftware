@@ -434,6 +434,9 @@
             this.comboBoxLicKey.Name = "comboBoxLicKey";
             this.comboBoxLicKey.Size = new System.Drawing.Size(436, 23);
             this.comboBoxLicKey.TabIndex = 17;
+            this.comboBoxLicKey.DropDownClosed += new System.EventHandler(this.comboBoxLicKey_DropDownClosed);
+            this.comboBoxLicKey.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicKey_KeyUp);
+            this.comboBoxLicKey.Leave += new System.EventHandler(this.comboBoxLicKey_Leave);
             // 
             // checkBoxLicKeyEnable
             // 

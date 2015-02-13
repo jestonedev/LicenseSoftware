@@ -396,5 +396,41 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxSoftwareName.Items.Count == 0)
                 comboBoxSoftwareName.SelectedIndex = -1;
         }
+
+        private void comboBoxLicKey_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                   || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                string text = comboBoxLicKey.Text;
+                int selectionStart = comboBoxLicKey.SelectionStart;
+                int selectionLength = comboBoxLicKey.SelectionLength;
+                v_softLicKeys.Filter = "LicKey like '%" + comboBoxLicKey.Text + "%'";
+                comboBoxLicKey.Text = text;
+                comboBoxLicKey.SelectionStart = selectionStart;
+                comboBoxLicKey.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxLicKey_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxLicKey.Items.Count > 0)
+            {
+                if (comboBoxLicKey.SelectedItem == null)
+                    comboBoxLicKey.SelectedItem = v_softLicKeys[v_softLicKeys.Position];
+                comboBoxLicKey.Text = ((DataRowView)v_softLicKeys[v_softLicKeys.Position])["LicKey"].ToString();
+            }
+            if (comboBoxLicKey.SelectedItem == null)
+            {
+                comboBoxLicKey.Text = "";
+                v_softLicKeys.Filter = "";
+            }
+        }
+
+        private void comboBoxLicKey_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxLicKey.Items.Count == 0)
+                comboBoxLicKey.SelectedIndex = -1;
+        }
     }
 }
