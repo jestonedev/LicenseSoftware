@@ -101,5 +101,22 @@ namespace LicenseSoftware.DataModels
                    where installation_row.Field<int?>("ID LicenseKey") == idKey
                    select installation_row).Count() == 0;
         }
+
+        /// <summary>
+        /// Получает список идентификаторов неиспользованных ключей. Для корпоративных и электронных лицензий возвращает все ключи, для локальных только неиспользованные
+        /// </summary>
+        /// <param name="idLicense">Идентификатор лицензии</param>
+        /// <returns>Список идентификаторов ключей</returns>
+        public static IEnumerable<int> LicKeyIdsNotUsed(int idLicense)
+        {
+            return from license_key_row in DataModelHelper.FilterRows(SoftLicKeysDataModel.GetInstance().Select())
+                   join license_row in DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select())
+                   on license_key_row.Field<int>("ID License") equals license_row.Field<int>("ID License")
+                   join installation_row in DataModelHelper.FilterRows(SoftInstallationsDataModel.GetInstance().Select())
+                   on license_key_row.Field<int>("ID LicenseKey") equals installation_row.Field<int?>("ID LicenseKey") into jg
+                   from jg_row in jg.DefaultIfEmpty()
+                   where license_key_row.Field<int>("ID License") == idLicense && (jg_row == null ||  license_row.Field<int>("ID LicType") != 13)
+                   select license_key_row.Field<int>("ID LicenseKey");
+        }
     }
 }

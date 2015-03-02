@@ -155,7 +155,8 @@ namespace LicenseSoftware.Viewport
                 comboBoxLicenseID.SelectedValue = (object)idLicense ?? DBNull.Value;
                 if (v_licenses.Position != -1)
                 {
-                    v_softLicKeys.Filter = "[ID License] = " + ((DataRowView)v_licenses[v_licenses.Position])["ID License"];
+                    v_softLicKeys.Filter = "[ID License] = " + ((DataRowView)v_licenses[v_licenses.Position])["ID License"]
+                         + " AND [ID LicenseKey] IN (0" + LicKeysFilter((int)((DataRowView)v_licenses[v_licenses.Position])["ID License"]) + ")";
                     comboBoxLicKeysID.SelectedValue = (object)idLicKey ?? DBNull.Value;
                 }
                 else
@@ -997,7 +998,9 @@ namespace LicenseSoftware.Viewport
                 string text = comboBoxLicKeysID.Text;
                 int selectionStart = comboBoxLicKeysID.SelectionStart;
                 int selectionLength = comboBoxLicKeysID.SelectionLength;
-                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0") + " AND LicKey like '%" + comboBoxLicKeysID.Text + "%'";
+                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0") 
+                    + " AND LicKey like '%" + comboBoxLicKeysID.Text + "%'"
+                    + " AND [ID LicenseKey] IN (0" + LicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
                 comboBoxLicKeysID.Text = text;
                 comboBoxLicKeysID.SelectionStart = selectionStart;
                 comboBoxLicKeysID.SelectionLength = selectionLength;
@@ -1009,7 +1012,8 @@ namespace LicenseSoftware.Viewport
             if (comboBoxLicKeysID.SelectedItem == null)
             {
                 comboBoxLicKeysID.Text = "";
-                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0");
+                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0")
+                     + " AND [ID LicenseKey] IN (0" + LicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
             }
             if (String.IsNullOrEmpty(comboBoxLicKeysID.Text))
                 comboBoxLicKeysID.SelectedItem = null;
@@ -1092,11 +1096,26 @@ namespace LicenseSoftware.Viewport
             {
                 int? idLicense = (int?)comboBoxLicenseID.SelectedValue;
                 if (idLicense != null)
-                    v_softLicKeys.Filter = "[ID License] = " + idLicense.ToString();
+                    v_softLicKeys.Filter = "[ID License] = " + idLicense.ToString() + " AND [ID LicenseKey] IN (0" + LicKeysFilter(idLicense.Value) + ")";
                 else
                     v_softLicKeys.Filter = "1 = 0";
             }
             CheckViewportModifications();
+        }
+
+        private string LicKeysFilter(int idLicense)
+        {
+            IEnumerable<int> licKeyIds = DataModelHelper.LicKeyIdsNotUsed(idLicense);
+            string licKeys = "";
+            foreach (int licKey in licKeyIds)
+                licKeys += licKey.ToString(CultureInfo.InvariantCulture) + ",";
+            if (v_softInstallations.Position != -1)
+            {
+                DataRowView row = (DataRowView)v_softInstallations[v_softInstallations.Position];
+                if (row["ID LicenseKey"] != DBNull.Value)
+                    licKeys += row["ID LicenseKey"].ToString();
+            }
+            return licKeys;
         }
 
         private void comboBoxLicKeysID_SelectedValueChanged(object sender, EventArgs e)
@@ -1209,6 +1228,15 @@ namespace LicenseSoftware.Viewport
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallationsViewport));
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.idInstallation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBoxLicenseID = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -1223,15 +1251,6 @@ namespace LicenseSoftware.Viewport
             this.comboBoxInstallatorID = new System.Windows.Forms.ComboBox();
             this.dateTimePickerInstallDate = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
-            this.idInstallation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -1291,12 +1310,87 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.ReadOnly = true;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(1013, 310);
-            this.dataGridView.TabIndex = 2;
+            this.dataGridView.TabIndex = 0;
             this.dataGridView.VirtualMode = true;
             this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
             this.dataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_ColumnHeaderMouseClick);
             this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
+            // 
+            // idInstallation
+            // 
+            this.idInstallation.Frozen = true;
+            this.idInstallation.HeaderText = "Идентификатор";
+            this.idInstallation.Name = "idInstallation";
+            this.idInstallation.ReadOnly = true;
+            this.idInstallation.Visible = false;
+            // 
+            // software
+            // 
+            this.software.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.software.HeaderText = "Наименование ПО";
+            this.software.MinimumWidth = 300;
+            this.software.Name = "software";
+            this.software.ReadOnly = true;
+            this.software.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // department
+            // 
+            this.department.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.department.HeaderText = "Департамент";
+            this.department.MinimumWidth = 300;
+            this.department.Name = "department";
+            this.department.ReadOnly = true;
+            this.department.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.department.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // computer
+            // 
+            this.computer.HeaderText = "Имя ПК";
+            this.computer.MinimumWidth = 200;
+            this.computer.Name = "computer";
+            this.computer.ReadOnly = true;
+            this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // serialNum
+            // 
+            this.serialNum.HeaderText = "Серийный №";
+            this.serialNum.MinimumWidth = 150;
+            this.serialNum.Name = "serialNum";
+            this.serialNum.ReadOnly = true;
+            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // invNum
+            // 
+            this.invNum.HeaderText = "Инвентарный №";
+            this.invNum.MinimumWidth = 150;
+            this.invNum.Name = "invNum";
+            this.invNum.ReadOnly = true;
+            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // installationDate
+            // 
+            this.installationDate.HeaderText = "Дата установки";
+            this.installationDate.MinimumWidth = 130;
+            this.installationDate.Name = "installationDate";
+            this.installationDate.ReadOnly = true;
+            // 
+            // license
+            // 
+            this.license.HeaderText = "Лицензия";
+            this.license.MinimumWidth = 250;
+            this.license.Name = "license";
+            this.license.ReadOnly = true;
+            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // licKey
+            // 
+            this.licKey.HeaderText = "Лицензионный ключ";
+            this.licKey.MinimumWidth = 150;
+            this.licKey.Name = "licKey";
+            this.licKey.ReadOnly = true;
+            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // groupBox1
             // 
@@ -1310,7 +1404,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(503, 113);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Сведения о лицензии";
             // 
@@ -1396,7 +1490,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox2.Location = new System.Drawing.Point(512, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(504, 113);
-            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Сведения об установке";
             // 
@@ -1462,81 +1556,6 @@ namespace LicenseSoftware.Viewport
             this.label5.Size = new System.Drawing.Size(78, 15);
             this.label5.TabIndex = 77;
             this.label5.Text = "Установщик";
-            // 
-            // idInstallation
-            // 
-            this.idInstallation.Frozen = true;
-            this.idInstallation.HeaderText = "Идентификатор";
-            this.idInstallation.Name = "idInstallation";
-            this.idInstallation.ReadOnly = true;
-            this.idInstallation.Visible = false;
-            // 
-            // software
-            // 
-            this.software.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.software.HeaderText = "Наименование ПО";
-            this.software.MinimumWidth = 300;
-            this.software.Name = "software";
-            this.software.ReadOnly = true;
-            this.software.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // department
-            // 
-            this.department.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.department.HeaderText = "Департамент";
-            this.department.MinimumWidth = 300;
-            this.department.Name = "department";
-            this.department.ReadOnly = true;
-            this.department.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.department.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // computer
-            // 
-            this.computer.HeaderText = "Имя ПК";
-            this.computer.MinimumWidth = 200;
-            this.computer.Name = "computer";
-            this.computer.ReadOnly = true;
-            this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // serialNum
-            // 
-            this.serialNum.HeaderText = "Серийный №";
-            this.serialNum.MinimumWidth = 150;
-            this.serialNum.Name = "serialNum";
-            this.serialNum.ReadOnly = true;
-            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // invNum
-            // 
-            this.invNum.HeaderText = "Инвентарный №";
-            this.invNum.MinimumWidth = 150;
-            this.invNum.Name = "invNum";
-            this.invNum.ReadOnly = true;
-            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // installationDate
-            // 
-            this.installationDate.HeaderText = "Дата установки";
-            this.installationDate.MinimumWidth = 130;
-            this.installationDate.Name = "installationDate";
-            this.installationDate.ReadOnly = true;
-            // 
-            // license
-            // 
-            this.license.HeaderText = "Лицензия";
-            this.license.MinimumWidth = 250;
-            this.license.Name = "license";
-            this.license.ReadOnly = true;
-            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // licKey
-            // 
-            this.licKey.HeaderText = "Лицензионный ключ";
-            this.licKey.MinimumWidth = 150;
-            this.licKey.Name = "licKey";
-            this.licKey.ReadOnly = true;
-            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // InstallationsViewport
             // 

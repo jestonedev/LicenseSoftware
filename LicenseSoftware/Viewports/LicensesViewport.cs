@@ -1157,7 +1157,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox3.Location = new System.Drawing.Point(402, 122);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(394, 83);
-            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Срок действия лицензии";
             // 
@@ -1289,7 +1289,7 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.ReadOnly = true;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(793, 256);
-            this.dataGridView.TabIndex = 4;
+            this.dataGridView.TabIndex = 0;
             this.dataGridView.VirtualMode = true;
             this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
             this.dataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_ColumnHeaderMouseClick);
@@ -1361,7 +1361,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(393, 113);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Сведения о ПО";
             // 
@@ -1443,7 +1443,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox2.Location = new System.Drawing.Point(402, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(394, 113);
-            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Общие сведения о лицензии";
             // 
