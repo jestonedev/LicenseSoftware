@@ -7,6 +7,7 @@ namespace LicenseSoftware.Reporting
 {
     public enum ReporterType
     {
-        EmptyReporter
+        LogInstallationsReporter,
+        LogLicensesReporter
     }
 }

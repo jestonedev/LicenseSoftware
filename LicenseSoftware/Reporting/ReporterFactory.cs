@@ -12,9 +12,10 @@ namespace LicenseSoftware.Reporting
         {
             switch (reporterType)
             {
-                case ReporterType.EmptyReporter:
-                    // Template
-                    break;
+                case ReporterType.LogInstallationsReporter:
+                    return new LogInstallationsReporter();
+                case ReporterType.LogLicensesReporter:
+                    return new LogLicensesReporter();
             }
             throw new ReporterException(
                 String.Format(CultureInfo.InvariantCulture, "В фабрику ReporterFactory передан неизвестный тип {0}", reporterType.ToString()));

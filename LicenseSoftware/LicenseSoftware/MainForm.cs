@@ -499,5 +499,15 @@ namespace LicenseSoftware
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        private void ribbonButtonLogInstallationsReport_Click(object sender, EventArgs e)
+        {
+            RunReport(ReporterType.LogInstallationsReporter);
+        }
+
+        private void ribbonButtonLogLicensesReport_Click(object sender, EventArgs e)
+        {
+            RunReport(ReporterType.LogLicensesReporter);
+        }
     }
 }

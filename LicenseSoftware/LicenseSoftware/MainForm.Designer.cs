@@ -84,10 +84,9 @@ namespace LicenseSoftware
             this.ribbonButtonTabsClose = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonTabCopy = new System.Windows.Forms.RibbonButton();
             this.ribbonTabHousing = new System.Windows.Forms.RibbonTab();
-            this.ribbonPanel7 = new System.Windows.Forms.RibbonPanel();
-            this.ribbonButtonEmptyLicenseReport = new System.Windows.Forms.RibbonButton();
             this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
-            this.ribbonButtonEmptyInstallationsReport = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonLogInstallationsReport = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonLogLicensesReport = new System.Windows.Forms.RibbonButton();
             this.mbStatusStrip1 = new MBToolStrip.MBStatusStrip();
             this.toolStripLabelHelloUser = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -517,38 +516,37 @@ namespace LicenseSoftware
             // 
             // ribbonTabHousing
             // 
-            this.ribbonTabHousing.Panels.Add(this.ribbonPanel7);
             this.ribbonTabHousing.Panels.Add(this.ribbonPanel4);
             this.ribbonTabHousing.Text = "Отчеты";
             this.ribbonTabHousing.ToolTip = "";
             this.ribbonTabHousing.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonTabHousing.ToolTipImage")));
             this.ribbonTabHousing.ToolTipTitle = "Отчеты";
             // 
-            // ribbonPanel7
-            // 
-            this.ribbonPanel7.ButtonMoreEnabled = false;
-            this.ribbonPanel7.ButtonMoreVisible = false;
-            this.ribbonPanel7.Items.Add(this.ribbonButtonEmptyLicenseReport);
-            this.ribbonPanel7.Text = "Отчеты по лицензиям";
-            // 
-            // ribbonButtonEmptyLicenseReport
-            // 
-            this.ribbonButtonEmptyLicenseReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.Image")));
-            this.ribbonButtonEmptyLicenseReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.SmallImage")));
-            this.ribbonButtonEmptyLicenseReport.Text = "Шаблон кнопки отчета";
-            this.ribbonButtonEmptyLicenseReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyLicenseReport.ToolTipImage")));
-            // 
             // ribbonPanel4
             // 
-            this.ribbonPanel4.Items.Add(this.ribbonButtonEmptyInstallationsReport);
-            this.ribbonPanel4.Text = "Отчеты по установкам";
+            this.ribbonPanel4.Items.Add(this.ribbonButtonLogInstallationsReport);
+            this.ribbonPanel4.Items.Add(this.ribbonButtonLogLicensesReport);
+            this.ribbonPanel4.Text = "Отчеты";
             // 
-            // ribbonButtonEmptyInstallationsReport
+            // ribbonButtonLogInstallationsReport
             // 
-            this.ribbonButtonEmptyInstallationsReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.Image")));
-            this.ribbonButtonEmptyInstallationsReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.SmallImage")));
-            this.ribbonButtonEmptyInstallationsReport.Text = "Шаблон кнопки";
-            this.ribbonButtonEmptyInstallationsReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonEmptyInstallationsReport.ToolTipImage")));
+            this.ribbonButtonLogInstallationsReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogInstallationsReport.Image")));
+            this.ribbonButtonLogInstallationsReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogInstallationsReport.SmallImage")));
+            this.ribbonButtonLogInstallationsReport.Text = "Лог изменений установок";
+            this.ribbonButtonLogInstallationsReport.ToolTip = "История изменений в установках программного обеспечения за период";
+            this.ribbonButtonLogInstallationsReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogInstallationsReport.ToolTipImage")));
+            this.ribbonButtonLogInstallationsReport.ToolTipTitle = "Лог изменений установок";
+            this.ribbonButtonLogInstallationsReport.Click += new System.EventHandler(this.ribbonButtonLogInstallationsReport_Click);
+            // 
+            // ribbonButtonLogLicensesReport
+            // 
+            this.ribbonButtonLogLicensesReport.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogLicensesReport.Image")));
+            this.ribbonButtonLogLicensesReport.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogLicensesReport.SmallImage")));
+            this.ribbonButtonLogLicensesReport.Text = "Лог изменений лицензий";
+            this.ribbonButtonLogLicensesReport.ToolTip = "История изменений в лицензиях на программное обеспечение за период";
+            this.ribbonButtonLogLicensesReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogLicensesReport.ToolTipImage")));
+            this.ribbonButtonLogLicensesReport.ToolTipTitle = "Лог изменений лицензий";
+            this.ribbonButtonLogLicensesReport.Click += new System.EventHandler(this.ribbonButtonLogLicensesReport_Click);
             // 
             // mbStatusStrip1
             // 
@@ -699,7 +697,6 @@ namespace LicenseSoftware
         private System.Windows.Forms.RibbonButton ribbonButtonNext;
         private System.Windows.Forms.RibbonButton ribbonButtonLast;
         private System.Windows.Forms.RibbonButton ribbonButtonSearch;
-        private System.Windows.Forms.RibbonPanel ribbonPanel7;
         private System.Windows.Forms.Ribbon ribbon1;
         private System.Windows.Forms.ToolStripLabel toolStripLabelHelloUser;
         private System.Windows.Forms.RibbonSeparator ribbonSeparator2;
@@ -721,9 +718,9 @@ namespace LicenseSoftware
         private System.Windows.Forms.RibbonButton ribbonRibbonButtonDocTypes;
         private System.Windows.Forms.RibbonButton ribbonRibbonButtonLicTypes;
         private System.Windows.Forms.RibbonButton ribbonRibbonButtonInstallers;
-        private System.Windows.Forms.RibbonButton ribbonButtonEmptyLicenseReport;
         private System.Windows.Forms.RibbonPanel ribbonPanel4;
-        private System.Windows.Forms.RibbonButton ribbonButtonEmptyInstallationsReport;
+        private System.Windows.Forms.RibbonButton ribbonButtonLogInstallationsReport;
+        private System.Windows.Forms.RibbonButton ribbonButtonLogLicensesReport;
     }
 }
 

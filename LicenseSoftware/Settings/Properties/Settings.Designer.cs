@@ -98,7 +98,7 @@ namespace Settings.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\nas\\media$\\ActivityManager\\templates\\software_licenses")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\nas\\media$\\ActivityManager\\templates\\lifs")]
         public string ActivityManagerConfigsPath {
             get {
                 return ((string)(this["ActivityManagerConfigsPath"]));

@@ -1,6 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
+ <Namespaces>
+  <Namespace Name="Registry.Reporting">
+   <Messages>
+    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2015-03-04 08:36:06Z" FixCategory="Breaking">
+     <Issue Certainty="50" Level="Warning">Consider merging the types defined in 'Registry.Reporting' with another namespace.</Issue>
+    </Message>
+   </Messages>
+  </Namespace>
+ </Namespaces>
+ <Rules>
+  <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+   <Name>Avoid namespaces with few types</Name>
+   <Description>A namespace should generally have more than five types.</Description>
+   <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182130.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="50">Warning</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+ </Rules>
  <Localized>
   <String Key="Category">Category</String>
   <String Key="Certainty">Certainty</String>

@@ -386,8 +386,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxSoftwareName.SelectedItem == null)
             {
-                comboBoxSoftwareName.Text = "";
                 v_software.Filter = "";
+                comboBoxSoftwareName.Text = "";
+                comboBoxSoftwareName.SelectedItem = null;
             }
         }
 
@@ -422,8 +423,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxLicKey.SelectedItem == null)
             {
-                comboBoxLicKey.Text = "";
                 v_softLicKeys.Filter = "";
+                comboBoxLicKey.Text = "";
+                comboBoxLicKey.SelectedItem = null;
             }
         }
 

@@ -565,8 +565,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxSoftwareName.SelectedItem == null)
             {
-                comboBoxSoftwareName.Text = "";
                 v_software.Filter = "";
+                comboBoxSoftwareName.Text = "";
+                comboBoxSoftwareName.SelectedItem = null;
             }
         }
 
@@ -601,8 +602,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxComputer.SelectedItem == null)
             {
-                comboBoxComputer.Text = "";
                 v_devices.Filter = "";
+                comboBoxComputer.Text = "";
+                comboBoxComputer.SelectedItem = null;
             }
         }
 
@@ -637,8 +639,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxInvNum.SelectedItem == null)
             {
-                comboBoxInvNum.Text = "";
                 v_devicesInvNum.Filter = "";
+                comboBoxInvNum.Text = "";
+                comboBoxInvNum.SelectedItem = null;
             }
         }
 
@@ -673,8 +676,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxSerialNum.SelectedItem == null)
             {
-                comboBoxSerialNum.Text = "";
                 v_devicesSerialNum.Filter = "";
+                comboBoxSerialNum.Text = "";
+                comboBoxSerialNum.SelectedItem = null;
             }
         }
 
@@ -709,8 +713,9 @@ namespace LicenseSoftware.SearchForms
             }
             if (comboBoxLicKey.SelectedItem == null)
             {
-                comboBoxLicKey.Text = "";
                 v_softLicKeys.Filter = "";
+                comboBoxLicKey.Text = "";
+                comboBoxLicKey.SelectedItem = null;
             }
         }
 
