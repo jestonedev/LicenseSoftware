@@ -104,7 +104,7 @@ namespace LicenseSoftware.Viewport
                     return false;
                 }
             }
-            if (v_snapshotSoftLicKeys.Count > (int)ParentRow["InstallationsCount"])
+            if (ParentRow["InstallationsCount"] != DBNull.Value && v_snapshotSoftLicKeys.Count > (int)ParentRow["InstallationsCount"])
             {
                 DialogResult result = MessageBox.Show("Количество внесенных ключей превышает количество разрешенных установок данного ПО. " +
                     "Вы уверены, что хотите сохранить изменения в базу данных?", "Внимание",
