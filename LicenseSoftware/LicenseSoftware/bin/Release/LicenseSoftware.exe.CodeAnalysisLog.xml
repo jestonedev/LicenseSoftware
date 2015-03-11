@@ -6,7 +6,7 @@
    <Modules>
     <Module Name="licensesoftware.exe">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-03-04 09:05:13Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-03-11 04:24:48Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'LicenseSoftware.exe' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -17,10 +17,10 @@
          <Members>
           <Member Name="#ProcessCmdKey(System.Windows.Forms.Message&amp;,System.Windows.Forms.Keys)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Active" Created="2015-03-04 09:05:13Z" FixCategory="NonBreaking">
+            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Active" Created="2015-03-11 04:24:48Z" FixCategory="NonBreaking">
              <Issue Certainty="33" Level="CriticalError" Path="e:\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="434">'MainForm.ProcessCmdKey(ref Message, Keys)' calls into 'Form.ProcessCmdKey(ref Message, Keys)' which has a LinkDemand. By making this call, 'Form.ProcessCmdKey(ref Message, Keys)' is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: &#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'&#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'</Issue>
             </Message>
-            <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Status="Active" Created="2015-03-04 09:05:13Z" FixCategory="Breaking">
+            <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Status="Active" Created="2015-03-11 04:24:48Z" FixCategory="Breaking">
              <Issue Name="BaseOnly" Certainty="33" Level="CriticalError" Path="e:\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="434">Add the following security attribute to 'MainForm.ProcessCmdKey(ref Message, Keys)' in order to match a LinkDemand on base method 'Form.ProcessCmdKey(ref Message, Keys)':  [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)].</Issue>
             </Message>
            </Messages>

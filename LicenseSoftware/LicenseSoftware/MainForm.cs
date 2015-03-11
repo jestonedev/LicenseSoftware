@@ -509,5 +509,10 @@ namespace LicenseSoftware
         {
             RunReport(ReporterType.LogLicensesReporter);
         }
+
+        private void ribbonButtonLicensesBySoftCount_Click(object sender, EventArgs e)
+        {
+            RunReport(ReporterType.LicensesBySoftCountReporter);
+        }
     }
 }

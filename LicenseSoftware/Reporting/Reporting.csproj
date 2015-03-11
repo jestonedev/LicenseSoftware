@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LogInstallationsReporter.cs" />
+    <Compile Include="LicensesBySoftCountReporter.cs" />
     <Compile Include="LogLicensesReporter.cs" />
     <Compile Include="Reporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

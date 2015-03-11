@@ -87,6 +87,7 @@ namespace LicenseSoftware
             this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonLogInstallationsReport = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonLogLicensesReport = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonLicensesBySoftCount = new System.Windows.Forms.RibbonButton();
             this.mbStatusStrip1 = new MBToolStrip.MBStatusStrip();
             this.toolStripLabelHelloUser = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -526,6 +527,7 @@ namespace LicenseSoftware
             // 
             this.ribbonPanel4.Items.Add(this.ribbonButtonLogInstallationsReport);
             this.ribbonPanel4.Items.Add(this.ribbonButtonLogLicensesReport);
+            this.ribbonPanel4.Items.Add(this.ribbonButtonLicensesBySoftCount);
             this.ribbonPanel4.Text = "Отчеты";
             // 
             // ribbonButtonLogInstallationsReport
@@ -545,8 +547,19 @@ namespace LicenseSoftware
             this.ribbonButtonLogLicensesReport.Text = "Лог изменений лицензий";
             this.ribbonButtonLogLicensesReport.ToolTip = "История изменений в лицензиях на программное обеспечение за период";
             this.ribbonButtonLogLicensesReport.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLogLicensesReport.ToolTipImage")));
-            this.ribbonButtonLogLicensesReport.ToolTipTitle = "Лог изменений лицензий";
+            this.ribbonButtonLogLicensesReport.ToolTipTitle = "Лог изменений лицензий";
             this.ribbonButtonLogLicensesReport.Click += new System.EventHandler(this.ribbonButtonLogLicensesReport_Click);
+            // 
+            // ribbonButtonLicensesBySoftCount
+            // 
+            this.ribbonButtonLicensesBySoftCount.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLicensesBySoftCount.Image")));
+            this.ribbonButtonLicensesBySoftCount.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLicensesBySoftCount.SmallImage")));
+            this.ribbonButtonLicensesBySoftCount.Text = "Количество лицензий по ПО";
+            this.ribbonButtonLicensesBySoftCount.ToolTip = "При нажатии на данную кнопку будет сформирован отчет по количеству  установок по " +
+    "программному обеспечению";
+            this.ribbonButtonLicensesBySoftCount.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonLicensesBySoftCount.ToolTipImage")));
+            this.ribbonButtonLicensesBySoftCount.ToolTipTitle = "Количество установок по ПО";
+            this.ribbonButtonLicensesBySoftCount.Click += new System.EventHandler(this.ribbonButtonLicensesBySoftCount_Click);
             // 
             // mbStatusStrip1
             // 
@@ -721,6 +734,7 @@ namespace LicenseSoftware
         private System.Windows.Forms.RibbonPanel ribbonPanel4;
         private System.Windows.Forms.RibbonButton ribbonButtonLogInstallationsReport;
         private System.Windows.Forms.RibbonButton ribbonButtonLogLicensesReport;
+        private System.Windows.Forms.RibbonButton ribbonButtonLicensesBySoftCount;
     }
 }
 

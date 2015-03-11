@@ -8,6 +8,7 @@ namespace LicenseSoftware.Reporting
     public enum ReporterType
     {
         LogInstallationsReporter,
-        LogLicensesReporter
+        LogLicensesReporter,
+        LicensesBySoftCountReporter
     }
 }
