@@ -9,6 +9,7 @@ namespace LicenseSoftware.Reporting
     {
         LogInstallationsReporter,
         LogLicensesReporter,
-        LicensesBySoftCountReporter
+        LicensesBySoftCountReporter,
+        InstallationsInfoReporter
     }
 }

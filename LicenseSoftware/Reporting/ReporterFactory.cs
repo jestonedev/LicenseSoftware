@@ -18,6 +18,8 @@ namespace LicenseSoftware.Reporting
                     return new LogLicensesReporter();
                 case ReporterType.LicensesBySoftCountReporter:
                     return new LicensesBySoftCountReporter();
+                case ReporterType.InstallationsInfoReporter:
+                    return new InstallationsInfoReporter();
             }
             throw new ReporterException(
                 String.Format(CultureInfo.InvariantCulture, "В фабрику ReporterFactory передан неизвестный тип {0}", reporterType.ToString()));

@@ -67,6 +67,7 @@
       <DependentUpon>DateRangeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InstallationsInfoReporter.cs" />
     <Compile Include="LogInstallationsReporter.cs" />
     <Compile Include="LicensesBySoftCountReporter.cs" />
     <Compile Include="LogLicensesReporter.cs" />

@@ -514,5 +514,10 @@ namespace LicenseSoftware
         {
             RunReport(ReporterType.LicensesBySoftCountReporter);
         }
+
+        private void ribbonButtonInstallationsInfo_Click(object sender, EventArgs e)
+        {
+            RunReport(ReporterType.InstallationsInfoReporter);
+        }
     }
 }
