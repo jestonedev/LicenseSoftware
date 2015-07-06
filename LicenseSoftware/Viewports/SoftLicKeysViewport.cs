@@ -299,6 +299,7 @@ namespace LicenseSoftware.Viewport
 
         public override void SaveRecord()
         {
+            dataGridView.EndEdit();
             sync_views = false;
             List<SoftLicKey> list = SoftLicKeysFromViewport();
             if (!ValidateSoftLicKeys(list))
@@ -402,8 +403,7 @@ namespace LicenseSoftware.Viewport
             softLicKeys.Select().RowDeleted -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleted);
             base.Close();
         }
-
-        
+  
 
         void v_snapshotLicKeys_CurrentItemChanged(object sender, EventArgs e)
         {
@@ -424,8 +424,10 @@ namespace LicenseSoftware.Viewport
                     if (cell.Value == null || String.IsNullOrEmpty(cell.Value.ToString().Trim()))
                         cell.ErrorText = "Номер лицензионного ключа не может быть пустым";
                     else
-                    if (cell.Value.ToString().Trim().Length > 200)
-                        cell.ErrorText = "Длина лицензионного ключа не может превышать 200 символов";
+                        if (cell.Value.ToString().Trim().Length > 200)
+                            cell.ErrorText = "Длина лицензионного ключа не может превышать 200 символов";
+                        else
+                            cell.ErrorText = "";
                     break;
             }
         }

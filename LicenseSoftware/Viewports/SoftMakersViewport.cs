@@ -293,6 +293,7 @@ namespace LicenseSoftware.Viewport
 
         public override void SaveRecord()
         {
+            dataGridView.EndEdit();
             sync_views = false;
             List<SoftMaker> list = SoftMakersFromViewport();
             if (!ValidateViewportData(list))

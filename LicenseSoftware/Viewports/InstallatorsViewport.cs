@@ -277,6 +277,7 @@ namespace LicenseSoftware.Viewport
 
         public override void SaveRecord()
         {
+            dataGridView.EndEdit();
             sync_views = false;
             List<SoftInstallator> list = InstallatorsFromViewport();
             if (!ValidateViewportData(list))
