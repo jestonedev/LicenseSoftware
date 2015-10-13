@@ -860,7 +860,7 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 20);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -869,7 +869,7 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(806, 68);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(806, 65);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
@@ -882,7 +882,7 @@ namespace LicenseSoftware.Viewport
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(403, 68);
+            this.panel1.Size = new System.Drawing.Size(403, 65);
             this.panel1.TabIndex = 0;
             // 
             // textBoxSoftwareName
@@ -892,7 +892,7 @@ namespace LicenseSoftware.Viewport
             this.textBoxSoftwareName.Location = new System.Drawing.Point(121, 8);
             this.textBoxSoftwareName.MaxLength = 500;
             this.textBoxSoftwareName.Name = "textBoxSoftwareName";
-            this.textBoxSoftwareName.Size = new System.Drawing.Size(267, 21);
+            this.textBoxSoftwareName.Size = new System.Drawing.Size(267, 24);
             this.textBoxSoftwareName.TabIndex = 0;
             this.textBoxSoftwareName.TextChanged += new System.EventHandler(this.textBoxSoftwareName_TextChanged);
             // 
@@ -901,7 +901,7 @@ namespace LicenseSoftware.Viewport
             this.label87.AutoSize = true;
             this.label87.Location = new System.Drawing.Point(10, 41);
             this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(70, 15);
+            this.label87.Size = new System.Drawing.Size(85, 18);
             this.label87.TabIndex = 74;
             this.label87.Text = "Версия ПО";
             // 
@@ -910,7 +910,7 @@ namespace LicenseSoftware.Viewport
             this.label86.AutoSize = true;
             this.label86.Location = new System.Drawing.Point(10, 10);
             this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(95, 15);
+            this.label86.Size = new System.Drawing.Size(111, 18);
             this.label86.TabIndex = 73;
             this.label86.Text = "Наименование";
             // 
@@ -921,7 +921,7 @@ namespace LicenseSoftware.Viewport
             this.textBoxVersion.Location = new System.Drawing.Point(121, 37);
             this.textBoxVersion.MaxLength = 50;
             this.textBoxVersion.Name = "textBoxVersion";
-            this.textBoxVersion.Size = new System.Drawing.Size(267, 21);
+            this.textBoxVersion.Size = new System.Drawing.Size(267, 24);
             this.textBoxVersion.TabIndex = 1;
             this.textBoxVersion.TextChanged += new System.EventHandler(this.textBoxVersion_TextChanged);
             // 
@@ -935,7 +935,7 @@ namespace LicenseSoftware.Viewport
             this.panel2.Location = new System.Drawing.Point(403, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(403, 68);
+            this.panel2.Size = new System.Drawing.Size(403, 65);
             this.panel2.TabIndex = 1;
             // 
             // comboBoxSoftMaker
@@ -946,8 +946,9 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftMaker.FormattingEnabled = true;
             this.comboBoxSoftMaker.Location = new System.Drawing.Point(127, 37);
             this.comboBoxSoftMaker.Name = "comboBoxSoftMaker";
-            this.comboBoxSoftMaker.Size = new System.Drawing.Size(266, 23);
+            this.comboBoxSoftMaker.Size = new System.Drawing.Size(266, 26);
             this.comboBoxSoftMaker.TabIndex = 1;
+            this.comboBoxSoftMaker.SelectedIndexChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedIndexChanged);
             this.comboBoxSoftMaker.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedValueChanged);
             // 
             // label1
@@ -955,7 +956,7 @@ namespace LicenseSoftware.Viewport
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(10, 41);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(103, 15);
+            this.label1.Size = new System.Drawing.Size(126, 18);
             this.label1.TabIndex = 73;
             this.label1.Text = "Разработчик ПО";
             // 
@@ -967,7 +968,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftType.FormattingEnabled = true;
             this.comboBoxSoftType.Location = new System.Drawing.Point(127, 8);
             this.comboBoxSoftType.Name = "comboBoxSoftType";
-            this.comboBoxSoftType.Size = new System.Drawing.Size(266, 23);
+            this.comboBoxSoftType.Size = new System.Drawing.Size(266, 26);
             this.comboBoxSoftType.TabIndex = 0;
             this.comboBoxSoftType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSoftType_SelectedIndexChanged);
             // 
@@ -976,7 +977,7 @@ namespace LicenseSoftware.Viewport
             this.label84.AutoSize = true;
             this.label84.Location = new System.Drawing.Point(10, 10);
             this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(50, 15);
+            this.label84.Size = new System.Drawing.Size(62, 18);
             this.label84.TabIndex = 71;
             this.label84.Text = "Вид ПО";
             // 
@@ -1087,6 +1088,11 @@ namespace LicenseSoftware.Viewport
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
+
+        }
+
+        private void comboBoxSoftMaker_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

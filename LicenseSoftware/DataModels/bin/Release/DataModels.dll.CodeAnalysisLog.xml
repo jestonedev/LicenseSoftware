@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
  <Targets>
-  <Target Name="E:\LicenseSoftware\LicenseSoftware\DataModels\bin\Release\DataModels.dll">
+  <Target Name="D:\Proejcts\LicenseSoftware\LicenseSoftware\DataModels\bin\Release\DataModels.dll">
    <Modules>
     <Module Name="datamodels.dll">
      <Namespaces>
@@ -12,8 +12,8 @@
          <Members>
           <Member Name="#.cctor()" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-03-04 08:35:51Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Error" Path="e:\LicenseSoftware\LicenseSoftware\DataModels" File="DataSetManager.cs" Line="13">Be sure to set the DataSet Locale property wherever 'DataSetManager.DataSetManager()' creates an instance of that type.</Issue>
+            <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Status="Active" Created="2015-10-13 07:36:03Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\DataModels" File="DataSetManager.cs" Line="13">Be sure to set the DataSet Locale property wherever 'DataSetManager.DataSetManager()' creates an instance of that type.</Issue>
             </Message>
            </Messages>
           </Member>

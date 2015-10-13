@@ -60,9 +60,13 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                IEnumerable<int> subUnits = DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentID.SelectedValue);
-                filter += "[ID Department] IN (" + comboBoxDepartmentID.SelectedValue.ToString()+",";
-                foreach (int id in subUnits)
+                var selectedDepartments = DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentID.SelectedValue).Union(new List<int> { (int)comboBoxDepartmentID.SelectedValue });
+                var accessibleDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                              where departments_row.Field<bool>("AllowSelect")
+                              select departments_row.Field<int>("ID Department");
+                var departments = selectedDepartments.Intersect(accessibleDepartments);
+                filter += "[ID Department] IN ("; 
+                foreach (int id in departments)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
                 filter = filter.TrimEnd(new char[] { ',' }) + ")";
             }

@@ -84,7 +84,13 @@ namespace LicenseSoftware.SearchForms
             if ((checkBoxDepartmentLicEnable.Checked) && (comboBoxDepartmentLicID.SelectedValue != null))
             {
                 IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID Department") == (int)comboBoxDepartmentLicID.SelectedValue; }, Entities.EntityType.License);
+                    (row) =>
+                    {
+                        return
+                            DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentLicID.SelectedValue).Union(
+                            new List<int> { (int)comboBoxDepartmentLicID.SelectedValue }).Contains(
+                            row.Field<int>("ID Department"));
+                    }, Entities.EntityType.License);
                 included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
             }
             if ((checkBoxDocNumberEnable.Checked) && (!String.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))

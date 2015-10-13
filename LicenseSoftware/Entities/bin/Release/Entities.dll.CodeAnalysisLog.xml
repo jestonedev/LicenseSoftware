@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
  <Targets>
-  <Target Name="E:\LicenseSoftware\LicenseSoftware\Entities\bin\Release\Entities.dll">
+  <Target Name="D:\Proejcts\LicenseSoftware\LicenseSoftware\Entities\bin\Release\Entities.dll">
    <Modules>
     <Module Name="entities.dll">
      <Namespaces>
@@ -12,8 +12,8 @@
          <Members>
           <Member Name="#op_Equality(LicenseSoftware.Entities.SoftLicense,LicenseSoftware.Entities.SoftLicense)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-02-11 03:02:49Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Entities" File="SoftLicense.cs" Line="35">'SoftLicense.operator ==(SoftLicense, SoftLicense)' has a cyclomatic complexity of 26. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-10-13 07:35:58Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Entities" File="SoftLicense.cs" Line="35">'SoftLicense.operator ==(SoftLicense, SoftLicense)' has a cyclomatic complexity of 26. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
           </Member>

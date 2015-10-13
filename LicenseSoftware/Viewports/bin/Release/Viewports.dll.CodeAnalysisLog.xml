@@ -2,11 +2,11 @@
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
  <Targets>
-  <Target Name="E:\LicenseSoftware\LicenseSoftware\Viewports\bin\Release\Viewports.dll">
+  <Target Name="D:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports\bin\Release\Viewports.dll">
    <Modules>
     <Module Name="viewports.dll">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-07-06 02:09:22Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'Viewports.dll' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -17,18 +17,18 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-07-06 02:09:22Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="CriticalWarning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 75. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="CriticalWarning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 75. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2015-07-06 02:09:22Z" FixCategory="NonBreaking">
-             <Issue Name="Method" Certainty="75" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 17. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
+            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
+             <Issue Name="Method" Certainty="75" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 17. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#vButtonSearch_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-07-06 02:09:22Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="360">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="366">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -38,8 +38,11 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-07-06 02:09:22Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Warning" Path="e:\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="39">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 35. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="39">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 39. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            </Message>
+            <Message Id="departments" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2015-10-13 07:36:13Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="39">'departments', a variable declared in 'SearchLicensesForm.GetFilter()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -81,6 +84,17 @@
    <Url>http://msdn.microsoft.com/library/bb386043.aspx</Url>
    <Email>[none]</Email>
    <MessageLevel Certainty="90">Warning</MessageLevel>
+   <File Name="maintainabilityrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500">
+   <Name>Variable names should not match field names</Name>
+   <Description>Instance field and variable names should not be identical within the same scope.</Description>
+   <Resolution Name="Local">{0}, a variable declared in {1}, has the same name as an instance field on the type. Change the name of one of these items.</Resolution>
+   <Resolution Name="Parameter">{0}, a parameter declared in {1}, has the same name as an instance field on the type. Change the name of one of these items.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182216.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
    <File Name="maintainabilityrules.dll" Version="12.0.0.0" />
   </Rule>
  </Rules>
