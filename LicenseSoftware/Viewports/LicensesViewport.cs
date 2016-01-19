@@ -72,6 +72,7 @@ namespace LicenseSoftware.Viewport
         private DataGridViewTextBoxColumn buyLicenseDate;
         private DataGridViewTextBoxColumn expireLicenseDate;
         private CheckBox checkBoxInstallCountEnable;
+        private DataGridViewTextBoxColumn currentMaxInst;
 
 
         private SearchForm sSearchForm = null;
@@ -1051,6 +1052,24 @@ namespace LicenseSoftware.Viewport
                     if (row_index != -1)
                         e.Value = ((DataRowView)v_departments[row_index])["Department"].ToString().Trim();
                     break;
+                case "currentMaxInst":
+                    var installations = SoftInstallationsDataModel.GetInstance().Select();
+                    var currentCount = (from installRow in DataModelHelper.FilterRows(installations)
+                                       where installRow.Field<int>("ID License") == 
+                                       (int?)((DataRowView)v_licenses[e.RowIndex])["ID License"]
+                                       select installRow).Count();                    
+                    int maxCount = 0;
+                    Int32.TryParse(((DataRowView)v_licenses[e.RowIndex])["InstallationsCount"].ToString(),out maxCount) ;
+                    if (currentCount == maxCount)
+                    {
+                        dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = System.Drawing.Color.LightPink;
+                    }
+                    else
+                    {
+                        dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = System.Drawing.Color.White;
+                    }
+                    e.Value = currentCount.ToString() + " / " + maxCount.ToString();
+                    break;
             }
         }
 
@@ -1118,6 +1137,7 @@ namespace LicenseSoftware.Viewport
             this.label6 = new System.Windows.Forms.Label();
             this.comboBoxLicTypeID = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.currentMaxInst = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel14.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox32.SuspendLayout();
@@ -1166,7 +1186,7 @@ namespace LicenseSoftware.Viewport
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(7, 54);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(101, 15);
+            this.label10.Size = new System.Drawing.Size(118, 18);
             this.label10.TabIndex = 87;
             this.label10.Text = "Дата истечения";
             // 
@@ -1178,7 +1198,7 @@ namespace LicenseSoftware.Viewport
             this.dateTimePickerExpireLicenseDate.Location = new System.Drawing.Point(161, 51);
             this.dateTimePickerExpireLicenseDate.Name = "dateTimePickerExpireLicenseDate";
             this.dateTimePickerExpireLicenseDate.ShowCheckBox = true;
-            this.dateTimePickerExpireLicenseDate.Size = new System.Drawing.Size(220, 21);
+            this.dateTimePickerExpireLicenseDate.Size = new System.Drawing.Size(220, 24);
             this.dateTimePickerExpireLicenseDate.TabIndex = 1;
             this.dateTimePickerExpireLicenseDate.ValueChanged += new System.EventHandler(this.dateTimePickerExpireLicenseDate_ValueChanged);
             // 
@@ -1187,7 +1207,7 @@ namespace LicenseSoftware.Viewport
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(7, 24);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(124, 15);
+            this.label9.Size = new System.Drawing.Size(144, 18);
             this.label9.TabIndex = 85;
             this.label9.Text = "Дата приобретения";
             // 
@@ -1197,7 +1217,7 @@ namespace LicenseSoftware.Viewport
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerBuyLicenseDate.Location = new System.Drawing.Point(161, 22);
             this.dateTimePickerBuyLicenseDate.Name = "dateTimePickerBuyLicenseDate";
-            this.dateTimePickerBuyLicenseDate.Size = new System.Drawing.Size(220, 21);
+            this.dateTimePickerBuyLicenseDate.Size = new System.Drawing.Size(220, 24);
             this.dateTimePickerBuyLicenseDate.TabIndex = 0;
             this.dateTimePickerBuyLicenseDate.ValueChanged += new System.EventHandler(this.dateTimePickerBuyLicenseDate_ValueChanged);
             // 
@@ -1223,7 +1243,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxDocTypeID.FormattingEnabled = true;
             this.comboBoxDocTypeID.Location = new System.Drawing.Point(161, 51);
             this.comboBoxDocTypeID.Name = "comboBoxDocTypeID";
-            this.comboBoxDocTypeID.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxDocTypeID.Size = new System.Drawing.Size(220, 26);
             this.comboBoxDocTypeID.TabIndex = 1;
             this.comboBoxDocTypeID.SelectedIndexChanged += new System.EventHandler(this.comboBoxDocTypeID_SelectedIndexChanged);
             // 
@@ -1232,7 +1252,7 @@ namespace LicenseSoftware.Viewport
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(7, 54);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(94, 15);
+            this.label8.Size = new System.Drawing.Size(114, 18);
             this.label8.TabIndex = 86;
             this.label8.Text = "Вид документа";
             // 
@@ -1243,7 +1263,7 @@ namespace LicenseSoftware.Viewport
             this.textBoxDocNumber.Location = new System.Drawing.Point(161, 22);
             this.textBoxDocNumber.MaxLength = 500;
             this.textBoxDocNumber.Name = "textBoxDocNumber";
-            this.textBoxDocNumber.Size = new System.Drawing.Size(220, 21);
+            this.textBoxDocNumber.Size = new System.Drawing.Size(220, 24);
             this.textBoxDocNumber.TabIndex = 0;
             this.textBoxDocNumber.TextChanged += new System.EventHandler(this.textBoxDocNumber_TextChanged);
             // 
@@ -1252,7 +1272,7 @@ namespace LicenseSoftware.Viewport
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(7, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 15);
+            this.label1.Size = new System.Drawing.Size(134, 18);
             this.label1.TabIndex = 84;
             this.label1.Text = "Номер документа";
             // 
@@ -1280,7 +1300,8 @@ namespace LicenseSoftware.Viewport
             this.software,
             this.department,
             this.buyLicenseDate,
-            this.expireLicenseDate});
+            this.expireLicenseDate,
+            this.currentMaxInst});
             this.tableLayoutPanel14.SetColumnSpan(this.dataGridView, 2);
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(3, 211);
@@ -1311,7 +1332,7 @@ namespace LicenseSoftware.Viewport
             this.docNumber.MinimumWidth = 100;
             this.docNumber.Name = "docNumber";
             this.docNumber.ReadOnly = true;
-            this.docNumber.Width = 155;
+            this.docNumber.Width = 182;
             // 
             // software
             // 
@@ -1340,7 +1361,7 @@ namespace LicenseSoftware.Viewport
             this.buyLicenseDate.Name = "buyLicenseDate";
             this.buyLicenseDate.ReadOnly = true;
             this.buyLicenseDate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.buyLicenseDate.Width = 150;
+            this.buyLicenseDate.Width = 154;
             // 
             // expireLicenseDate
             // 
@@ -1373,7 +1394,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxDepartmentID.FormattingEnabled = true;
             this.comboBoxDepartmentID.Location = new System.Drawing.Point(161, 80);
             this.comboBoxDepartmentID.Name = "comboBoxDepartmentID";
-            this.comboBoxDepartmentID.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxDepartmentID.Size = new System.Drawing.Size(220, 26);
             this.comboBoxDepartmentID.TabIndex = 2;
             this.comboBoxDepartmentID.SelectedIndexChanged += new System.EventHandler(this.comboBoxDepartmentID_SelectedIndexChanged);
             // 
@@ -1382,7 +1403,7 @@ namespace LicenseSoftware.Viewport
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(7, 83);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(143, 15);
+            this.label4.Size = new System.Drawing.Size(170, 18);
             this.label4.TabIndex = 77;
             this.label4.Text = "Департамент-заказчик";
             // 
@@ -1394,7 +1415,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSupplierID.FormattingEnabled = true;
             this.comboBoxSupplierID.Location = new System.Drawing.Point(161, 51);
             this.comboBoxSupplierID.Name = "comboBoxSupplierID";
-            this.comboBoxSupplierID.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxSupplierID.Size = new System.Drawing.Size(220, 26);
             this.comboBoxSupplierID.TabIndex = 1;
             this.comboBoxSupplierID.SelectedIndexChanged += new System.EventHandler(this.comboBoxSupplierID_SelectedIndexChanged);
             // 
@@ -1403,7 +1424,7 @@ namespace LicenseSoftware.Viewport
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(93, 15);
+            this.label3.Size = new System.Drawing.Size(113, 18);
             this.label3.TabIndex = 75;
             this.label3.Text = "Поставщик ПО";
             // 
@@ -1414,7 +1435,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftwareID.FormattingEnabled = true;
             this.comboBoxSoftwareID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxSoftwareID.Name = "comboBoxSoftwareID";
-            this.comboBoxSoftwareID.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxSoftwareID.Size = new System.Drawing.Size(220, 26);
             this.comboBoxSoftwareID.TabIndex = 0;
             this.comboBoxSoftwareID.DropDownClosed += new System.EventHandler(this.comboBoxSoftwareID_DropDownClosed);
             this.comboBoxSoftwareID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedValueChanged);
@@ -1426,7 +1447,7 @@ namespace LicenseSoftware.Viewport
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(7, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 15);
+            this.label2.Size = new System.Drawing.Size(138, 18);
             this.label2.TabIndex = 73;
             this.label2.Text = "Наименование ПО";
             // 
@@ -1452,7 +1473,7 @@ namespace LicenseSoftware.Viewport
             this.checkBoxInstallCountEnable.AutoSize = true;
             this.checkBoxInstallCountEnable.Location = new System.Drawing.Point(165, 55);
             this.checkBoxInstallCountEnable.Name = "checkBoxInstallCountEnable";
-            this.checkBoxInstallCountEnable.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxInstallCountEnable.Size = new System.Drawing.Size(18, 17);
             this.checkBoxInstallCountEnable.TabIndex = 1;
             this.checkBoxInstallCountEnable.UseVisualStyleBackColor = true;
             this.checkBoxInstallCountEnable.CheckedChanged += new System.EventHandler(this.checkBoxInstallCountEnable_CheckedChanged);
@@ -1464,7 +1485,7 @@ namespace LicenseSoftware.Viewport
             this.textBoxDescription.Location = new System.Drawing.Point(161, 81);
             this.textBoxDescription.MaxLength = 500;
             this.textBoxDescription.Name = "textBoxDescription";
-            this.textBoxDescription.Size = new System.Drawing.Size(220, 21);
+            this.textBoxDescription.Size = new System.Drawing.Size(220, 24);
             this.textBoxDescription.TabIndex = 3;
             this.textBoxDescription.TextChanged += new System.EventHandler(this.textBoxDescription_TextChanged);
             // 
@@ -1473,7 +1494,7 @@ namespace LicenseSoftware.Viewport
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(7, 83);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 15);
+            this.label7.Size = new System.Drawing.Size(94, 18);
             this.label7.TabIndex = 82;
             this.label7.Text = "Примечание";
             // 
@@ -1489,7 +1510,7 @@ namespace LicenseSoftware.Viewport
             0,
             0});
             this.numericUpDownInstallationsCount.Name = "numericUpDownInstallationsCount";
-            this.numericUpDownInstallationsCount.Size = new System.Drawing.Size(195, 21);
+            this.numericUpDownInstallationsCount.Size = new System.Drawing.Size(195, 24);
             this.numericUpDownInstallationsCount.TabIndex = 2;
             this.numericUpDownInstallationsCount.Value = new decimal(new int[] {
             1,
@@ -1503,7 +1524,7 @@ namespace LicenseSoftware.Viewport
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(7, 54);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(138, 15);
+            this.label6.Size = new System.Drawing.Size(168, 18);
             this.label6.TabIndex = 79;
             this.label6.Text = "Количество установок";
             // 
@@ -1515,7 +1536,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicTypeID.FormattingEnabled = true;
             this.comboBoxLicTypeID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxLicTypeID.Name = "comboBoxLicTypeID";
-            this.comboBoxLicTypeID.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxLicTypeID.Size = new System.Drawing.Size(220, 26);
             this.comboBoxLicTypeID.TabIndex = 0;
             this.comboBoxLicTypeID.SelectedIndexChanged += new System.EventHandler(this.comboBoxLicTypeID_SelectedIndexChanged);
             // 
@@ -1524,9 +1545,19 @@ namespace LicenseSoftware.Viewport
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(7, 25);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(87, 15);
+            this.label5.Size = new System.Drawing.Size(104, 18);
             this.label5.TabIndex = 77;
             this.label5.Text = "Вид лицензии";
+            // 
+            // CurrentMaxInst
+            //            
+            this.currentMaxInst.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            this.currentMaxInst.HeaderText = "Установок тек./макс.";
+            this.currentMaxInst.Name = "currentMaxInst";
+            this.currentMaxInst.ReadOnly = true;
+            this.currentMaxInst.Width = 150;
+            this.currentMaxInst.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.currentMaxInst.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // LicensesViewport
             // 
