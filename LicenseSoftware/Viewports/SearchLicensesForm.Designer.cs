@@ -66,6 +66,7 @@
             this.comboBoxLicKey = new System.Windows.Forms.ComboBox();
             this.checkBoxLicKeyEnable = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.checkBoxOnlyAvailableInstallations = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // comboBoxSoftwareType
@@ -91,7 +92,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 51);
+            this.label7.Location = new System.Drawing.Point(15, 51);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(50, 15);
             this.label7.TabIndex = 21;
@@ -102,11 +103,11 @@
             this.vButtonCancel.AllowAnimations = true;
             this.vButtonCancel.BackColor = System.Drawing.Color.Transparent;
             this.vButtonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.vButtonCancel.Location = new System.Drawing.Point(257, 487);
+            this.vButtonCancel.Location = new System.Drawing.Point(257, 515);
             this.vButtonCancel.Name = "vButtonCancel";
             this.vButtonCancel.RoundedCornersMask = ((byte)(15));
             this.vButtonCancel.Size = new System.Drawing.Size(117, 35);
-            this.vButtonCancel.TabIndex = 25;
+            this.vButtonCancel.TabIndex = 27;
             this.vButtonCancel.Text = "Отмена";
             this.vButtonCancel.UseVisualStyleBackColor = false;
             this.vButtonCancel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -115,11 +116,11 @@
             // 
             this.vButtonSearch.AllowAnimations = true;
             this.vButtonSearch.BackColor = System.Drawing.Color.Transparent;
-            this.vButtonSearch.Location = new System.Drawing.Point(119, 487);
+            this.vButtonSearch.Location = new System.Drawing.Point(119, 515);
             this.vButtonSearch.Name = "vButtonSearch";
             this.vButtonSearch.RoundedCornersMask = ((byte)(15));
             this.vButtonSearch.Size = new System.Drawing.Size(117, 35);
-            this.vButtonSearch.TabIndex = 24;
+            this.vButtonSearch.TabIndex = 26;
             this.vButtonSearch.Text = "Поиск";
             this.vButtonSearch.UseVisualStyleBackColor = false;
             this.vButtonSearch.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
@@ -138,7 +139,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 8);
+            this.label11.Location = new System.Drawing.Point(15, 7);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(116, 15);
             this.label11.TabIndex = 32;
@@ -167,7 +168,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(10, 94);
+            this.label12.Location = new System.Drawing.Point(15, 94);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(103, 15);
             this.label12.TabIndex = 36;
@@ -180,7 +181,7 @@
             this.comboBoxDepartmentID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentID.Enabled = false;
             this.comboBoxDepartmentID.FormattingEnabled = true;
-            this.comboBoxDepartmentID.Location = new System.Drawing.Point(43, 242);
+            this.comboBoxDepartmentID.Location = new System.Drawing.Point(42, 242);
             this.comboBoxDepartmentID.Name = "comboBoxDepartmentID";
             this.comboBoxDepartmentID.Size = new System.Drawing.Size(436, 23);
             this.comboBoxDepartmentID.TabIndex = 11;
@@ -203,7 +204,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSoftwareName.Enabled = false;
             this.comboBoxSoftwareName.FormattingEnabled = true;
-            this.comboBoxSoftwareName.Location = new System.Drawing.Point(43, 25);
+            this.comboBoxSoftwareName.Location = new System.Drawing.Point(42, 25);
             this.comboBoxSoftwareName.Name = "comboBoxSoftwareName";
             this.comboBoxSoftwareName.Size = new System.Drawing.Size(436, 23);
             this.comboBoxSoftwareName.TabIndex = 1;
@@ -218,7 +219,7 @@
             this.comboBoxLicType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLicType.Enabled = false;
             this.comboBoxLicType.FormattingEnabled = true;
-            this.comboBoxLicType.Location = new System.Drawing.Point(43, 198);
+            this.comboBoxLicType.Location = new System.Drawing.Point(42, 198);
             this.comboBoxLicType.Name = "comboBoxLicType";
             this.comboBoxLicType.Size = new System.Drawing.Size(436, 23);
             this.comboBoxLicType.TabIndex = 9;
@@ -226,7 +227,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 137);
+            this.label1.Location = new System.Drawing.Point(15, 137);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 15);
             this.label1.TabIndex = 41;
@@ -245,7 +246,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 180);
+            this.label2.Location = new System.Drawing.Point(15, 180);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 15);
             this.label2.TabIndex = 43;
@@ -264,7 +265,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 224);
+            this.label3.Location = new System.Drawing.Point(15, 224);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(134, 15);
             this.label3.TabIndex = 45;
@@ -283,7 +284,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 268);
+            this.label4.Location = new System.Drawing.Point(15, 268);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(177, 15);
             this.label4.TabIndex = 47;
@@ -320,7 +321,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 309);
+            this.label5.Location = new System.Drawing.Point(15, 309);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(160, 15);
             this.label5.TabIndex = 51;
@@ -333,7 +334,7 @@
             this.comboBoxLicDocType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLicDocType.Enabled = false;
             this.comboBoxLicDocType.FormattingEnabled = true;
-            this.comboBoxLicDocType.Location = new System.Drawing.Point(43, 326);
+            this.comboBoxLicDocType.Location = new System.Drawing.Point(42, 326);
             this.comboBoxLicDocType.Name = "comboBoxLicDocType";
             this.comboBoxLicDocType.Size = new System.Drawing.Size(436, 23);
             this.comboBoxLicDocType.TabIndex = 15;
@@ -341,7 +342,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(10, 395);
+            this.label9.Location = new System.Drawing.Point(15, 395);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(182, 15);
             this.label9.TabIndex = 87;
@@ -360,7 +361,7 @@
             // checkBoxBuyLicenseDateEnable
             // 
             this.checkBoxBuyLicenseDateEnable.AutoSize = true;
-            this.checkBoxBuyLicenseDateEnable.Location = new System.Drawing.Point(17, 416);
+            this.checkBoxBuyLicenseDateEnable.Location = new System.Drawing.Point(18, 416);
             this.checkBoxBuyLicenseDateEnable.Name = "checkBoxBuyLicenseDateEnable";
             this.checkBoxBuyLicenseDateEnable.Size = new System.Drawing.Size(15, 14);
             this.checkBoxBuyLicenseDateEnable.TabIndex = 18;
@@ -398,7 +399,7 @@
             // checkBoxExpireLicenseDateEnable
             // 
             this.checkBoxExpireLicenseDateEnable.AutoSize = true;
-            this.checkBoxExpireLicenseDateEnable.Location = new System.Drawing.Point(17, 458);
+            this.checkBoxExpireLicenseDateEnable.Location = new System.Drawing.Point(18, 458);
             this.checkBoxExpireLicenseDateEnable.Name = "checkBoxExpireLicenseDateEnable";
             this.checkBoxExpireLicenseDateEnable.Size = new System.Drawing.Size(15, 14);
             this.checkBoxExpireLicenseDateEnable.TabIndex = 21;
@@ -408,7 +409,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(10, 437);
+            this.label6.Location = new System.Drawing.Point(15, 437);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(195, 15);
             this.label6.TabIndex = 91;
@@ -430,7 +431,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicKey.Enabled = false;
             this.comboBoxLicKey.FormattingEnabled = true;
-            this.comboBoxLicKey.Location = new System.Drawing.Point(45, 369);
+            this.comboBoxLicKey.Location = new System.Drawing.Point(42, 369);
             this.comboBoxLicKey.Name = "comboBoxLicKey";
             this.comboBoxLicKey.Size = new System.Drawing.Size(436, 23);
             this.comboBoxLicKey.TabIndex = 17;
@@ -441,7 +442,7 @@
             // checkBoxLicKeyEnable
             // 
             this.checkBoxLicKeyEnable.AutoSize = true;
-            this.checkBoxLicKeyEnable.Location = new System.Drawing.Point(20, 373);
+            this.checkBoxLicKeyEnable.Location = new System.Drawing.Point(18, 373);
             this.checkBoxLicKeyEnable.Name = "checkBoxLicKeyEnable";
             this.checkBoxLicKeyEnable.Size = new System.Drawing.Size(15, 14);
             this.checkBoxLicKeyEnable.TabIndex = 16;
@@ -451,18 +452,29 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 352);
+            this.label8.Location = new System.Drawing.Point(15, 352);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(124, 15);
             this.label8.TabIndex = 94;
             this.label8.Text = "Лицензионный ключ";
+            // 
+            // checkBoxOnlyAvalableInstallations
+            // 
+            this.checkBoxOnlyAvailableInstallations.AutoSize = true;
+            this.checkBoxOnlyAvailableInstallations.Location = new System.Drawing.Point(18, 487);
+            this.checkBoxOnlyAvailableInstallations.Name = "checkBoxOnlyAvailableInstallations";
+            this.checkBoxOnlyAvailableInstallations.Size = new System.Drawing.Size(286, 19);
+            this.checkBoxOnlyAvailableInstallations.TabIndex = 25;
+            this.checkBoxOnlyAvailableInstallations.Text = "Только лицензии с доступными установками";
+            this.checkBoxOnlyAvailableInstallations.UseVisualStyleBackColor = true;
             // 
             // SearchLicensesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(208)))), ((int)(((byte)(235)))));
-            this.ClientSize = new System.Drawing.Size(493, 529);
+            this.ClientSize = new System.Drawing.Size(493, 556);
+            this.Controls.Add(this.checkBoxOnlyAvailableInstallations);
             this.Controls.Add(this.comboBoxLicKey);
             this.Controls.Add(this.checkBoxLicKeyEnable);
             this.Controls.Add(this.label8);
@@ -552,6 +564,7 @@
         private System.Windows.Forms.ComboBox comboBoxLicKey;
         private System.Windows.Forms.CheckBox checkBoxLicKeyEnable;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox checkBoxOnlyAvailableInstallations;
 
     }
 }

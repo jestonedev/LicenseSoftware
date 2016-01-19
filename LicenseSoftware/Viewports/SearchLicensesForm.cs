@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using LicenseSoftware.DataModels;
 using LicenseSoftware.CalcDataModels;
@@ -15,50 +12,50 @@ namespace LicenseSoftware.SearchForms
 {
     internal partial class SearchLicensesForm : SearchForm
     {
-        SoftTypesDataModel softTypes = null;
-        SoftMakersDataModel softMakers = null;
-        SoftSuppliersDataModel softSuppliers = null;
-        SoftLicTypesDataModel softLicTypes = null;
-        DepartmentsDataModel departments = null;
-        SoftLicDocTypesDataModel softLicDocTypes = null;
-        SoftLicKeysDataModel softLicKeys = null;
-        CalcDataModelSoftwareConcat software = null;
+        SoftTypesDataModel softTypes;
+        SoftMakersDataModel softMakers;
+        SoftSuppliersDataModel softSuppliers;
+        SoftLicTypesDataModel softLicTypes;
+        DepartmentsDataModel departments;
+        SoftLicDocTypesDataModel softLicDocTypes;
+        SoftLicKeysDataModel softLicKeys;
+        CalcDataModelSoftwareConcat software;
 
 
-        BindingSource v_software = null;
-        BindingSource v_softTypes = null;
-        BindingSource v_softMakers = null;
-        BindingSource v_softSuppliers = null;
-        BindingSource v_softLicTypes = null;
-        BindingSource v_departments = null;
-        BindingSource v_softLicDocTypes = null;
-        BindingSource v_softLicKeys = null;
+        BindingSource v_software;
+        BindingSource v_softTypes;
+        BindingSource v_softMakers;
+        BindingSource v_softSuppliers;
+        BindingSource v_softLicTypes;
+        BindingSource v_departments;
+        BindingSource v_softLicDocTypes;
+        BindingSource v_softLicKeys;
 
         internal override string GetFilter()
         {
-            string filter = "";
-            IEnumerable<int> included_ids = null;
+            var filter = "";
+            IEnumerable<int> includedSoftwareIds = null;
             if ((checkBoxLicTypeEnable.Checked) && (comboBoxLicType.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID LicType] = '{0}'", comboBoxLicType.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID LicType] = '{0}'", comboBoxLicType.SelectedValue);
             }
             if ((checkBoxLicDocTypeEnable.Checked) && (comboBoxLicDocType.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID DocType] = '{0}'", comboBoxLicDocType.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID DocType] = '{0}'", comboBoxLicDocType.SelectedValue);
             }
             if ((checkBoxSupplierEnable.Checked) && (comboBoxSupplierID.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID Supplier] = '{0}'", comboBoxSupplierID.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Supplier] = '{0}'", comboBoxSupplierID.SelectedValue);
             }
             if ((checkBoxDepartmentEnable.Checked) && (comboBoxDepartmentID.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
                 var selectedDepartments = DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentID.SelectedValue).Union(new List<int> { (int)comboBoxDepartmentID.SelectedValue });
                 var accessibleDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
@@ -66,64 +63,92 @@ namespace LicenseSoftware.SearchForms
                               select departments_row.Field<int>("ID Department");
                 var departments = selectedDepartments.Intersect(accessibleDepartments);
                 filter += "[ID Department] IN ("; 
-                foreach (int id in departments)
+                foreach (var id in departments)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
-                filter = filter.TrimEnd(new char[] { ',' }) + ")";
+                filter = filter.TrimEnd(',') + ")";
             }
             if (checkBoxDocNumberEnable.Checked)
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "DocNumber LIKE'%{0}%'", textBoxDocNumber.Text.Trim().Replace("'", ""));
+                filter += string.Format(CultureInfo.InvariantCulture, "DocNumber LIKE'%{0}%'", textBoxDocNumber.Text.Trim().Replace("'", ""));
             }
             if ((checkBoxSoftwareNameEnable.Checked) && (comboBoxSoftwareName.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID Software] = '{0}'", comboBoxSoftwareName.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Software] = '{0}'", comboBoxSoftwareName.SelectedValue);
             }
             if (checkBoxBuyLicenseDateEnable.Checked)
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "BuyLicenseDate {0} #{1}#",
+                filter += string.Format(CultureInfo.InvariantCulture, "BuyLicenseDate {0} #{1}#",
                     ConvertDisplayEqExprToSql(
                         comboBoxOpBuyLicenseDate.SelectedItem.ToString()),
                         dateTimePickerBuyLicenseDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
             if (checkBoxExpireLicenseDateEnable.Checked)
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "ExpireLicenseDate {0} #{1}#",
+                filter += string.Format(CultureInfo.InvariantCulture, "ExpireLicenseDate {0} #{1}#",
                     ConvertDisplayEqExprToSql(
                         comboBoxOpExpireLicenseDate.SelectedItem.ToString()),
                         dateTimePickerExpireLicenseDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
             if (checkBoxSoftwareMakerEnable.Checked && (comboBoxSoftwareMaker.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetSoftwareIDsBySoftMaker((int)comboBoxSoftwareMaker.SelectedValue);
-                included_ids = DataModelHelper.Intersect(included_ids, ids);
+                var ids = DataModelHelper.GetSoftwareIDsBySoftMaker((int)comboBoxSoftwareMaker.SelectedValue);
+                includedSoftwareIds = DataModelHelper.Intersect(includedSoftwareIds, ids);
             }
             if (checkBoxSoftwareTypeEnable.Checked && (comboBoxSoftwareType.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetSoftwareIDsBySoftType((int)comboBoxSoftwareType.SelectedValue);
-                included_ids = DataModelHelper.Intersect(included_ids, ids);
+                var ids = DataModelHelper.GetSoftwareIDsBySoftType((int)comboBoxSoftwareType.SelectedValue);
+                includedSoftwareIds = DataModelHelper.Intersect(includedSoftwareIds, ids);
             }
             if (checkBoxLicKeyEnable.Checked && (comboBoxLicKey.SelectedValue != null))
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += String.Format(CultureInfo.InvariantCulture, "[ID License] = '{0}'", comboBoxLicKey.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID License] = '{0}'", comboBoxLicKey.SelectedValue);
             }
-            if (included_ids != null)
+            if (checkBoxOnlyAvailableInstallations.Checked)
             {
-                if (!String.IsNullOrEmpty(filter.Trim()))
+                var installationsCount =
+                    from installRow in DataModelHelper.FilterRows(SoftInstallationsDataModel.GetInstance().Select())
+                    group installRow by installRow.Field<int>("ID License")
+                    into gs
+                    select new
+                    {
+                        idLicense = gs.Key,
+                        istallationsCount = gs.Count()
+                    };
+                var notAvailableLicenses =
+                    (from licensesRow in DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select())
+                    join installRow in installationsCount
+                        on licensesRow.Field<int>("ID License") equals installRow.idLicense
+                    where licensesRow.Field<int?>("InstallationsCount") != null &&
+                        (licensesRow.Field<int>("InstallationsCount") - installRow.istallationsCount <= 0)
+                    select licensesRow.Field<int>("ID License")).ToList();
+                if (notAvailableLicenses.Any())
+                {
+                    if (!string.IsNullOrEmpty(filter.Trim()))
+                        filter += " AND ";
+                    filter += "[ID License] NOT IN (0";
+                    foreach (var id in notAvailableLicenses)
+                        filter += id.ToString(CultureInfo.InvariantCulture) + ",";
+                    filter = filter.TrimEnd(',') + ")";
+                }
+            }
+            if (includedSoftwareIds != null && includedSoftwareIds.Any())
+            {
+                if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
                 filter += "[ID Software] IN (0";
-                foreach (int id in included_ids)
+                foreach (var id in includedSoftwareIds)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
-                filter = filter.TrimEnd(new char[] { ',' }) + ")";
+                filter = filter.TrimEnd(',') + ")";
             }
             return filter;
         }
@@ -219,7 +244,7 @@ namespace LicenseSoftware.SearchForms
             foreach (Control control in this.Controls)
                 control.KeyDown += (sender, e) =>
                 {
-                    ComboBox comboBox = sender as ComboBox;
+                    var comboBox = sender as ComboBox;
                     if (comboBox != null && comboBox.DroppedDown)
                         return;
                     if (e.KeyCode == Keys.Enter)
@@ -232,7 +257,7 @@ namespace LicenseSoftware.SearchForms
 
         private void vButtonSearch_Click(object sender, EventArgs e)
         {
-            if ((checkBoxSoftwareNameEnable.Checked) && String.IsNullOrEmpty(comboBoxSoftwareName.Text.Trim()))
+            if ((checkBoxSoftwareNameEnable.Checked) && string.IsNullOrEmpty(comboBoxSoftwareName.Text.Trim()))
             {
                 MessageBox.Show("Выберите наименование ПО или уберите галочку поиска по наименованию ПО",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
@@ -274,7 +299,7 @@ namespace LicenseSoftware.SearchForms
                 comboBoxDepartmentID.Focus();
                 return;
             }
-            if ((checkBoxDocNumberEnable.Checked) && (String.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))
+            if ((checkBoxDocNumberEnable.Checked) && (string.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))
             {
                 MessageBox.Show("Введите номер документа-основания или уберите галочку поиска по номеру документа-основания", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
@@ -370,9 +395,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxSoftwareName.Text;
-                int selectionStart = comboBoxSoftwareName.SelectionStart;
-                int selectionLength = comboBoxSoftwareName.SelectionLength;
+                var text = comboBoxSoftwareName.Text;
+                var selectionStart = comboBoxSoftwareName.SelectionStart;
+                var selectionLength = comboBoxSoftwareName.SelectionLength;
                 v_software.Filter = "Software like '%" + comboBoxSoftwareName.Text + "%'";
                 comboBoxSoftwareName.Text = text;
                 comboBoxSoftwareName.SelectionStart = selectionStart;
@@ -407,9 +432,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                    || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxLicKey.Text;
-                int selectionStart = comboBoxLicKey.SelectionStart;
-                int selectionLength = comboBoxLicKey.SelectionLength;
+                var text = comboBoxLicKey.Text;
+                var selectionStart = comboBoxLicKey.SelectionStart;
+                var selectionLength = comboBoxLicKey.SelectionLength;
                 v_softLicKeys.Filter = "LicKey like '%" + comboBoxLicKey.Text + "%'";
                 comboBoxLicKey.Text = text;
                 comboBoxLicKey.SelectionStart = selectionStart;
