@@ -6,7 +6,7 @@
    <Modules>
     <Module Name="viewports.dll">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'Viewports.dll' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -17,17 +17,17 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="CriticalWarning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 75. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Name="Method" Certainty="75" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 17. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#vButtonSearch_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="366">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
@@ -38,10 +38,10 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="CriticalWarning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 59. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="CriticalWarning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 66. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message Id="departments" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message Id="departments" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Name="Local" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'departments', a variable declared in 'SearchLicensesForm.GetFilter()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
@@ -54,17 +54,17 @@
        <Types>
         <Type Name="LicensesViewport" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
          <Messages>
-          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="Breaking">
+          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="Breaking">
            <Issue Name="UIType" Certainty="75" Level="Warning">'LicensesViewport' is coupled with 81 different (non-IComponent) types from 16 different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above 95 indicates poor maintainability, a class coupling between 95 and 80 indicates moderate maintainability, and a class coupling below 80 indicates good maintainability.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#dataGridView_CellValueNeeded(System.Object,System.Windows.Forms.DataGridViewCellValueEventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="System.Int32.TryParse(System.String,System.Int32@)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message Id="System.Int32.TryParse(System.String,System.Int32@)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Name="TryParse" Certainty="95" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1062">'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' calls 'int.TryParse(string, out int)' but does not explicitly check whether the conversion succeeded. Either use the return value in a conditional statement or verify that the call site expects that the out argument will be set to the default value when the conversion fails.</Issue>
             </Message>
-            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-01-19 03:19:13Z" FixCategory="NonBreaking">
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-02-11 09:06:15Z" FixCategory="NonBreaking">
              <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
              <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>

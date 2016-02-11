@@ -67,6 +67,18 @@ namespace LicenseSoftware.SearchForms
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
                 filter = filter.TrimEnd(',') + ")";
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(filter.Trim()))
+                    filter += " AND ";
+                var accessibleDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                                            where departments_row.Field<bool>("AllowSelect")
+                                            select departments_row.Field<int>("ID Department");
+                filter += "[ID Department] IN (";
+                foreach (var id in accessibleDepartments)
+                    filter += id.ToString(CultureInfo.InvariantCulture) + ",";
+                filter = filter.TrimEnd(',') + ")";
+            }
             if (checkBoxDocNumberEnable.Checked)
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))

@@ -4,7 +4,7 @@
  <Namespaces>
   <Namespace Name="Registry.Reporting">
    <Messages>
-    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2016-01-19 03:04:39Z" FixCategory="Breaking">
+    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2016-02-11 09:02:43Z" FixCategory="Breaking">
      <Issue Certainty="50" Level="Warning">Consider merging the types defined in 'Registry.Reporting' with another namespace.</Issue>
     </Message>
    </Messages>
@@ -21,7 +21,7 @@
          <Members>
           <Member Name="#Run()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-01-19 03:04:39Z" FixCategory="NonBreaking">
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-02-11 09:02:43Z" FixCategory="NonBreaking">
              <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Reporting" File="InstallationsInfoReporter.cs" Line="20">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'InstallationsInfoReporter.Run()' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>
            </Messages>
@@ -32,7 +32,7 @@
          <Members>
           <Member Name="#Run()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
            <Messages>
-            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-01-19 03:04:39Z" FixCategory="NonBreaking">
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-02-11 09:02:43Z" FixCategory="NonBreaking">
              <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Reporting" File="LicensesBySoftCountReporter.cs" Line="22">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesBySoftCountReporter.Run()' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>
            </Messages>
