@@ -140,6 +140,20 @@ namespace LicenseSoftware.SearchForms
                     }, Entities.EntityType.License);
                 included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
             }
+            var allowedDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                                    where departments_row.Field<bool>("AllowSelect")
+                                    select departments_row.Field<int>("ID Department");
+            var allowedComputers =
+                from devicesRow in DataModelHelper.FilterRows(DevicesDataModel.GetInstance().Select())
+                join depRow in allowedDepartments
+                    on devicesRow.Field<int>("ID Department") equals depRow
+                select devicesRow.Field<int>("ID Device");
+            if (!string.IsNullOrEmpty(filter.Trim()))
+                filter += " AND ";
+            filter += "[ID Computer] IN (0";
+            foreach (var id in allowedComputers)
+                filter += id.ToString(CultureInfo.InvariantCulture) + ",";
+            filter = filter.TrimEnd(',') + ")";
             if (checkBoxInstallDateEnable.Checked)
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
