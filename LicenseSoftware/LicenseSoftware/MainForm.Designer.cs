@@ -86,6 +86,7 @@ namespace LicenseSoftware
             this.ribbonTabHousing = new System.Windows.Forms.RibbonTab();
             this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonLicensesBySoftCount = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonInstallationsInfo = new System.Windows.Forms.RibbonButton();
             this.ribbonPanel5 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonLogLicensesReport = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonLogInstallationsReport = new System.Windows.Forms.RibbonButton();
@@ -96,7 +97,7 @@ namespace LicenseSoftware
             this.toolStripLabelRecordCount = new System.Windows.Forms.ToolStripLabel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.ribbonButton1 = new System.Windows.Forms.RibbonButton();
-            this.ribbonButtonInstallationsInfo = new System.Windows.Forms.RibbonButton();
+            this.ribbonOrbMenuItemHelp = new System.Windows.Forms.RibbonOrbMenuItem();
             this.mbStatusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,6 +118,7 @@ namespace LicenseSoftware
             this.ribbon1.OrbDropDown.MenuItems.Add(this.ribbonOrbMenuItemLicenses);
             this.ribbon1.OrbDropDown.MenuItems.Add(this.ribbonOrbMenuItemInstallations);
             this.ribbon1.OrbDropDown.MenuItems.Add(this.ribbonSeparator4);
+            this.ribbon1.OrbDropDown.MenuItems.Add(this.ribbonOrbMenuItemHelp);
             this.ribbon1.OrbDropDown.MenuItems.Add(this.ribbonOrbMenuItemExit);
             this.ribbon1.OrbDropDown.Name = "";
             this.ribbon1.OrbDropDown.RecentItems.Add(this.ribbonRibbonButtonSoftType);
@@ -126,7 +128,7 @@ namespace LicenseSoftware
             this.ribbon1.OrbDropDown.RecentItems.Add(this.ribbonRibbonButtonLicTypes);
             this.ribbon1.OrbDropDown.RecentItems.Add(this.ribbonRibbonButtonInstallers);
             this.ribbon1.OrbDropDown.RecentItemsCaption = "Справочники";
-            this.ribbon1.OrbDropDown.Size = new System.Drawing.Size(527, 251);
+            this.ribbon1.OrbDropDown.Size = new System.Drawing.Size(527, 295);
             this.ribbon1.OrbDropDown.TabIndex = 0;
             this.ribbon1.OrbImage = null;
             this.ribbon1.OrbStyle = System.Windows.Forms.RibbonOrbStyle.Office_2010;
@@ -544,6 +546,17 @@ namespace LicenseSoftware
             this.ribbonButtonLicensesBySoftCount.ToolTipTitle = "Количество установок по ПО";
             this.ribbonButtonLicensesBySoftCount.Click += new System.EventHandler(this.ribbonButtonLicensesBySoftCount_Click);
             // 
+            // ribbonButtonInstallationsInfo
+            // 
+            this.ribbonButtonInstallationsInfo.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.Image")));
+            this.ribbonButtonInstallationsInfo.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.SmallImage")));
+            this.ribbonButtonInstallationsInfo.Text = "Отчет по установкам ПО";
+            this.ribbonButtonInstallationsInfo.ToolTip = "При нажатии на данную кнопку будет сформирован отчет по установкам программного о" +
+    "беспечения на подконтрольные компьютеры";
+            this.ribbonButtonInstallationsInfo.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.ToolTipImage")));
+            this.ribbonButtonInstallationsInfo.ToolTipTitle = "Отчет по установкам ПО";
+            this.ribbonButtonInstallationsInfo.Click += new System.EventHandler(this.ribbonButtonInstallationsInfo_Click);
+            // 
             // ribbonPanel5
             // 
             this.ribbonPanel5.Items.Add(this.ribbonButtonLogLicensesReport);
@@ -679,16 +692,16 @@ namespace LicenseSoftware
             this.ribbonButton1.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButton1.ToolTipImage")));
             this.ribbonButton1.ToolTipTitle = "Лог изменений лицензий";
             // 
-            // ribbonButtonInstallationsInfo
+            // ribbonOrbMenuItemHelp
             // 
-            this.ribbonButtonInstallationsInfo.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.Image")));
-            this.ribbonButtonInstallationsInfo.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.SmallImage")));
-            this.ribbonButtonInstallationsInfo.Text = "Отчет по установкам ПО";
-            this.ribbonButtonInstallationsInfo.ToolTip = "При нажатии на данную кнопку будет сформирован отчет по установкам программного о" +
-    "беспечения на подконтрольные компьютеры";
-            this.ribbonButtonInstallationsInfo.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.ToolTipImage")));
-            this.ribbonButtonInstallationsInfo.ToolTipTitle = "Отчет по установкам ПО";
-            this.ribbonButtonInstallationsInfo.Click += new System.EventHandler(this.ribbonButtonInstallationsInfo_Click);
+            this.ribbonOrbMenuItemHelp.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.ribbonOrbMenuItemHelp.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.Image")));
+            this.ribbonOrbMenuItemHelp.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.SmallImage")));
+            this.ribbonOrbMenuItemHelp.Text = "Руководство пользователя";
+            this.ribbonOrbMenuItemHelp.ToolTip = "При нажатии на данную кнопку будет открыто руководство пользователя";
+            this.ribbonOrbMenuItemHelp.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.ToolTipImage")));
+            this.ribbonOrbMenuItemHelp.ToolTipTitle = "Руководство пользователя";
+            this.ribbonOrbMenuItemHelp.Click += new System.EventHandler(this.ribbonOrbMenuItemHelp_Click);
             // 
             // MainForm
             // 
@@ -767,6 +780,7 @@ namespace LicenseSoftware
         private System.Windows.Forms.RibbonPanel ribbonPanel5;
         private System.Windows.Forms.RibbonButton ribbonButton1;
         private System.Windows.Forms.RibbonButton ribbonButtonInstallationsInfo;
+        private System.Windows.Forms.RibbonOrbMenuItem ribbonOrbMenuItemHelp;
     }
 }
 
