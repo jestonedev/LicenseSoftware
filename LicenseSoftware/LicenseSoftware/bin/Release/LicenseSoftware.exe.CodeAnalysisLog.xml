@@ -2,11 +2,11 @@
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
  <Targets>
-  <Target Name="D:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\LicenseSoftware\bin\Release\LicenseSoftware.exe">
+  <Target Name="D:\Proejcts\LicenseSoftware\LicenseSoftware\LicenseSoftware\bin\Release\LicenseSoftware.exe">
    <Modules>
     <Module Name="licensesoftware.exe">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-02-29 09:18:56Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-04-12 07:25:19Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'LicenseSoftware.exe' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -17,18 +17,18 @@
          <Members>
           <Member Name="#ProcessCmdKey(System.Windows.Forms.Message&amp;,System.Windows.Forms.Keys)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Active" Created="2016-02-29 09:18:56Z" FixCategory="NonBreaking">
-             <Issue Certainty="33" Level="CriticalError" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="437">'MainForm.ProcessCmdKey(ref Message, Keys)' calls into 'Form.ProcessCmdKey(ref Message, Keys)' which has a LinkDemand. By making this call, 'Form.ProcessCmdKey(ref Message, Keys)' is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: &#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'&#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'</Issue>
+            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Status="Active" Created="2016-04-12 07:25:19Z" FixCategory="NonBreaking">
+             <Issue Certainty="33" Level="CriticalError" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="437">'MainForm.ProcessCmdKey(ref Message, Keys)' calls into 'Form.ProcessCmdKey(ref Message, Keys)' which has a LinkDemand. By making this call, 'Form.ProcessCmdKey(ref Message, Keys)' is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: &#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'&#xD;&#xA;   -&gt;'MainForm.ProcessCmdKey(ref Message, Keys)'</Issue>
             </Message>
-            <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Status="Active" Created="2016-02-29 09:18:56Z" FixCategory="Breaking">
-             <Issue Name="BaseOnly" Certainty="33" Level="CriticalError" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="437">Add the following security attribute to 'MainForm.ProcessCmdKey(ref Message, Keys)' in order to match a LinkDemand on base method 'Form.ProcessCmdKey(ref Message, Keys)':  [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)].</Issue>
+            <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Status="Active" Created="2016-04-12 07:25:19Z" FixCategory="Breaking">
+             <Issue Name="BaseOnly" Certainty="33" Level="CriticalError" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="437">Add the following security attribute to 'MainForm.ProcessCmdKey(ref Message, Keys)' in order to match a LinkDemand on base method 'Form.ProcessCmdKey(ref Message, Keys)':  [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)].</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#ribbonOrbMenuItemHelp_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-02-29 09:18:56Z" FixCategory="NonBreaking">
-             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="532">Because the behavior of 'string.Format(string, object)' could vary based on the current user's locale settings, replace this call in 'MainForm.ribbonOrbMenuItemHelp_Click(object, EventArgs)' with a call to 'string.Format(IFormatProvider, string, params object[])'. If the result of 'string.Format(IFormatProvider, string, params object[])' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
+            <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-04-12 07:25:19Z" FixCategory="NonBreaking">
+             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\LicenseSoftware" File="MainForm.cs" Line="532">Because the behavior of 'string.Format(string, object)' could vary based on the current user's locale settings, replace this call in 'MainForm.ribbonOrbMenuItemHelp_Click(object, EventArgs)' with a call to 'string.Format(IFormatProvider, string, params object[])'. If the result of 'string.Format(IFormatProvider, string, params object[])' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>
            </Messages>
           </Member>
