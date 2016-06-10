@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Data;
 using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
-using LicenseSoftware.CalcDataModels;
-using System.Text.RegularExpressions;
-using CustomControls;
 using Security;
 using System.Globalization;
-using LicenseSoftware.Reporting;
+using System.Linq;
 
 namespace LicenseSoftware.Viewport
 {
@@ -22,13 +17,15 @@ namespace LicenseSoftware.Viewport
         #endregion Components
 
         #region Models
-        SoftLicKeysDataModel softLicKeys = null;
-        DataTable snapshotsoftLicKeys = new DataTable("snapshotSoftLicKeys");
+
+        private SoftLicKeysDataModel softLicKeys;
+        private DataTable snapshotsoftLicKeys = new DataTable("snapshotSoftLicKeys");
         #endregion Models
 
         #region Views
-        BindingSource v_softLicKeys = null;
-        BindingSource v_snapshotSoftLicKeys = null;
+
+        private BindingSource v_softLicKeys;
+        private BindingSource v_snapshotSoftLicKeys;
         #endregion Views
         private DataGridViewTextBoxColumn idLicenseKey;
         private DataGridViewTextBoxColumn idLicense;
@@ -36,7 +33,7 @@ namespace LicenseSoftware.Viewport
 
 
         //Флаг разрешения синхронизации snapshot и original моделей
-        bool sync_views = true;
+        private bool _syncViews = true;
 
         private SoftLicKeysViewport()
             : this(null)
@@ -53,24 +50,24 @@ namespace LicenseSoftware.Viewport
         public SoftLicKeysViewport(SoftLicKeysViewport softLicKeysViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = softLicKeysViewport.DynamicFilter;
-            this.StaticFilter = softLicKeysViewport.StaticFilter;
-            this.ParentRow = softLicKeysViewport.ParentRow;
-            this.ParentType = softLicKeysViewport.ParentType;
+            DynamicFilter = softLicKeysViewport.DynamicFilter;
+            StaticFilter = softLicKeysViewport.StaticFilter;
+            ParentRow = softLicKeysViewport.ParentRow;
+            ParentType = softLicKeysViewport.ParentType;
         }
 
         private bool SnapshotHasChanges()
         {
-            List<SoftLicKey> list_from_view = SoftLicKeysFromView();
-            List<SoftLicKey> list_from_viewport = SoftLicKeysFromViewport();
-            if (list_from_view.Count != list_from_viewport.Count)
+            var listFromView = SoftLicKeysFromView();
+            var listFromViewport = SoftLicKeysFromViewport();
+            if (listFromView.Count != listFromViewport.Count)
                 return true;
-            bool founded = false;
-            for (int i = 0; i < list_from_view.Count; i++)
+            bool founded;
+            for (var i = 0; i < listFromView.Count; i++)
             {
                 founded = false;
-                for (int j = 0; j < list_from_viewport.Count; j++)
-                    if (list_from_view[i] == list_from_viewport[j])
+                for (var j = 0; j < listFromViewport.Count; j++)
+                    if (listFromView[i] == listFromViewport[j])
                         founded = true;
                 if (!founded)
                     return true;
@@ -80,36 +77,51 @@ namespace LicenseSoftware.Viewport
 
         private static object[] DataRowViewToArray(DataRowView dataRowView)
         {
-            return new object[] { 
+            return new[] { 
                 dataRowView["ID LicenseKey"], 
                 dataRowView["ID License"], 
                 dataRowView["LicKey"]
             };
         }
 
-        private bool ValidateSoftLicKeys(List<SoftLicKey> softLicKeys)
+        private bool ValidateSoftLicKeys(List<SoftLicKey> softLicKeysParam)
         {
-            foreach (SoftLicKey softLicKey in softLicKeys)
+            foreach (var softLicKey in softLicKeysParam)
             {
                 if (softLicKey.LicKey == null)
                 {
-                    MessageBox.Show("Лицензионный ключ является обязательным для заполнения", "Ошибка",
+                    MessageBox.Show(@"Лицензионный ключ является обязательным для заполнения", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
                 if (softLicKey.LicKey != null && softLicKey.LicKey.Length > 200)
                 {
-                    MessageBox.Show("Длина лицензионного ключа не может превышать 200 символов", "Ошибка", 
+                    MessageBox.Show(@"Длина лицензионного ключа не может превышать 200 символов", @"Ошибка", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    return false;
+                }
+                var localSoftLicKey = softLicKey;
+                if (softLicKeysParam.Count(v => v.LicKey == localSoftLicKey.LicKey) > 1)
+                {
+                    MessageBox.Show(string.Format("Вы пытаетесь добавить лицензионный ключ {0} дважды", localSoftLicKey.LicKey),
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    return false;
+                }
+                var duplicates = softLicKeys.Select().AsEnumerable().
+                    Where(v => v.Field<string>("LicKey") == localSoftLicKey.LicKey && v.Field<int>("ID License") != localSoftLicKey.IdLicense);
+                if (duplicates.Any())
+                {
+                    MessageBox.Show(string.Format("Нельзя добавить лицензионный ключ {0}, т.к. он уже присутствует в другой лицензии", localSoftLicKey.LicKey), 
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
             }
             if (ParentRow["InstallationsCount"] != DBNull.Value && v_snapshotSoftLicKeys.Count > (int)ParentRow["InstallationsCount"])
             {
-                DialogResult result = MessageBox.Show("Количество внесенных ключей превышает количество разрешенных установок данного ПО. " +
-                    "Вы уверены, что хотите сохранить изменения в базу данных?", "Внимание",
+                var result = MessageBox.Show(@"Количество внесенных ключей превышает количество разрешенных установок данного ПО. " +
+                    @"Вы уверены, что хотите сохранить изменения в базу данных?", @"Внимание",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                if (result != System.Windows.Forms.DialogResult.Yes)
+                if (result != DialogResult.Yes)
                     return false;
             }
             return true;
@@ -117,22 +129,24 @@ namespace LicenseSoftware.Viewport
 
         private static SoftLicKey RowToSoftLicKey(DataRow row)
         {
-            SoftLicKey softLicKey = new SoftLicKey();
-            softLicKey.IdLicenseKey = ViewportHelper.ValueOrNull<int>(row, "ID LicenseKey");
-            softLicKey.IdLicense = ViewportHelper.ValueOrNull<int>(row, "ID License");
-            softLicKey.LicKey = ViewportHelper.ValueOrNull(row, "LicKey");
+            var softLicKey = new SoftLicKey
+            {
+                IdLicenseKey = ViewportHelper.ValueOrNull<int>(row, "ID LicenseKey"),
+                IdLicense = ViewportHelper.ValueOrNull<int>(row, "ID License"),
+                LicKey = ViewportHelper.ValueOrNull(row, "LicKey")
+            };
             return softLicKey;
         }
 
         private List<SoftLicKey> SoftLicKeysFromViewport()
         {
-            List<SoftLicKey> list = new List<SoftLicKey>();
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            var list = new List<SoftLicKey>();
+            for (var i = 0; i < dataGridView.Rows.Count; i++)
             {
                 if (!dataGridView.Rows[i].IsNewRow)
                 {
-                    SoftLicKey slk = new SoftLicKey();
-                    DataGridViewRow row = dataGridView.Rows[i];
+                    var slk = new SoftLicKey();
+                    var row = dataGridView.Rows[i];
                     slk.IdLicenseKey = ViewportHelper.ValueOrNull<int>(row, "idLicenseKey");
                     slk.IdLicense = ViewportHelper.ValueOrNull<int>(row, "idLicense");
                     slk.LicKey = ViewportHelper.ValueOrNull(row, "LicKey");
@@ -144,11 +158,11 @@ namespace LicenseSoftware.Viewport
 
         private List<SoftLicKey> SoftLicKeysFromView()
         {
-            List<SoftLicKey> list = new List<SoftLicKey>();
-            for (int i = 0; i < v_softLicKeys.Count; i++)
+            var list = new List<SoftLicKey>();
+            for (var i = 0; i < v_softLicKeys.Count; i++)
             {
-                SoftLicKey slk = new SoftLicKey();
-                DataRowView row = ((DataRowView)v_softLicKeys[i]);
+                var slk = new SoftLicKey();
+                var row = ((DataRowView)v_softLicKeys[i]);
                 slk.IdLicenseKey = ViewportHelper.ValueOrNull<int>(row, "ID LicenseKey");
                 slk.IdLicense = ViewportHelper.ValueOrNull<int>(row, "ID License");
                 slk.LicKey = ViewportHelper.ValueOrNull(row, "LicKey");
@@ -210,45 +224,46 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
             softLicKeys = SoftLicKeysDataModel.GetInstance();
             // Дожидаемся дозагрузки данных, если это необходимо
             softLicKeys.Select();
 
-            v_softLicKeys = new BindingSource();
-            v_softLicKeys.DataMember = "SoftLicKeys";
-            v_softLicKeys.Filter = StaticFilter;
-            if (!String.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
+            v_softLicKeys = new BindingSource
+            {
+                DataMember = "SoftLicKeys",
+                Filter = StaticFilter
+            };
+            if (!string.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
                 v_softLicKeys.Filter += " AND ";
             v_softLicKeys.Filter += DynamicFilter;
             v_softLicKeys.DataSource = DataSetManager.DataSet;
 
             if (ParentRow != null && ParentType == ParentTypeEnum.License)
-                this.Text = String.Format(CultureInfo.InvariantCulture, "Лицензионные ключи лицензии №{0}", ParentRow["ID License"]);
+                Text = string.Format(CultureInfo.InvariantCulture, "Лицензионные ключи лицензии №{0}", ParentRow["ID License"]);
             else
                 throw new ViewportException("Неизвестный тип родительского объекта");
 
             //Инициируем колонки snapshot-модели
-            for (int i = 0; i < softLicKeys.Select().Columns.Count; i++)
+            for (var i = 0; i < softLicKeys.Select().Columns.Count; i++)
                 snapshotsoftLicKeys.Columns.Add(new DataColumn(softLicKeys.Select().Columns[i].ColumnName, softLicKeys.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (int i = 0; i < v_softLicKeys.Count; i++)
+            for (var i = 0; i < v_softLicKeys.Count; i++)
                 snapshotsoftLicKeys.Rows.Add(DataRowViewToArray(((DataRowView)v_softLicKeys[i])));
-            v_snapshotSoftLicKeys = new BindingSource();
-            v_snapshotSoftLicKeys.DataSource = snapshotsoftLicKeys;
-            v_snapshotSoftLicKeys.CurrentItemChanged += new EventHandler(v_snapshotLicKeys_CurrentItemChanged);
+            v_snapshotSoftLicKeys = new BindingSource {DataSource = snapshotsoftLicKeys};
+            v_snapshotSoftLicKeys.CurrentItemChanged += v_snapshotLicKeys_CurrentItemChanged;
 
             dataGridView.DataSource = v_snapshotSoftLicKeys;
             idLicenseKey.DataPropertyName = "ID LicenseKey";
             idLicense.DataPropertyName = "ID License";
             LicKey.DataPropertyName = "LicKey";
             dataGridView.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
-            dataGridView.CellValidated += new DataGridViewCellEventHandler(dataGridView_CellValidated);
+            dataGridView.CellValidated += dataGridView_CellValidated;
             //События изменения данных для проверки соответствия реальным данным в модели
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softLicKeys.Select().RowChanged += new DataRowChangeEventHandler(SoftLicKeysViewport_RowChanged);
-            softLicKeys.Select().RowDeleting += new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleting);
+            softLicKeys.Select().RowChanged += SoftLicKeysViewport_RowChanged;
+            softLicKeys.Select().RowDeleting += SoftLicKeysViewport_RowDeleting;
             softLicKeys.Select().RowDeleted += SoftLicKeysViewport_RowDeleted;
         }
 
@@ -262,7 +277,7 @@ namespace LicenseSoftware.Viewport
         {
             if ((ParentRow == null) || (ParentType != ParentTypeEnum.License))
                 return;
-            DataRowView row = (DataRowView)v_snapshotSoftLicKeys.AddNew();
+            var row = (DataRowView)v_snapshotSoftLicKeys.AddNew();
             row["ID License"] = ParentRow["ID License"];
             row.EndEdit();
         }
@@ -286,7 +301,7 @@ namespace LicenseSoftware.Viewport
         public override void CancelRecord()
         {
             snapshotsoftLicKeys.Clear();
-            for (int i = 0; i < v_softLicKeys.Count; i++)
+            for (var i = 0; i < v_softLicKeys.Count; i++)
                 snapshotsoftLicKeys.Rows.Add(DataRowViewToArray(((DataRowView)v_softLicKeys[i])));
             MenuCallback.EditingStateUpdate();
         }
@@ -300,22 +315,22 @@ namespace LicenseSoftware.Viewport
         public override void SaveRecord()
         {
             dataGridView.EndEdit();
-            sync_views = false;
-            List<SoftLicKey> list = SoftLicKeysFromViewport();
+            _syncViews = false;
+            var list = SoftLicKeysFromViewport();
             if (!ValidateSoftLicKeys(list))
             {
-                sync_views = true;
+                _syncViews = true;
                 return;
             }
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                DataRow row = softLicKeys.Select().Rows.Find(((SoftLicKey)list[i]).IdLicenseKey);
+                var row = softLicKeys.Select().Rows.Find(list[i].IdLicenseKey);
                 if (row == null)
                 {
-                    int idLicKey = SoftLicKeysDataModel.Insert(list[i]);
+                    var idLicKey = SoftLicKeysDataModel.Insert(list[i]);
                     if (idLicKey == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     ((DataRowView)v_snapshotSoftLicKeys[i])["ID LicenseKey"] = idLicKey;
@@ -323,12 +338,12 @@ namespace LicenseSoftware.Viewport
                 }
                 else
                 {
-                    SoftLicKey softLicKeyFromView = RowToSoftLicKey(row);
+                    var softLicKeyFromView = RowToSoftLicKey(row);
                     if (softLicKeyFromView == list[i])
                         continue;
                     if (SoftLicKeysDataModel.Update(list[i]) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     row["ID License"] = list[i].IdLicense == null ? DBNull.Value : (object)list[i].IdLicense;
@@ -336,25 +351,23 @@ namespace LicenseSoftware.Viewport
                 }
             }
             list = SoftLicKeysFromView();
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                int row_index = -1;
-                for (int j = 0; j < dataGridView.Rows.Count; j++)
+                var rowIndex = -1;
+                for (var j = 0; j < dataGridView.Rows.Count; j++)
                     if ((dataGridView.Rows[j].Cells["idLicenseKey"].Value != null) &&
-                        !String.IsNullOrEmpty(dataGridView.Rows[j].Cells["idLicenseKey"].Value.ToString()) &&
+                        !string.IsNullOrEmpty(dataGridView.Rows[j].Cells["idLicenseKey"].Value.ToString()) &&
                         ((int)dataGridView.Rows[j].Cells["idLicenseKey"].Value == list[i].IdLicenseKey))
-                        row_index = j;
-                if (row_index == -1)
+                        rowIndex = j;
+                if (rowIndex != -1) continue;
+                if (SoftLicKeysDataModel.Delete(list[i].IdLicenseKey.Value) == -1)
                 {
-                    if (SoftLicKeysDataModel.Delete(list[i].IdLicenseKey.Value) == -1)
-                    {
-                        sync_views = true;
-                        return;
-                    }
-                    softLicKeys.Select().Rows.Find(((SoftLicKey)list[i]).IdLicenseKey).Delete();
+                    _syncViews = true;
+                    return;
                 }
+                softLicKeys.Select().Rows.Find(list[i].IdLicenseKey).Delete();
             }
-            sync_views = true;
+            _syncViews = true;
             MenuCallback.EditingStateUpdate();
             //TODO тут будет вызов обновления вычисляемой модели доступных лицензионных ключей
         }
@@ -366,7 +379,7 @@ namespace LicenseSoftware.Viewport
 
         public override Viewport Duplicate()
         {
-            SoftLicKeysViewport viewport = new SoftLicKeysViewport(this, MenuCallback);
+            var viewport = new SoftLicKeysViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
             return viewport;
@@ -374,11 +387,9 @@ namespace LicenseSoftware.Viewport
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (SnapshotHasChanges())
             {
-                DialogResult result = MessageBox.Show("Сохранить изменения о комнатах в базу данных?", "Внимание",
+                var result = MessageBox.Show(@"Сохранить изменения о комнатах в базу данных?", @"Внимание",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Yes)
                     SaveRecord();
@@ -391,21 +402,21 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softLicKeys.Select().RowChanged -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowChanged);
-            softLicKeys.Select().RowDeleting -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleting);
-            softLicKeys.Select().RowDeleted -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleted);
+            softLicKeys.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
+            softLicKeys.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
+            softLicKeys.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
         }
 
         public override void ForceClose()
         {
-            softLicKeys.Select().RowChanged -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowChanged);
-            softLicKeys.Select().RowDeleting -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleting);
-            softLicKeys.Select().RowDeleted -= new DataRowChangeEventHandler(SoftLicKeysViewport_RowDeleted);
-            base.Close();
+            softLicKeys.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
+            softLicKeys.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
+            softLicKeys.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
+            Close();
         }
-  
 
-        void v_snapshotLicKeys_CurrentItemChanged(object sender, EventArgs e)
+
+        private void v_snapshotLicKeys_CurrentItemChanged(object sender, EventArgs e)
         {
             if (Selected)
             {
@@ -415,9 +426,9 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             switch (cell.OwningColumn.Name)
             {
                 case "LicKey":
@@ -432,7 +443,7 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void SoftLicKeysViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
+        private void SoftLicKeysViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
             MenuCallback.ForceCloseDetachedViewports();
             if (Selected)
@@ -444,124 +455,113 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void SoftLicKeysViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
+        private void SoftLicKeysViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            if (e.Action == DataRowAction.Delete)
-            {
-                int row_index = v_snapshotSoftLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]);
-                if (row_index != -1)
-                    ((DataRowView)v_snapshotSoftLicKeys[row_index]).Delete();
-            }
+            if (e.Action != DataRowAction.Delete) return;
+            var rowIndex = v_snapshotSoftLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]);
+            if (rowIndex != -1)
+                ((DataRowView)v_snapshotSoftLicKeys[rowIndex]).Delete();
         }
 
-        void SoftLicKeysViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void SoftLicKeysViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            int row_index = v_snapshotSoftLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]);
-            if (row_index == -1 && v_softLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]) != -1)
+            var rowIndex = v_snapshotSoftLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]);
+            if (rowIndex == -1 && v_softLicKeys.Find("ID LicenseKey", e.Row["ID LicenseKey"]) != -1)
             {
-                snapshotsoftLicKeys.Rows.Add(new object[] { 
-                        e.Row["ID LicenseKey"], 
-                        e.Row["ID License"],           
-                        e.Row["LicKey"]
-                    });
+                snapshotsoftLicKeys.Rows.Add(e.Row["ID LicenseKey"], e.Row["ID License"], e.Row["LicKey"]);
             }
             else
-                if (row_index != -1)
+                if (rowIndex != -1)
                 {
-                    DataRowView row = ((DataRowView)v_snapshotSoftLicKeys[row_index]);
+                    var row = ((DataRowView)v_snapshotSoftLicKeys[rowIndex]);
                     row["ID License"] = e.Row["ID License"];
                     row["LicKey"] = e.Row["LicKey"];
                 }
-            if (Selected)
-            {
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-                MenuCallback.EditingStateUpdate();
-                MenuCallback.RelationsStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
+            MenuCallback.EditingStateUpdate();
+            MenuCallback.RelationsStateUpdate();
         }
 
-        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             MenuCallback.EditingStateUpdate();
         }
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftLicKeysViewport));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idLicenseKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idLicense = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LicKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftLicKeysViewport));
+            dataGridView = new DataGridView();
+            idLicenseKey = new DataGridViewTextBoxColumn();
+            idLicense = new DataGridViewTextBoxColumn();
+            LicKey = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idLicenseKey,
-            this.idLicense,
-            this.LicKey});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView.ShowCellToolTips = false;
-            this.dataGridView.Size = new System.Drawing.Size(795, 333);
-            this.dataGridView.TabIndex = 0;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(idLicenseKey, idLicense, LicKey);
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new System.Drawing.Point(3, 3);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridView.ShowCellToolTips = false;
+            dataGridView.Size = new System.Drawing.Size(795, 333);
+            dataGridView.TabIndex = 0;
             // 
             // idLicenseKey
             // 
-            this.idLicenseKey.HeaderText = "Внутренний номер лицензионного ключа";
-            this.idLicenseKey.Name = "idLicenseKey";
-            this.idLicenseKey.Visible = false;
+            idLicenseKey.HeaderText = @"Внутренний номер лицензионного ключа";
+            idLicenseKey.Name = "idLicenseKey";
+            idLicenseKey.Visible = false;
             // 
             // idLicense
             // 
-            this.idLicense.HeaderText = "Внутренний номер лицензии";
-            this.idLicense.Name = "idLicense";
-            this.idLicense.Visible = false;
+            idLicense.HeaderText = @"Внутренний номер лицензии";
+            idLicense.Name = "idLicense";
+            idLicense.Visible = false;
             // 
             // LicKey
             // 
-            this.LicKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.LicKey.HeaderText = "Лицензионный ключ";
-            this.LicKey.MinimumWidth = 150;
-            this.LicKey.Name = "LicKey";
+            LicKey.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            LicKey.HeaderText = @"Лицензионный ключ";
+            LicKey.MinimumWidth = 150;
+            LicKey.Name = "LicKey";
             // 
             // SoftLicKeysViewport
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(801, 339);
-            this.Controls.Add(this.dataGridView);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SoftLicKeysViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Перечень лицензионных ключей";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(801, 339);
+            Controls.Add(dataGridView);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            Name = "SoftLicKeysViewport";
+            Padding = new Padding(3);
+            Text = @"Перечень лицензионных ключей";
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
+            ResumeLayout(false);
 
         }
     }

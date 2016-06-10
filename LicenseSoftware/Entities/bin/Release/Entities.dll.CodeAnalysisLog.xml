@@ -12,7 +12,7 @@
          <Members>
           <Member Name="#op_Equality(LicenseSoftware.Entities.SoftLicense,LicenseSoftware.Entities.SoftLicense)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-11 09:02:34Z" FixCategory="NonBreaking">
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-06-10 08:09:08Z" FixCategory="NonBreaking">
              <Issue Certainty="90" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Entities" File="SoftLicense.cs" Line="35">'SoftLicense.operator ==(SoftLicense, SoftLicense)' has a cyclomatic complexity of 26. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
