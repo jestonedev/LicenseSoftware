@@ -2,11 +2,11 @@
 <?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
 <FxCopReport Version="12.0">
  <Targets>
-  <Target Name="D:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports\bin\Release\Viewports.dll">
+  <Target Name="D:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports\bin\Release\Viewports.dll">
    <Modules>
     <Module Name="viewports.dll">
      <Messages>
-      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
        <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'Viewports.dll' with a strong name key.</Issue>
       </Message>
      </Messages>
@@ -17,18 +17,18 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 88. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a cyclomatic complexity of 88. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Name="Method" Certainty="75" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 13. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
+            <Message TypeName="AvoidUnmaintainableCode" Category="Microsoft.Maintainability" CheckId="CA1505" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="Method" Certainty="75" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="46">'SearchInstallationsForm.GetFilter()' has a maintainability index of 13. Rewrite or refactor the method to increase its maintainability index (MI). An MI below 10 indicates poor maintainability, an MI between 10 and 20 indicates moderate maintainability, and an MI above 20 indicates good maintainability.</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#vButtonSearch_Click(System.Object,System.EventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="380">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchInstallationsForm.cs" Line="380">'SearchInstallationsForm.vButtonSearch_Click(object, EventArgs)' has a cyclomatic complexity of 29. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -38,11 +38,11 @@
          <Members>
           <Member Name="#GetFilter()" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Certainty="90" Level="CriticalWarning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 66. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Certainty="90" Level="CriticalWarning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'SearchLicensesForm.GetFilter()' has a cyclomatic complexity of 66. Rewrite or refactor the method to reduce complexity to 25.</Issue>
             </Message>
-            <Message Id="departments" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Name="Local" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'departments', a variable declared in 'SearchLicensesForm.GetFilter()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
+            <Message Id="departments" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="Local" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="SearchLicensesForm.cs" Line="36">'departments', a variable declared in 'SearchLicensesForm.GetFilter()', has the same name as an instance field on the type. Change the name of one of these items.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -52,21 +52,46 @@
       </Namespace>
       <Namespace Name="LicenseSoftware.Viewport">
        <Types>
+        <Type Name="InstallationsViewport" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Members>
+          <Member Name="#ChangeCbEditing(System.Windows.Forms.ComboBox,System.Boolean)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="1595">The 'this' parameter (or 'Me' in Visual Basic) of 'InstallationsViewport.ChangeCbEditing(ComboBox, bool)' is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#CopyRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="677">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'InstallationsViewport.CopyRecord()' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#InsertRecord()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="False">
+           <Messages>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="InstallationsViewport.cs" Line="655">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'InstallationsViewport.InsertRecord()' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
         <Type Name="LicensesViewport" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
          <Messages>
-          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="Breaking">
+          <Message TypeName="AvoidExcessiveClassCoupling" Category="Microsoft.Maintainability" CheckId="CA1506" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="Breaking">
            <Issue Name="UIType" Certainty="75" Level="Warning">'LicensesViewport' is coupled with 81 different (non-IComponent) types from 16 different namespaces. Rewrite or refactor this class's methods to decrease its class coupling, or consider moving some of the class's methods to some of the other types it is tightly coupled with. A class coupling above 95 indicates poor maintainability, a class coupling between 95 and 80 indicates moderate maintainability, and a class coupling below 80 indicates good maintainability.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#dataGridView_CellValueNeeded(System.Object,System.Windows.Forms.DataGridViewCellValueEventArgs)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message Id="System.Int32.TryParse(System.String,System.Int32@)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Name="TryParse" Certainty="95" Level="Warning" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1062">'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' calls 'int.TryParse(string, out int)' but does not explicitly check whether the conversion succeeded. Either use the return value in a conditional statement or verify that the call site expects that the out argument will be set to the default value when the conversion fails.</Issue>
+            <Message Id="System.Int32.TryParse(System.String,System.Int32@)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="TryParse" Certainty="95" Level="Warning" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1062">'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' calls 'int.TryParse(string, out int)' but does not explicitly check whether the conversion succeeded. Either use the return value in a conditional statement or verify that the call site expects that the out argument will be set to the default value when the conversion fails.</Issue>
             </Message>
-            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-02-12 01:05:47Z" FixCategory="NonBreaking">
-             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
-             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Projects\Visual Studio Projects\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
+            <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Status="Active" Created="2016-04-12 07:18:50Z" FixCategory="NonBreaking">
+             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
+             <Issue Name="IFormatProviderAlternateString" Certainty="95" Level="Error" Path="d:\Proejcts\LicenseSoftware\LicenseSoftware\Viewports" File="LicensesViewport.cs" Line="1071">Because the behavior of 'int.ToString()' could vary based on the current user's locale settings, replace this call in 'LicensesViewport.dataGridView_CellValueNeeded(object, DataGridViewCellValueEventArgs)' with a call to 'int.ToString(IFormatProvider)'. If the result of 'int.ToString(IFormatProvider)' will be displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify 'CultureInfo.InvariantCulture'.</Issue>
             </Message>
            </Messages>
           </Member>
@@ -129,6 +154,16 @@
    <Email>[none]</Email>
    <MessageLevel Certainty="95">Warning</MessageLevel>
    <File Name="usagerules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+   <Name>Mark members as static</Name>
+   <Description>Methods which do not access instance data or call instance methods can be marked as static (Shared in Visual Basic). After doing so, the compiler will emit non-virtual call sites to these members which will prevent a check at runtime for each call that ensures the current object pointer is non-null. This can result in a measurable performance gain for performance-sensitive code. In some cases, the failure to access the current object instance represents a correctness issue.</Description>
+   <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms245046.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Warning</MessageLevel>
+   <File Name="performancerules.dll" Version="12.0.0.0" />
   </Rule>
   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
    <Name>Specify IFormatProvider</Name>
