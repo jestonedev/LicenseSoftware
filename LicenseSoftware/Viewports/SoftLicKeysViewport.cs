@@ -107,14 +107,6 @@ namespace LicenseSoftware.Viewport
                         @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
-                var duplicates = softLicKeys.Select().AsEnumerable().
-                    Where(v => v.Field<string>("LicKey") == localSoftLicKey.LicKey && v.Field<int>("ID License") != localSoftLicKey.IdLicense);
-                if (duplicates.Any())
-                {
-                    MessageBox.Show(string.Format("Нельзя добавить лицензионный ключ {0}, т.к. он уже присутствует в другой лицензии", localSoftLicKey.LicKey), 
-                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    return false;
-                }
             }
             if (ParentRow["InstallationsCount"] != DBNull.Value && v_snapshotSoftLicKeys.Count > (int)ParentRow["InstallationsCount"])
             {
