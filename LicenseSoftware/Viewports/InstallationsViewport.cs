@@ -62,13 +62,13 @@ namespace LicenseSoftware.Viewport
         private SearchForm sSearchForm = null;
         private DataGridViewTextBoxColumn idInstallation;
         private DataGridViewTextBoxColumn software;
+        private DataGridViewTextBoxColumn licKey;
         private DataGridViewTextBoxColumn department;
         private DataGridViewTextBoxColumn computer;
         private DataGridViewTextBoxColumn serialNum;
         private DataGridViewTextBoxColumn invNum;
         private DataGridViewTextBoxColumn installationDate;
         private DataGridViewTextBoxColumn license;
-        private DataGridViewTextBoxColumn licKey;
         private bool is_first_visibility = true;
 
         private InstallationsViewport()
@@ -1237,15 +1237,6 @@ namespace LicenseSoftware.Viewport
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallationsViewport));
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idInstallation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBoxLicenseID = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -1260,6 +1251,15 @@ namespace LicenseSoftware.Viewport
             this.comboBoxInstallatorID = new System.Windows.Forms.ComboBox();
             this.dateTimePickerInstallDate = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
+            this.idInstallation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -1287,10 +1287,10 @@ namespace LicenseSoftware.Viewport
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToOrderColumns = true;
             this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1304,13 +1304,13 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idInstallation,
             this.software,
+            this.licKey,
             this.department,
             this.computer,
             this.serialNum,
             this.invNum,
             this.installationDate,
-            this.license,
-            this.licKey});
+            this.license});
             this.tableLayoutPanel14.SetColumnSpan(this.dataGridView, 2);
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(3, 122);
@@ -1325,81 +1325,6 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_ColumnHeaderMouseClick);
             this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
-            // 
-            // idInstallation
-            // 
-            this.idInstallation.Frozen = true;
-            this.idInstallation.HeaderText = "Идентификатор";
-            this.idInstallation.Name = "idInstallation";
-            this.idInstallation.ReadOnly = true;
-            this.idInstallation.Visible = false;
-            // 
-            // software
-            // 
-            this.software.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.software.HeaderText = "Наименование ПО";
-            this.software.MinimumWidth = 300;
-            this.software.Name = "software";
-            this.software.ReadOnly = true;
-            this.software.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // department
-            // 
-            this.department.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.department.HeaderText = "Департамент";
-            this.department.MinimumWidth = 300;
-            this.department.Name = "department";
-            this.department.ReadOnly = true;
-            this.department.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.department.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // computer
-            // 
-            this.computer.HeaderText = "Имя ПК";
-            this.computer.MinimumWidth = 200;
-            this.computer.Name = "computer";
-            this.computer.ReadOnly = true;
-            this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // serialNum
-            // 
-            this.serialNum.HeaderText = "Серийный №";
-            this.serialNum.MinimumWidth = 150;
-            this.serialNum.Name = "serialNum";
-            this.serialNum.ReadOnly = true;
-            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // invNum
-            // 
-            this.invNum.HeaderText = "Инвентарный №";
-            this.invNum.MinimumWidth = 150;
-            this.invNum.Name = "invNum";
-            this.invNum.ReadOnly = true;
-            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // installationDate
-            // 
-            this.installationDate.HeaderText = "Дата установки";
-            this.installationDate.MinimumWidth = 130;
-            this.installationDate.Name = "installationDate";
-            this.installationDate.ReadOnly = true;
-            // 
-            // license
-            // 
-            this.license.HeaderText = "Лицензия";
-            this.license.MinimumWidth = 250;
-            this.license.Name = "license";
-            this.license.ReadOnly = true;
-            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // licKey
-            // 
-            this.licKey.HeaderText = "Лицензионный ключ";
-            this.licKey.MinimumWidth = 150;
-            this.licKey.Name = "licKey";
-            this.licKey.ReadOnly = true;
-            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // groupBox1
             // 
@@ -1424,7 +1349,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicenseID.FormattingEnabled = true;
             this.comboBoxLicenseID.Location = new System.Drawing.Point(161, 51);
             this.comboBoxLicenseID.Name = "comboBoxLicenseID";
-            this.comboBoxLicenseID.Size = new System.Drawing.Size(330, 26);
+            this.comboBoxLicenseID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxLicenseID.TabIndex = 1;
             this.comboBoxLicenseID.DropDownClosed += new System.EventHandler(this.comboBoxLicenseID_DropDownClosed);
             this.comboBoxLicenseID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicenseID_SelectedValueChanged);
@@ -1436,7 +1361,7 @@ namespace LicenseSoftware.Viewport
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 18);
+            this.label3.Size = new System.Drawing.Size(63, 15);
             this.label3.TabIndex = 75;
             this.label3.Text = "Лицензия";
             // 
@@ -1447,7 +1372,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicKeysID.FormattingEnabled = true;
             this.comboBoxLicKeysID.Location = new System.Drawing.Point(161, 80);
             this.comboBoxLicKeysID.Name = "comboBoxLicKeysID";
-            this.comboBoxLicKeysID.Size = new System.Drawing.Size(330, 26);
+            this.comboBoxLicKeysID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxLicKeysID.TabIndex = 2;
             this.comboBoxLicKeysID.DropDownClosed += new System.EventHandler(this.comboBoxLicKeysID_DropDownClosed);
             this.comboBoxLicKeysID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicKeysID_SelectedValueChanged);
@@ -1459,7 +1384,7 @@ namespace LicenseSoftware.Viewport
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(7, 83);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(151, 18);
+            this.label8.Size = new System.Drawing.Size(124, 15);
             this.label8.TabIndex = 86;
             this.label8.Text = "Лицензионный ключ";
             // 
@@ -1470,7 +1395,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxSoftwareID.FormattingEnabled = true;
             this.comboBoxSoftwareID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxSoftwareID.Name = "comboBoxSoftwareID";
-            this.comboBoxSoftwareID.Size = new System.Drawing.Size(330, 26);
+            this.comboBoxSoftwareID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxSoftwareID.TabIndex = 0;
             this.comboBoxSoftwareID.DropDownClosed += new System.EventHandler(this.comboBoxSoftwareID_DropDownClosed);
             this.comboBoxSoftwareID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedValueChanged);
@@ -1483,7 +1408,7 @@ namespace LicenseSoftware.Viewport
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(7, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 18);
+            this.label2.Size = new System.Drawing.Size(116, 15);
             this.label2.TabIndex = 73;
             this.label2.Text = "Наименование ПО";
             // 
@@ -1511,7 +1436,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxComputerID.FormattingEnabled = true;
             this.comboBoxComputerID.Location = new System.Drawing.Point(161, 22);
             this.comboBoxComputerID.Name = "comboBoxComputerID";
-            this.comboBoxComputerID.Size = new System.Drawing.Size(330, 26);
+            this.comboBoxComputerID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxComputerID.TabIndex = 0;
             this.comboBoxComputerID.DropDownClosed += new System.EventHandler(this.comboBoxComputerID_DropDownClosed);
             this.comboBoxComputerID.SelectedValueChanged += new System.EventHandler(this.comboBoxComputerID_SelectedValueChanged);
@@ -1523,7 +1448,7 @@ namespace LicenseSoftware.Viewport
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(7, 25);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 18);
+            this.label4.Size = new System.Drawing.Size(75, 15);
             this.label4.TabIndex = 77;
             this.label4.Text = "Компьютер";
             // 
@@ -1532,7 +1457,7 @@ namespace LicenseSoftware.Viewport
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(6, 54);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(118, 18);
+            this.label9.Size = new System.Drawing.Size(99, 15);
             this.label9.TabIndex = 85;
             this.label9.Text = "Дата установки";
             // 
@@ -1545,7 +1470,7 @@ namespace LicenseSoftware.Viewport
             this.comboBoxInstallatorID.FormattingEnabled = true;
             this.comboBoxInstallatorID.Location = new System.Drawing.Point(161, 80);
             this.comboBoxInstallatorID.Name = "comboBoxInstallatorID";
-            this.comboBoxInstallatorID.Size = new System.Drawing.Size(330, 26);
+            this.comboBoxInstallatorID.Size = new System.Drawing.Size(330, 23);
             this.comboBoxInstallatorID.TabIndex = 2;
             this.comboBoxInstallatorID.SelectedIndexChanged += new System.EventHandler(this.comboBoxInstallatorID_SelectedIndexChanged);
             // 
@@ -1555,7 +1480,7 @@ namespace LicenseSoftware.Viewport
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimePickerInstallDate.Location = new System.Drawing.Point(161, 53);
             this.dateTimePickerInstallDate.Name = "dateTimePickerInstallDate";
-            this.dateTimePickerInstallDate.Size = new System.Drawing.Size(330, 24);
+            this.dateTimePickerInstallDate.Size = new System.Drawing.Size(330, 21);
             this.dateTimePickerInstallDate.TabIndex = 1;
             this.dateTimePickerInstallDate.ValueChanged += new System.EventHandler(this.dateTimePickerInstallationDate_ValueChanged);
             // 
@@ -1564,9 +1489,90 @@ namespace LicenseSoftware.Viewport
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(7, 83);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(93, 18);
+            this.label5.Size = new System.Drawing.Size(78, 15);
             this.label5.TabIndex = 77;
             this.label5.Text = "Установщик";
+            // 
+            // idInstallation
+            // 
+            this.idInstallation.Frozen = true;
+            this.idInstallation.HeaderText = "Идентификатор";
+            this.idInstallation.Name = "idInstallation";
+            this.idInstallation.ReadOnly = true;
+            this.idInstallation.Visible = false;
+            // 
+            // software
+            // 
+            this.software.HeaderText = "Наименование ПО";
+            this.software.MinimumWidth = 300;
+            this.software.Name = "software";
+            this.software.ReadOnly = true;
+            this.software.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.software.Width = 300;
+            // 
+            // licKey
+            // 
+            this.licKey.HeaderText = "Лицензионный ключ";
+            this.licKey.MinimumWidth = 150;
+            this.licKey.Name = "licKey";
+            this.licKey.ReadOnly = true;
+            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.licKey.Width = 150;
+            // 
+            // department
+            // 
+            this.department.HeaderText = "Кабинет";
+            this.department.MinimumWidth = 80;
+            this.department.Name = "department";
+            this.department.ReadOnly = true;
+            this.department.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.department.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.department.Width = 80;
+            // 
+            // computer
+            // 
+            this.computer.HeaderText = "Имя ПК";
+            this.computer.MinimumWidth = 80;
+            this.computer.Name = "computer";
+            this.computer.ReadOnly = true;
+            this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.computer.Width = 80;
+            // 
+            // serialNum
+            // 
+            this.serialNum.HeaderText = "Серийный №";
+            this.serialNum.MinimumWidth = 150;
+            this.serialNum.Name = "serialNum";
+            this.serialNum.ReadOnly = true;
+            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.serialNum.Width = 150;
+            // 
+            // invNum
+            // 
+            this.invNum.HeaderText = "Инвентарный №";
+            this.invNum.MinimumWidth = 130;
+            this.invNum.Name = "invNum";
+            this.invNum.ReadOnly = true;
+            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.invNum.Width = 130;
+            // 
+            // installationDate
+            // 
+            this.installationDate.HeaderText = "Дата установки";
+            this.installationDate.MinimumWidth = 80;
+            this.installationDate.Name = "installationDate";
+            this.installationDate.ReadOnly = true;
+            this.installationDate.Width = 80;
+            // 
+            // license
+            // 
+            this.license.HeaderText = "Лицензия";
+            this.license.MinimumWidth = 250;
+            this.license.Name = "license";
+            this.license.ReadOnly = true;
+            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.license.Width = 250;
             // 
             // InstallationsViewport
             // 
