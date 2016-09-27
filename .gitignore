@@ -6,3 +6,4 @@
 *.user
 *.bak
 [Tt]humbs.db
+*.CodeAnalysisLog.xml
