@@ -601,7 +601,15 @@ namespace LicenseSoftware.Viewport
                 sSearchForm = new SearchLicensesForm();
             if (sSearchForm.ShowDialog() != DialogResult.OK)
                 return;
-            DynamicFilter = sSearchForm.GetFilter();
+            try 
+            {
+                DynamicFilter = sSearchForm.GetFilter();
+            }
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.Message, @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
             string Filter = StaticFilter;
             if (!String.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
                 Filter += " AND ";

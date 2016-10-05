@@ -33,6 +33,7 @@ namespace LicenseSoftware.SearchForms
 
         internal override string GetFilter()
         {
+
             var filter = "";
             IEnumerable<int> includedSoftwareIds = null;
             if ((checkBoxLicTypeEnable.Checked) && (comboBoxLicType.SelectedValue != null))
@@ -62,7 +63,9 @@ namespace LicenseSoftware.SearchForms
                               where departments_row.Field<bool>("AllowSelect")
                               select departments_row.Field<int>("ID Department");
                 var departments = selectedDepartments.Intersect(accessibleDepartments);
-                filter += "[ID Department] IN ("; 
+                if (departments.Count() == 0)
+                    throw new ViewportException("Вы не состоите ни в одном из департаментов.");
+                filter += "[ID Department] IN (";
                 foreach (var id in departments)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
                 filter = filter.TrimEnd(',') + ")";
@@ -74,6 +77,8 @@ namespace LicenseSoftware.SearchForms
                 var accessibleDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
                                             where departments_row.Field<bool>("AllowSelect")
                                             select departments_row.Field<int>("ID Department");
+                if (accessibleDepartments.Count() == 0)
+                    throw new ViewportException("Вы не состоите ни в одном из департаментов.");
                 filter += "[ID Department] IN (";
                 foreach (var id in accessibleDepartments)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
