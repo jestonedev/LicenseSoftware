@@ -539,7 +539,6 @@ namespace LicenseSoftware.Viewport
             v_softInstallators = new BindingSource();
             v_softInstallators.DataMember = "SoftInstallators";
             v_softInstallators.DataSource = ds;
-            v_softInstallators.Filter = "Inactive = 0";
 
             v_softInstallations = new BindingSource();
             v_softInstallations.CurrentItemChanged += new EventHandler(v_softInstallations_CurrentItemChanged);
@@ -661,7 +660,7 @@ namespace LicenseSoftware.Viewport
                 comboBoxSoftwareID.SelectedValue = ParentRow["ID Software"];
                 comboBoxLicenseID.SelectedValue = ParentRow["ID License"];
             }
-            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID.ToString() + " AND " + "Inactive = 0";
+            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
             ChangeCbEditing(comboBoxComputerID, true);
             ChangeCbEditing(comboBoxInstallatorID, true);
             dataGridView.Enabled = false;
@@ -683,7 +682,7 @@ namespace LicenseSoftware.Viewport
             dataGridView.RowCount = dataGridView.RowCount + 1;
             var installation = InstallationFromView();
             v_softInstallations.AddNew();
-            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID.ToString() + " AND " + "Inactive = 0";
+            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
             ChangeCbEditing(comboBoxComputerID, true);
             ChangeCbEditing(comboBoxInstallatorID, true);
             dataGridView.Enabled = false;
@@ -801,12 +800,18 @@ namespace LicenseSoftware.Viewport
                     {
                         is_editable = false;
                         dataGridView.Enabled = true;
-                        ((DataRowView)v_softInstallations[v_softInstallations.Position]).Delete();
+                        var row = (DataRowView)v_softInstallations[v_softInstallations.Position];
+                        row.Delete();
                         dataGridView.RowCount = dataGridView.RowCount - 1;
                         if (v_softInstallations.Position != -1)
                             dataGridView.Rows[v_softInstallations.Position].Selected = true;
                     }
-                    v_softInstallators.Filter = "Inactive = 0";
+                    var idInstallator = 0;
+                    var currentRow = (DataRowView) v_softInstallations[v_softInstallations.Position];
+                    if (currentRow["ID Installator"] != DBNull.Value)
+                        idInstallator = (int)currentRow["ID Installator"];
+                    v_softInstallators.Filter = 
+                        string.Format("Inactive = 0 OR [ID Installator] = {0}", idInstallator);
                     ChangeCbEditing(comboBoxComputerID, false);
                     ChangeCbEditing(comboBoxInstallatorID, false);
                     viewportState = ViewportState.ReadState;
