@@ -18,10 +18,10 @@ namespace LicenseSoftware.DataModels
         private static string selectQuery = "SELECT * FROM SoftInstallations WHERE Deleted = 0";
         private static string deleteQuery = "UPDATE SoftInstallations SET Deleted = 1 WHERE [ID Installation] = @IDInstallation";
         private static string insertQuery = @"INSERT INTO SoftInstallations
-                            ([ID License], [ID Computer], InstallationDate, [ID LicenseKey], [ID Installator])
-                            VALUES (@IDLicense, @IDComputer, @InstallationDate, @IDLicenseKey, @IDInstallator); SELECT CONVERT(int, SCOPE_IDENTITY());";
+                            ([ID License], [ID Computer], InstallationDate, [ID LicenseKey], [ID Installator], [Description])
+                            VALUES (@IDLicense, @IDComputer, @InstallationDate, @IDLicenseKey, @IDInstallator, @Description); SELECT CONVERT(int, SCOPE_IDENTITY());";
         private static string updateQuery = @"UPDATE SoftInstallations SET [ID License] = @IDLicense, [ID Computer] = @IDComputer, 
-                                              InstallationDate = @InstallationDate, [ID LicenseKey] = @IDLicenseKey, [ID Installator] = @IDInstallator
+                                              InstallationDate = @InstallationDate, [ID LicenseKey] = @IDLicenseKey, [ID Installator] = @IDInstallator, [Description] = @Description
                                               WHERE [ID Installation] = @IDInstallation";
         private static string tableName = "SoftInstallations";
 
@@ -83,12 +83,13 @@ namespace LicenseSoftware.DataModels
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softInstallation.IdLicense));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDComputer", softInstallation.IdComputer));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("InstallationDate", softInstallation.InstallationDate));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicenseKey", softInstallation.IdLicenseKey));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", softInstallation.IdInstallator));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallation", softInstallation.IdInstallation));
+                command.Parameters.Add(DBConnection.CreateParameter("IDLicense", softInstallation.IdLicense));
+                command.Parameters.Add(DBConnection.CreateParameter("IDComputer", softInstallation.IdComputer));
+                command.Parameters.Add(DBConnection.CreateParameter("InstallationDate", softInstallation.InstallationDate));
+                command.Parameters.Add(DBConnection.CreateParameter("IDLicenseKey", softInstallation.IdLicenseKey));
+                command.Parameters.Add(DBConnection.CreateParameter("IDInstallator", softInstallation.IdInstallator));
+                command.Parameters.Add(DBConnection.CreateParameter("IDInstallation", softInstallation.IdInstallation));
+                command.Parameters.Add(DBConnection.CreateParameter<string>("Description", softInstallation.Description));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
@@ -115,11 +116,12 @@ namespace LicenseSoftware.DataModels
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicense", softInstallation.IdLicense));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDComputer", softInstallation.IdComputer));
-                command.Parameters.Add(DBConnection.CreateParameter<DateTime?>("InstallationDate", softInstallation.InstallationDate));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicenseKey", softInstallation.IdLicenseKey));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", softInstallation.IdInstallator));
+                command.Parameters.Add(DBConnection.CreateParameter("IDLicense", softInstallation.IdLicense));
+                command.Parameters.Add(DBConnection.CreateParameter("IDComputer", softInstallation.IdComputer));
+                command.Parameters.Add(DBConnection.CreateParameter("InstallationDate", softInstallation.InstallationDate));
+                command.Parameters.Add(DBConnection.CreateParameter("IDLicenseKey", softInstallation.IdLicenseKey));
+                command.Parameters.Add(DBConnection.CreateParameter("IDInstallator", softInstallation.IdInstallator));
+                command.Parameters.Add(DBConnection.CreateParameter<string>("Description", softInstallation.Description));
 
                 try
                 {
@@ -128,7 +130,7 @@ namespace LicenseSoftware.DataModels
                 catch (SqlException e)
                 {
                     connection.SqlRollbackTransaction();
-                    MessageBox.Show(String.Format(CultureInfo.InvariantCulture, 
+                    MessageBox.Show(string.Format(CultureInfo.InvariantCulture, 
                         "Не удалось добавить установку программного обеспечения в базу данных. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
