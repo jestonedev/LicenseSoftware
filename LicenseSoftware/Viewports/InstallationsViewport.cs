@@ -135,7 +135,6 @@ namespace LicenseSoftware.Viewport
             {
                 v_software.Filter = "";
                 v_licenses.Filter = "";
-                v_softLicKeys.Filter = "";
                 int? idSoftware = null;
                 int? idLicense = null;
                 int? idLicKey = null;
@@ -902,11 +901,6 @@ namespace LicenseSoftware.Viewport
             dataGridView.Refresh();
         }
 
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            base.OnVisibleChanged(e);
-        }
-
         private void Devices_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Add)
@@ -915,6 +909,8 @@ namespace LicenseSoftware.Viewport
 
         void v_softInstallations_CurrentItemChanged(object sender, EventArgs e)
         {
+            var currentIsEditable = is_editable;
+            is_editable = false;
             SetViewportCaption(); 
             SelectCurrentAutoCompleteValue();
             if (v_softInstallations.Position == -1 || dataGridView.RowCount == 0)
@@ -943,7 +939,7 @@ namespace LicenseSoftware.Viewport
                 return;
             dataGridView.Enabled = true;
             viewportState = ViewportState.ReadState;
-            is_editable = true;
+            is_editable = currentIsEditable;
         }
 
         private void comboBoxSoftwareID_KeyUp(object sender, KeyEventArgs e)
@@ -1095,7 +1091,6 @@ namespace LicenseSoftware.Viewport
 
         private void comboBoxComputerID_SelectedValueChanged(object sender, EventArgs e)
         {
-
             CheckViewportModifications();
         }
 
