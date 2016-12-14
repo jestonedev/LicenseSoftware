@@ -4,8 +4,11 @@ using LicenseSoftware.Entities;
 using LicenseSoftware.SearchForms;
 using Security;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LicenseSoftware.Viewport
@@ -150,12 +153,12 @@ namespace LicenseSoftware.Viewport
                         idLicKey = Convert.ToInt32(installationRow["ID LicenseKey"], CultureInfo.InvariantCulture);
                 }
                 comboBoxSoftwareID.SelectedValue = (object)idSoftware ?? DBNull.Value;
-                v_licenses.Filter = DepartmentFilter() + " AND [ID Software] = " + ((DataRowView)v_software[v_software.Position])["ID Software"];
+                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + ((DataRowView)v_software[v_software.Position])["ID Software"];
                 comboBoxLicenseID.SelectedValue = (object)idLicense ?? DBNull.Value;
                 if (v_licenses.Position != -1)
                 {
                     v_softLicKeys.Filter = "[ID License] = " + ((DataRowView)v_licenses[v_licenses.Position])["ID License"]
-                         + " AND [ID LicenseKey] IN (0" + LicKeysFilter((int)((DataRowView)v_licenses[v_licenses.Position])["ID License"]) + ")";
+                         + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((int)((DataRowView)v_licenses[v_licenses.Position])["ID License"]) + ")";
                     comboBoxLicKeysID.SelectedValue = (object)idLicKey ?? DBNull.Value;
                 }
                 else
@@ -163,7 +166,7 @@ namespace LicenseSoftware.Viewport
             }
             if (comboBoxComputerID.DataSource != null && !string.IsNullOrEmpty(comboBoxComputerID.ValueMember))
             {
-                v_devices.Filter = DepartmentFilter();
+                v_devices.Filter = GetAllowedDepartmentFilter();
                 int? idComputer = null;
                 if (installationRow["ID Computer"] != DBNull.Value)
                     idComputer = (int)installationRow["ID Computer"];
@@ -521,7 +524,7 @@ namespace LicenseSoftware.Viewport
             v_devices = new BindingSource();
             v_devices.DataMember = "Devices";
             v_devices.DataSource = ds;
-            v_devices.Filter = DepartmentFilter();
+            v_devices.Filter = GetAllowedDepartmentFilter();
 
             v_software = new BindingSource();
             v_software.DataMember = "SoftwareConcat";
@@ -530,7 +533,7 @@ namespace LicenseSoftware.Viewport
             v_licenses = new BindingSource();
             v_licenses.DataMember = "LicensesConcat";
             v_licenses.DataSource = ds;
-            v_licenses.Filter = DepartmentFilter();
+            v_licenses.Filter = GetAllowedDepartmentFilter();
 
             v_softLicKeys = new BindingSource();
             v_softLicKeys.DataMember = "SoftLicKeys";
@@ -567,41 +570,41 @@ namespace LicenseSoftware.Viewport
 
         private void RebuildFilter()
         {
-            var Filter = StaticFilter;
+            var filter = StaticFilter;
             // Фильтрация по правам на департаменты
-            if (!string.IsNullOrEmpty(Filter))
-                Filter += " AND ";
-            Filter += ComputerFilter();
-            if (!string.IsNullOrEmpty(Filter) && !string.IsNullOrEmpty(DynamicFilter))
-                Filter += " AND ";
-            Filter += DynamicFilter;
-            v_softInstallations.Filter = Filter;
+            if (!string.IsNullOrEmpty(filter))
+                filter += " AND ";
+            filter += ComputerFilter();
+            if (!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(DynamicFilter))
+                filter += " AND ";
+            filter += DynamicFilter;
+            v_softInstallations.Filter = filter;
         }
 
         private string ComputerFilter()
         {
-            var DeviceFilter = v_devices.Filter;
-            var DevicePosition = v_devices.Position;
-            v_devices.Filter = DepartmentFilter();
-            var Filter = "[ID Computer] IN (0";
+            var deviceFilter = v_devices.Filter;
+            var devicePosition = v_devices.Position;
+            v_devices.Filter = GetAllowedDepartmentFilter();
+            var filter = "[ID Computer] IN (0";
             for (var i = 0; i < v_devices.Count; i++)
-                Filter += ((DataRowView)v_devices[i])["ID Device"] + ",";
-            Filter = Filter.TrimEnd(',');
-            Filter += ")";
-            v_devices.Filter = DeviceFilter;
-            v_devices.Position = DevicePosition;
-            return Filter;
+                filter += ((DataRowView)v_devices[i])["ID Device"] + ",";
+            filter = filter.TrimEnd(',');
+            filter += ")";
+            v_devices.Filter = deviceFilter;
+            v_devices.Position = devicePosition;
+            return filter;
         }
 
-        private string DepartmentFilter()
+        private string GetAllowedDepartmentFilter()
         {
-            var DepartmentFilter = "[ID Department] IN (0";
+            var departmentFilter = "[ID Department] IN (0";
             for (var i = 0; i < v_departments.Count; i++)
                 if ((bool)((DataRowView)v_departments[i])["AllowSelect"])
-                    DepartmentFilter += ((DataRowView)v_departments[i])["ID Department"] + ",";
-            DepartmentFilter = DepartmentFilter.TrimEnd(',');
-            DepartmentFilter += ")";
-            return DepartmentFilter;
+                    departmentFilter += ((DataRowView)v_departments[i])["ID Department"] + ",";
+            departmentFilter = departmentFilter.TrimEnd(',');
+            departmentFilter += ")";
+            return departmentFilter;
         }
 
         public override bool CanSearchRecord()
@@ -986,7 +989,7 @@ namespace LicenseSoftware.Viewport
                 var text = comboBoxLicenseID.Text;
                 var selectionStart = comboBoxLicenseID.SelectionStart;
                 var selectionLength = comboBoxLicenseID.SelectionLength;
-                v_licenses.Filter = DepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0") + " AND License like '%" + comboBoxLicenseID.Text + "%'";
+                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0") + " AND License like '%" + comboBoxLicenseID.Text + "%'";
                 comboBoxLicenseID.Text = text;
                 comboBoxLicenseID.SelectionStart = selectionStart;
                 comboBoxLicenseID.SelectionLength = selectionLength;
@@ -1003,7 +1006,7 @@ namespace LicenseSoftware.Viewport
             if (comboBoxLicenseID.SelectedItem == null)
             {
                 comboBoxLicenseID.Text = "";
-                v_licenses.Filter = DepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0");
+                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0");
             }
         }
 
@@ -1023,7 +1026,7 @@ namespace LicenseSoftware.Viewport
                 var selectionLength = comboBoxLicKeysID.SelectionLength;
                 v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0") 
                     + " AND LicKey like '%" + comboBoxLicKeysID.Text + "%'"
-                    + " AND [ID LicenseKey] IN (0" + LicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
+                    + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
                 comboBoxLicKeysID.Text = text;
                 comboBoxLicKeysID.SelectionStart = selectionStart;
                 comboBoxLicKeysID.SelectionLength = selectionLength;
@@ -1036,7 +1039,7 @@ namespace LicenseSoftware.Viewport
             {
                 comboBoxLicKeysID.Text = "";
                 v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0")
-                     + " AND [ID LicenseKey] IN (0" + LicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
+                     + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
             }
             if (string.IsNullOrEmpty(comboBoxLicKeysID.Text))
                 comboBoxLicKeysID.SelectedItem = null;
@@ -1050,17 +1053,24 @@ namespace LicenseSoftware.Viewport
 
         private void comboBoxComputerID_KeyUp(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
-                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            if ((e.KeyCode < Keys.A || e.KeyCode > Keys.Z) && (e.KeyCode != Keys.Back) &&
+                (e.KeyCode < Keys.D0 || e.KeyCode > Keys.D9) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9))
+                return;
+            var text = comboBoxComputerID.Text;
+            var selectionStart = comboBoxComputerID.SelectionStart;
+            var selectionLength = comboBoxComputerID.SelectionLength;
+            if (!string.IsNullOrEmpty(comboBoxComputerID.Text))
             {
-                var text = comboBoxComputerID.Text;
-                var selectionStart = comboBoxComputerID.SelectionStart;
-                var selectionLength = comboBoxComputerID.SelectionLength;
-                v_devices.Filter = "[Device Name] like '%" + comboBoxComputerID.Text + "%'";
-                comboBoxComputerID.Text = text;
-                comboBoxComputerID.SelectionStart = selectionStart;
-                comboBoxComputerID.SelectionLength = selectionLength;
+                var deviceFilter = "[Device Name] like '%" + comboBoxComputerID.Text + "%'";
+                var filter = GetDeviceFilter();
+                filter = !string.IsNullOrEmpty(filter) ? 
+                    string.Format("({0}) AND {1}", filter, deviceFilter) : 
+                    deviceFilter;
+                v_devices.Filter = filter;
             }
+            comboBoxComputerID.Text = text;
+            comboBoxComputerID.SelectionStart = selectionStart;
+            comboBoxComputerID.SelectionLength = selectionLength;
         }
 
         private void comboBoxComputerID_Leave(object sender, EventArgs e)
@@ -1073,7 +1083,7 @@ namespace LicenseSoftware.Viewport
             if (comboBoxComputerID.SelectedItem == null)
             {
                 comboBoxComputerID.Text = "";
-                v_devices.Filter = DepartmentFilter();
+                v_devices.Filter = GetDeviceFilter();
             }
         }
 
@@ -1106,7 +1116,7 @@ namespace LicenseSoftware.Viewport
             {
                 var idSoftware = (int?)comboBoxSoftwareID.SelectedValue;
                 if (idSoftware != null)
-                    v_licenses.Filter = DepartmentFilter() + " AND [ID Software] = " + idSoftware.ToString();
+                    v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + idSoftware;
                 else
                     v_licenses.Filter = "1 = 0";
             }
@@ -1119,14 +1129,51 @@ namespace LicenseSoftware.Viewport
             {
                 var idLicense = (int?)comboBoxLicenseID.SelectedValue;
                 if (idLicense != null)
-                    v_softLicKeys.Filter = "[ID License] = " + idLicense.ToString() + " AND [ID LicenseKey] IN (0" + LicKeysFilter(idLicense.Value) + ")";
+                {
+                    v_softLicKeys.Filter = "[ID License] = " + idLicense + " AND [ID LicenseKey] IN (0" +
+                                           GetLicKeysFilter(idLicense.Value) + ")";
+                    v_devices.Filter = GetDeviceFilter();
+                }
                 else
                     v_softLicKeys.Filter = "1 = 0";
             }
             CheckViewportModifications();
         }
 
-        private string LicKeysFilter(int idLicense)
+        private string GetDeviceFilter()
+        {
+            var filter = GetAllowedDepartmentFilter();
+            var licenseId = comboBoxLicenseID.SelectedValue;
+            if (licenseId != null)
+            {
+                var vLicensesRowIndex = v_licenses.Find("ID License", licenseId);
+                if (vLicensesRowIndex != -1)
+                {
+                    var vLicensesRow = (DataRowView)v_licenses[vLicensesRowIndex];
+                    if (!string.IsNullOrEmpty(filter))
+                    {
+                        filter += " AND ";
+                    }
+                    var idDepartment = (int) vLicensesRow["ID Department"];
+                    filter += string.Format("[ID Department] IN (0{0})",
+                        DataModelHelper.GetDepartmentSubunits(idDepartment).Concat(new[] {idDepartment}).
+                            Select(v => v.ToString()).Aggregate((acc, v) => acc + "," + v));
+                }
+            }
+
+            var vSoftInstallationsRow = v_softInstallations.Position > -1
+                ? (DataRowView) v_softInstallations[v_softInstallations.Position] : null;
+            if (vSoftInstallationsRow != null && vSoftInstallationsRow["ID Computer"] != DBNull.Value)
+            {
+                var idComputer = (int) vSoftInstallationsRow["ID Computer"];
+                filter = !string.IsNullOrEmpty(filter) ? 
+                    string.Format("({0}) OR ([ID Device] = {1})", filter, idComputer) : 
+                    string.Format("([ID Device] = {0})", idComputer);
+            }
+            return filter;
+        }
+
+        private string GetLicKeysFilter(int idLicense)
         {
             var licKeyIds = DataModelHelper.LicKeyIdsNotUsed(idLicense);
             var licKeys = "";
@@ -1176,9 +1223,9 @@ namespace LicenseSoftware.Viewport
                     row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
                     if (row != null)
                     {
-                        var row_index = v_departments.Find("ID Department", row["ID Department"]);
-                        if (row_index != -1)
-                            e.Value = ((DataRowView)v_departments[row_index])["Department"].ToString().Trim();
+                        var rowIndex = v_departments.Find("ID Department", row["ID Department"]);
+                        if (rowIndex != -1)
+                            e.Value = ((DataRowView)v_departments[rowIndex])["Department"].ToString().Trim();
                     }
                     break;
                 case "computer":

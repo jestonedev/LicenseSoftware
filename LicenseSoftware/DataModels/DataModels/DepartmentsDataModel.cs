@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Data.Common;
 using System.Data;
 using System.Windows.Forms;
-using LicenseSoftware.Entities;
-using System.Data.SqlClient;
-using System.Threading;
 using System.Globalization;
 
 namespace LicenseSoftware.DataModels
 {
     public sealed class DepartmentsDataModel : DataModel
     {
-        private static DepartmentsDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM Departments ORDER BY [ID Parent Department], Department";
-        private static string accessQuery = @"SELECT ISNULL(d.[ID Department],0) AS [ID Department], d1.[ID Parent Department]
+        private static DepartmentsDataModel dataModel;
+        private const string SelectQuery = "SELECT * FROM Departments ORDER BY [ID Parent Department], Department";
+        private const string AccessQuery = @"SELECT ISNULL(d.[ID Department],0) AS [ID Department], d1.[ID Parent Department]
                                                 FROM
                                                   dbo.ACLUsers u
                                                   LEFT JOIN dbo.ACLDepartments d
@@ -27,13 +22,13 @@ namespace LicenseSoftware.DataModels
         private static string tableName = "Departments";
 
         private DepartmentsDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, SelectQuery, tableName)
         {   
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID Department"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID Department"] };
         }
 
         public static DepartmentsDataModel GetInstance()
@@ -43,20 +38,20 @@ namespace LicenseSoftware.DataModels
 
         public DataTable SelectVisibleDepartments()
         {
-            DataTable departments = base.Select();
-            DataTable accessDepartments = null;
-            DataTable resultDepartments = new DataTable("Departments");
+            var departments = Select();
+            DataTable accessDepartments;
+            var resultDepartments = new DataTable("Departments");
             resultDepartments.Columns.Add("ID Department").DataType = typeof(int);
             resultDepartments.Columns.Add("ID Parent Department").DataType = typeof(int);
             resultDepartments.Columns.Add("Department").DataType = typeof(string);
             resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
             resultDepartments.Columns.Add("Level").DataType = typeof(int);
-            resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
+            resultDepartments.PrimaryKey = new[] { resultDepartments.Columns["ID Department"] };
             resultDepartments.Locale = CultureInfo.InvariantCulture;
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = accessQuery;
+                command.CommandText = AccessQuery;
                 accessDepartments = connection.SqlSelectTable("accessDepartments", command);
             }
 
@@ -67,8 +62,8 @@ namespace LicenseSoftware.DataModels
                 allowDepartmentsIDs = allowDepartmentsIDs.Union(new List<int>() { (int)accessDepartment["ID Department"] });
                 if (accessDepartment["ID Parent Department"] != DBNull.Value)
                 {
-                    bool organizationRoot = false;
-                    DataRow currentDepartment = accessDepartment;
+                    var organizationRoot = false;
+                    var currentDepartment = accessDepartment;
                     while (!organizationRoot)
                     {
                         currentDepartment = departments.Rows.Find(currentDepartment["ID Parent Department"]);
@@ -86,22 +81,10 @@ namespace LicenseSoftware.DataModels
             }
             foreach (DataRow row in departments.Rows)
                 if (allowDepartmentsIDs.Contains((int)row["ID Department"]))
-                    resultDepartments.Rows.Add(new object[] {
-                        row["ID Department"],
-                        row["ID Parent Department"],
-                        row["Department"],
-                        true,
-                        0
-                    });
+                    resultDepartments.Rows.Add(row["ID Department"], row["ID Parent Department"], row["Department"], true, 0);
                 else
                     if (parentDepartmentsIDs.Contains((int)row["ID Department"]))
-                        resultDepartments.Rows.Add(new object[] {
-                        row["ID Department"],
-                        row["ID Parent Department"],
-                        row["Department"],
-                        false,
-                        0
-                    });
+                        resultDepartments.Rows.Add(row["ID Department"], row["ID Parent Department"], row["Department"], false, 0);
             return TabulateResultDepartments(SortResultDepartments(resultDepartments));
         }
 
@@ -109,8 +92,8 @@ namespace LicenseSoftware.DataModels
         {
             foreach (DataRow department in departments.Rows)
             {
-                DataRow currentRow = department;
-                int level = 0;
+                var currentRow = department;
+                var level = 0;
                 while (true)
                 {
                     if (currentRow["ID Parent Department"] == DBNull.Value)
@@ -122,8 +105,8 @@ namespace LicenseSoftware.DataModels
             }
             foreach (DataRow department in departments.Rows)
             {
-                int level = (int)department["Level"];
-                for (int i = 0; i < level; i++)
+                var level = (int)department["Level"];
+                for (var i = 0; i < level; i++)
                     department["Department"] = "     "+department["Department"];
             }
             return departments;
@@ -131,7 +114,7 @@ namespace LicenseSoftware.DataModels
 
         private DataTable SortResultDepartments(DataTable departments)
         {
-            DataTable resultDepartments = new DataTable("Departments");
+            var resultDepartments = new DataTable("Departments");
             resultDepartments.Columns.Add("ID Department").DataType = typeof(int);
             resultDepartments.Columns.Add("ID Parent Department").DataType = typeof(int);
             resultDepartments.Columns.Add("Department").DataType = typeof(string);
@@ -141,9 +124,9 @@ namespace LicenseSoftware.DataModels
             resultDepartments.Locale = CultureInfo.InvariantCulture;
             foreach (DataRow department in departments.Rows)
             {
-                int index =  -1;  //По умолчанию вставляем в конец
-                int parentIndex = -1;
-                for (int i = 0; i < resultDepartments.Rows.Count; i ++ )
+                var index =  -1;  //По умолчанию вставляем в конец
+                var parentIndex = -1;
+                for (var i = 0; i < resultDepartments.Rows.Count; i ++ )
                 {
                     //Ищем точку, в которую необходимо вставить запись
                     if (department["ID Parent Department"] == DBNull.Value)
@@ -159,7 +142,7 @@ namespace LicenseSoftware.DataModels
                             break;
                         }
                 }
-                DataRow row = resultDepartments.NewRow();
+                var row = resultDepartments.NewRow();
                 row["ID Department"] = department["ID Department"];
                 row["ID Parent Department"] = department["ID Parent Department"];
                 row["Department"] = department["Department"];

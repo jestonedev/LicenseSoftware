@@ -42,7 +42,7 @@ namespace LicenseSoftware.DataModels
 
         public static IEnumerable<int> GetDepartmentSubunits(int department)
         {
-            DepartmentsDataModel departments = DepartmentsDataModel.GetInstance();
+            var departments = DepartmentsDataModel.GetInstance();
             IEnumerable<int> departmentIDs = new List<int>();
             foreach (DataRow row in departments.Select().Rows)
                 if (row.RowState != DataRowState.Deleted &&

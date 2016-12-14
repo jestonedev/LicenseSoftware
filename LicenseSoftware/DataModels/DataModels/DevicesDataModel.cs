@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
-using System.Data;
-using System.Windows.Forms;
-using LicenseSoftware.Entities;
-using System.Data.SqlClient;
-using System.Threading;
-using System.Globalization;
+﻿using System.Windows.Forms;
 
 namespace LicenseSoftware.DataModels
 {
@@ -25,7 +15,7 @@ namespace LicenseSoftware.DataModels
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID Device"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID Device"] };
         }
 
         public static DevicesDataModel GetInstance()

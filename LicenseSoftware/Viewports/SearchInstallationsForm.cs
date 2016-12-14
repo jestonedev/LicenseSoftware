@@ -43,68 +43,64 @@ namespace LicenseSoftware.SearchForms
 
         internal override string GetFilter()
         {
-            string filter = "";
-            IEnumerable<int> included_licenses_ids = null;
+            var filter = "";
+            IEnumerable<int> includedLicensesIds = null;
             if ((checkBoxSoftwareNameEnable.Checked) && (comboBoxSoftwareName.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID Software") == (int)comboBoxSoftwareName.SelectedValue; }, Entities.EntityType.Software);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);    
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID Software") == (int)comboBoxSoftwareName.SelectedValue, Entities.EntityType.Software);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);    
             }
             if ((checkBoxSoftwareMakerEnable.Checked) && (comboBoxSoftwareMaker.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID SoftMaker") == (int)comboBoxSoftwareMaker.SelectedValue; }, Entities.EntityType.Software);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID SoftMaker") == (int)comboBoxSoftwareMaker.SelectedValue, Entities.EntityType.Software);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxSoftwareTypeEnable.Checked) && (comboBoxSoftwareType.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID SoftType") == (int)comboBoxSoftwareType.SelectedValue; }, Entities.EntityType.Software);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID SoftType") == (int)comboBoxSoftwareType.SelectedValue, Entities.EntityType.Software);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxSupplierEnable.Checked) && (comboBoxSupplierID.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID Supplier") == (int)comboBoxSupplierID.SelectedValue; }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID Supplier") == (int)comboBoxSupplierID.SelectedValue, Entities.EntityType.License);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxLicTypeEnable.Checked) && (comboBoxLicType.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID LicType") == (int)comboBoxLicType.SelectedValue; }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID LicType") == (int)comboBoxLicType.SelectedValue, Entities.EntityType.License);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxLicDocTypeEnable.Checked) && (comboBoxLicDocType.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<int>("ID DocType") == (int)comboBoxLicDocType.SelectedValue; }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => row.Field<int>("ID DocType") == (int)comboBoxLicDocType.SelectedValue, Entities.EntityType.License);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxDepartmentLicEnable.Checked) && (comboBoxDepartmentLicID.SelectedValue != null))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) =>
-                    {
-                        return
-                            DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentLicID.SelectedValue).Union(
-                            new List<int> { (int)comboBoxDepartmentLicID.SelectedValue }).Contains(
-                            row.Field<int>("ID Department"));
-                    }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => DataModelHelper.GetDepartmentSubunits((int)comboBoxDepartmentLicID.SelectedValue).Union(
+                        new List<int> { (int)comboBoxDepartmentLicID.SelectedValue }).Contains(
+                            row.Field<int>("ID Department")), Entities.EntityType.License);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if ((checkBoxDocNumberEnable.Checked) && (!String.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => { return row.Field<string>("DocNumber").ToUpper(CultureInfo.InvariantCulture)
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => { return row.Field<string>("DocNumber").ToUpper(CultureInfo.InvariantCulture)
                         .Contains(textBoxDocNumber.Text.Trim().ToUpper(CultureInfo.InvariantCulture));
                     }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if (checkBoxExpireLicenseDateEnable.Checked)
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) => {
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row => {
                         if (row.Field<DateTime?>("ExpireLicenseDate") != null)
                         {
                             switch (comboBoxOpExpireLicenseDate.SelectedItem.ToString())
@@ -118,12 +114,12 @@ namespace LicenseSoftware.SearchForms
                         else
                             return false;
                     }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if (checkBoxBuyLicenseDateEnable.Checked)
             {
-                IEnumerable<int> ids = DataModelHelper.GetLicenseIDsByCondition(
-                    (row) =>
+                var ids = DataModelHelper.GetLicenseIDsByCondition(
+                    row =>
                     {
                         if (row.Field<DateTime?>("BuyLicenseDate") != null)
                         {
@@ -138,7 +134,7 @@ namespace LicenseSoftware.SearchForms
                         else
                             return false;
                     }, Entities.EntityType.License);
-                included_licenses_ids = DataModelHelper.Intersect(included_licenses_ids, ids);
+                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             var allowedDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
                                     where departments_row.Field<bool>("AllowSelect")
@@ -195,20 +191,20 @@ namespace LicenseSoftware.SearchForms
             }
             if ((checkBoxDepartmentInstallEnable.Checked) && (comboBoxDepartmentInstallID.SelectedValue != null))
             {
-                IEnumerable<int> computerIds = DataModelHelper.GetComputerIDsByDepartment((int)comboBoxDepartmentInstallID.SelectedValue);
+                var computerIds = DataModelHelper.GetComputerIDsByDepartment((int)comboBoxDepartmentInstallID.SelectedValue);
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
                 filter += "[ID Computer] IN (0";
-                foreach (int id in computerIds)
+                foreach (var id in computerIds)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
                 filter = filter.TrimEnd(new char[] { ',' }) + ")";
             }
-            if (included_licenses_ids != null)
+            if (includedLicensesIds != null)
             {
                 if (!String.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
                 filter += "[ID License] IN (0";
-                foreach (int id in included_licenses_ids)
+                foreach (var id in includedLicensesIds)
                     filter += id.ToString(CultureInfo.InvariantCulture) + ",";
                 filter = filter.TrimEnd(new char[] { ',' }) + ")";
             }
@@ -353,7 +349,7 @@ namespace LicenseSoftware.SearchForms
             foreach (Control control in this.Controls)
                 control.KeyDown += (sender, e) =>
                 {
-                    ComboBox comboBox = sender as ComboBox;
+                    var comboBox = sender as ComboBox;
                     if (comboBox != null && comboBox.DroppedDown)
                         return;
                     if (e.KeyCode == Keys.Enter)
@@ -366,8 +362,8 @@ namespace LicenseSoftware.SearchForms
 
         private string DepartmentFilter()
         {
-            string DepartmentFilter = "[ID Department] IN (0";
-            for (int i = 0; i < v_departmentsInstall.Count; i++)
+            var DepartmentFilter = "[ID Department] IN (0";
+            for (var i = 0; i < v_departmentsInstall.Count; i++)
                 if ((bool)((DataRowView)v_departmentsInstall[i])["AllowSelect"])
                     DepartmentFilter += ((DataRowView)v_departmentsInstall[i])["ID Department"] + ",";
             DepartmentFilter = DepartmentFilter.TrimEnd(',');
@@ -596,9 +592,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxSoftwareName.Text;
-                int selectionStart = comboBoxSoftwareName.SelectionStart;
-                int selectionLength = comboBoxSoftwareName.SelectionLength;
+                var text = comboBoxSoftwareName.Text;
+                var selectionStart = comboBoxSoftwareName.SelectionStart;
+                var selectionLength = comboBoxSoftwareName.SelectionLength;
                 v_software.Filter = "Software like '%" + comboBoxSoftwareName.Text + "%'";
                 comboBoxSoftwareName.Text = text;
                 comboBoxSoftwareName.SelectionStart = selectionStart;
@@ -633,9 +629,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxComputer.Text;
-                int selectionStart = comboBoxComputer.SelectionStart;
-                int selectionLength = comboBoxComputer.SelectionLength;
+                var text = comboBoxComputer.Text;
+                var selectionStart = comboBoxComputer.SelectionStart;
+                var selectionLength = comboBoxComputer.SelectionLength;
                 v_devices.Filter = "[Device Name] like '%" + comboBoxComputer.Text + "%'";
                 comboBoxComputer.Text = text;
                 comboBoxComputer.SelectionStart = selectionStart;
@@ -670,9 +666,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxInvNum.Text;
-                int selectionStart = comboBoxInvNum.SelectionStart;
-                int selectionLength = comboBoxInvNum.SelectionLength;
+                var text = comboBoxInvNum.Text;
+                var selectionStart = comboBoxInvNum.SelectionStart;
+                var selectionLength = comboBoxInvNum.SelectionLength;
                 v_devicesInvNum.Filter = "[InventoryNumber] like '%" + comboBoxInvNum.Text + "%'";
                 comboBoxInvNum.Text = text;
                 comboBoxInvNum.SelectionStart = selectionStart;
@@ -707,9 +703,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxSerialNum.Text;
-                int selectionStart = comboBoxSerialNum.SelectionStart;
-                int selectionLength = comboBoxSerialNum.SelectionLength;
+                var text = comboBoxSerialNum.Text;
+                var selectionStart = comboBoxSerialNum.SelectionStart;
+                var selectionLength = comboBoxSerialNum.SelectionLength;
                 v_devicesSerialNum.Filter = "[SerialNumber] like '%" + comboBoxSerialNum.Text + "%'";
                 comboBoxSerialNum.Text = text;
                 comboBoxSerialNum.SelectionStart = selectionStart;
@@ -744,9 +740,9 @@ namespace LicenseSoftware.SearchForms
             if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) || (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
                 || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                string text = comboBoxLicKey.Text;
-                int selectionStart = comboBoxLicKey.SelectionStart;
-                int selectionLength = comboBoxLicKey.SelectionLength;
+                var text = comboBoxLicKey.Text;
+                var selectionStart = comboBoxLicKey.SelectionStart;
+                var selectionLength = comboBoxLicKey.SelectionLength;
                 v_softLicKeys.Filter = "[LicKey] like '%" + comboBoxLicKey.Text + "%'";
                 comboBoxLicKey.Text = text;
                 comboBoxLicKey.SelectionStart = selectionStart;
