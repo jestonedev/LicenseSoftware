@@ -807,9 +807,6 @@ namespace LicenseSoftware.Viewport
                         dataGridView.RowCount = dataGridView.RowCount - 1;
                         if (v_softInstallations.Position != -1)
                             dataGridView.Rows[v_softInstallations.Position].Selected = true;
-                    }
-                    if (v_softInstallations.Position != -1)
-                    {
                         var idInstallator = 0;
                         var currentRow = (DataRowView)v_softInstallations[v_softInstallations.Position];
                         if (currentRow["ID Installator"] != DBNull.Value)
