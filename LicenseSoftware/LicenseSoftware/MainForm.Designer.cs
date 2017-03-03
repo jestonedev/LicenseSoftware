@@ -50,6 +50,7 @@ namespace LicenseSoftware
             this.ribbonOrbMenuItemLicenses = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonOrbMenuItemInstallations = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonSeparator4 = new System.Windows.Forms.RibbonSeparator();
+            this.ribbonOrbMenuItemHelp = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonOrbMenuItemExit = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonRibbonButtonSoftType = new System.Windows.Forms.RibbonButton();
             this.ribbonRibbonButtonSuppliers = new System.Windows.Forms.RibbonButton();
@@ -87,6 +88,8 @@ namespace LicenseSoftware
             this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonLicensesBySoftCount = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonInstallationsInfo = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonRepDepart = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonRepPC = new System.Windows.Forms.RibbonButton();
             this.ribbonPanel5 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonLogLicensesReport = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonLogInstallationsReport = new System.Windows.Forms.RibbonButton();
@@ -97,7 +100,6 @@ namespace LicenseSoftware
             this.toolStripLabelRecordCount = new System.Windows.Forms.ToolStripLabel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.ribbonButton1 = new System.Windows.Forms.RibbonButton();
-            this.ribbonOrbMenuItemHelp = new System.Windows.Forms.RibbonOrbMenuItem();
             this.mbStatusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -176,6 +178,17 @@ namespace LicenseSoftware
             this.ribbonOrbMenuItemInstallations.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemInstallations.ToolTipImage")));
             this.ribbonOrbMenuItemInstallations.ToolTipTitle = "Установки ПО";
             this.ribbonOrbMenuItemInstallations.Click += new System.EventHandler(this.ribbonOrbMenuItemInstallations_Click);
+            // 
+            // ribbonOrbMenuItemHelp
+            // 
+            this.ribbonOrbMenuItemHelp.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.ribbonOrbMenuItemHelp.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.Image")));
+            this.ribbonOrbMenuItemHelp.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.SmallImage")));
+            this.ribbonOrbMenuItemHelp.Text = "Руководство пользователя";
+            this.ribbonOrbMenuItemHelp.ToolTip = "При нажатии на данную кнопку будет открыто руководство пользователя";
+            this.ribbonOrbMenuItemHelp.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.ToolTipImage")));
+            this.ribbonOrbMenuItemHelp.ToolTipTitle = "Руководство пользователя";
+            this.ribbonOrbMenuItemHelp.Click += new System.EventHandler(this.ribbonOrbMenuItemHelp_Click);
             // 
             // ribbonOrbMenuItemExit
             // 
@@ -533,6 +546,8 @@ namespace LicenseSoftware
             // 
             this.ribbonPanel4.Items.Add(this.ribbonButtonLicensesBySoftCount);
             this.ribbonPanel4.Items.Add(this.ribbonButtonInstallationsInfo);
+            this.ribbonPanel4.Items.Add(this.ribbonButtonRepDepart);
+            this.ribbonPanel4.Items.Add(this.ribbonButtonRepPC);
             this.ribbonPanel4.Text = "Отчеты";
             // 
             // ribbonButtonLicensesBySoftCount
@@ -556,6 +571,28 @@ namespace LicenseSoftware
             this.ribbonButtonInstallationsInfo.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonInstallationsInfo.ToolTipImage")));
             this.ribbonButtonInstallationsInfo.ToolTipTitle = "Отчет по установкам ПО";
             this.ribbonButtonInstallationsInfo.Click += new System.EventHandler(this.ribbonButtonInstallationsInfo_Click);
+            // 
+            // ribbonButtonRepDepart
+            // 
+            this.ribbonButtonRepDepart.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepDepart.Image")));
+            this.ribbonButtonRepDepart.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepDepart.SmallImage")));
+            this.ribbonButtonRepDepart.Text = "Отчет по департаментам";
+            this.ribbonButtonRepDepart.ToolTip = "При нажатии на данную кнопку будет сформирован отчет по установленному ПО по депа" +
+    "ртаментам";
+            this.ribbonButtonRepDepart.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepDepart.ToolTipImage")));
+            this.ribbonButtonRepDepart.ToolTipTitle = "Количество установок ПО по департаментам";
+            this.ribbonButtonRepDepart.Click += new System.EventHandler(this.ribbonButtonRepDepart_Click);
+            // 
+            // ribbonButtonRepPC
+            // 
+            this.ribbonButtonRepPC.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepPC.Image")));
+            this.ribbonButtonRepPC.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepPC.SmallImage")));
+            this.ribbonButtonRepPC.Text = "Отчет для каждого_ПК";
+            this.ribbonButtonRepPC.ToolTip = "При нажатии на данную кнопку будет сформирован отчет установленному ПО на компьют" +
+    "ере пользователя";
+            this.ribbonButtonRepPC.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonRepPC.ToolTipImage")));
+            this.ribbonButtonRepPC.ToolTipTitle = "Количество установок ПО на компьютере";
+            this.ribbonButtonRepPC.Click += new System.EventHandler(this.ribbonButtonRepPC_Click);
             // 
             // ribbonPanel5
             // 
@@ -692,17 +729,6 @@ namespace LicenseSoftware
             this.ribbonButton1.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButton1.ToolTipImage")));
             this.ribbonButton1.ToolTipTitle = "Лог изменений лицензий";
             // 
-            // ribbonOrbMenuItemHelp
-            // 
-            this.ribbonOrbMenuItemHelp.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
-            this.ribbonOrbMenuItemHelp.Image = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.Image")));
-            this.ribbonOrbMenuItemHelp.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.SmallImage")));
-            this.ribbonOrbMenuItemHelp.Text = "Руководство пользователя";
-            this.ribbonOrbMenuItemHelp.ToolTip = "При нажатии на данную кнопку будет открыто руководство пользователя";
-            this.ribbonOrbMenuItemHelp.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonOrbMenuItemHelp.ToolTipImage")));
-            this.ribbonOrbMenuItemHelp.ToolTipTitle = "Руководство пользователя";
-            this.ribbonOrbMenuItemHelp.Click += new System.EventHandler(this.ribbonOrbMenuItemHelp_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -781,6 +807,8 @@ namespace LicenseSoftware
         private System.Windows.Forms.RibbonButton ribbonButton1;
         private System.Windows.Forms.RibbonButton ribbonButtonInstallationsInfo;
         private System.Windows.Forms.RibbonOrbMenuItem ribbonOrbMenuItemHelp;
+        private System.Windows.Forms.RibbonButton ribbonButtonRepDepart;
+        private System.Windows.Forms.RibbonButton ribbonButtonRepPC;
     }
 }
 

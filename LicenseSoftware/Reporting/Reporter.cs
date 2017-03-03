@@ -110,5 +110,10 @@ namespace LicenseSoftware.Reporting
                     //Исключение происходит, когда подписчики отписываются после проверки условия на null в многопоточном режиме
                 }
         }
+
+        public virtual void Run(List<string> arguments)
+        {
+            Run(new Dictionary<string, string>());
+        }
     }
 }

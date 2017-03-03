@@ -264,5 +264,15 @@ namespace LicenseSoftware.Viewport
         {
             throw new ViewportException("Не реализовано");
         }
+
+        //блабла сюда тоже идет с IMenuController
+        public virtual List<string> GetIdLicenses()
+        {
+            throw new ViewportException("Не реализовано");
+        }
+        public virtual List<string> GetIdInstallations()
+        {
+            throw new ViewportException("Не реализовано");
+        }
     }
 }

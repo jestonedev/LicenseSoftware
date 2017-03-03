@@ -1684,6 +1684,15 @@ namespace LicenseSoftware.Viewport
         private void ChangeCbEditing(ComboBox control,bool state)
         {
             control.Enabled = state;
-        }     
+        }
+        public override List<string> GetIdInstallations()
+        {
+            var idList = new List<string>();
+            for (int i = 0; i < this.dataGridView.RowCount; i++)
+            {
+                idList.Add(this.dataGridView["idInstallation", i].Value.ToString());
+            }
+            return idList;
+        }
     }
 }

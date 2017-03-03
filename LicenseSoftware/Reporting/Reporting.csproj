@@ -66,11 +66,13 @@
     <Compile Include="DateRangeForm.designer.cs">
       <DependentUpon>DateRangeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DepartmentReporter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstallationsInfoReporter.cs" />
     <Compile Include="LogInstallationsReporter.cs" />
     <Compile Include="LicensesBySoftCountReporter.cs" />
     <Compile Include="LogLicensesReporter.cs" />
+    <Compile Include="PcReporter.cs" />
     <Compile Include="Reporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReporterException.cs" />

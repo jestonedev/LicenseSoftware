@@ -541,5 +541,47 @@ namespace LicenseSoftware
                 process.Start();
             }
         }
+
+        private void ribbonButtonRepDepart_Click(object sender, EventArgs e)
+        {
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null && document.GetType().ToString() == "LicenseSoftware.Viewport.LicensesViewport")
+            {
+                List<string> arguments = new List<string>();
+                arguments = DepRepArguments();
+                RunDepReport(ReporterType.DepartmentReporter, arguments);
+            }
+        }
+        private List<string> DepRepArguments()
+        {
+            var arguments = (dockPanel.ActiveDocument as IMenuController).GetIdLicenses();
+            return arguments;
+        }
+
+        private void RunDepReport(Reporting.ReporterType reporterType, List<string> args)
+        {
+            Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
+            reporter.ReportOutputStreamResponse += new EventHandler<ReportOutputStreamEventArgs>(reporter_ReportOutputStreamResponse);
+            reporter.ReportComplete += new EventHandler<EventArgs>(reporter_ReportComplete);
+            reporter.ReportCanceled += new EventHandler<EventArgs>(reporter_ReportCanceled);
+            reportCounter++;
+            reporter.Run(args);
+        }
+
+        private void ribbonButtonRepPC_Click(object sender, EventArgs e)
+        {
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null && document.GetType().ToString() == "LicenseSoftware.Viewport.InstallationsViewport")
+            {
+                List<string> arguments = new List<string>();
+                arguments = PcRepArguments();
+                RunDepReport(ReporterType.PcReporter, arguments);
+            }
+        }
+        private List<string> PcRepArguments()
+        {
+            var arguments = (dockPanel.ActiveDocument as IMenuController).GetIdInstallations();
+            return arguments;
+        }
     }
 }

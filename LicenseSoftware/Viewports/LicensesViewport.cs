@@ -1591,5 +1591,15 @@ namespace LicenseSoftware.Viewport
             this.ResumeLayout(false);
 
         }
+
+        public override List<string> GetIdLicenses()
+        {
+            var idList = new List<string>();
+            for (int i = 0; i < this.dataGridView.RowCount; i++ )
+            {
+                idList.Add(this.dataGridView["idLicense", i].Value.ToString());
+            }
+            return idList;
+        }
     }
 }

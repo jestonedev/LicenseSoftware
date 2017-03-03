@@ -10,6 +10,8 @@ namespace LicenseSoftware.Reporting
         LogInstallationsReporter,
         LogLicensesReporter,
         LicensesBySoftCountReporter,
-        InstallationsInfoReporter
+        InstallationsInfoReporter,
+        DepartmentReporter,
+        PcReporter
     }
 }

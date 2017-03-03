@@ -57,5 +57,9 @@ namespace LicenseSoftware.Viewport
         void ShowAssocInstallations();
 
         void ShowAssocLicKeys();
+
+        //попробуем добавить сюда
+        List<string> GetIdLicenses();
+        List<string> GetIdInstallations();
     }
 }
