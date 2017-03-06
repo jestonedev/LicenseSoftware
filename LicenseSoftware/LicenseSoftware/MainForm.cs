@@ -545,12 +545,15 @@ namespace LicenseSoftware
         private void ribbonButtonRepDepart_Click(object sender, EventArgs e)
         {
             var document = dockPanel.ActiveDocument as IMenuController;
-            if (document != null && document.GetType().ToString() == "LicenseSoftware.Viewport.LicensesViewport")
+            if (document != null && document.GetType() == typeof(LicensesViewport))
             {
                 List<string> arguments = new List<string>();
                 arguments = DepRepArguments();
                 RunDepReport(ReporterType.DepartmentReporter, arguments);
             }
+            else
+                MessageBox.Show("Для вывода отчета необходима активная вкладка \"Лицензии\"", @"Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
         private List<string> DepRepArguments()
         {
@@ -571,12 +574,15 @@ namespace LicenseSoftware
         private void ribbonButtonRepPC_Click(object sender, EventArgs e)
         {
             var document = dockPanel.ActiveDocument as IMenuController;
-            if (document != null && document.GetType().ToString() == "LicenseSoftware.Viewport.InstallationsViewport")
+            if (document != null && document.GetType() == typeof(InstallationsViewport))
             {
                 List<string> arguments = new List<string>();
                 arguments = PcRepArguments();
                 RunDepReport(ReporterType.PcReporter, arguments);
             }
+            else
+                MessageBox.Show("Для вывода отчета необходима активная вкладка \"Установки\"", @"Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
         private List<string> PcRepArguments()
         {

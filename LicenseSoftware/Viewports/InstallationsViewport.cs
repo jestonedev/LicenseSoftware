@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace LicenseSoftware.Viewport
 {
-    internal sealed class InstallationsViewport: Viewport
+    public sealed class InstallationsViewport: Viewport
     {
         #region Components
         private TableLayoutPanel tableLayoutPanel14;
