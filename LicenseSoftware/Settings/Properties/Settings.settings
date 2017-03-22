@@ -15,13 +15,13 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="ActivityManagerPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\nas\media$\ActivityManager\ActivityManager.exe</Value>
+      <Value Profile="(Default)">\\mcs.br\adm\server\ActivityManager\ActivityManager.exe</Value>
     </Setting>
     <Setting Name="ActivityManagerOutputCodePage" Type="System.String" Scope="User">
       <Value Profile="(Default)">cp866</Value>
     </Setting>
     <Setting Name="ActivityManagerConfigsPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\nas\media$\ActivityManager\templates\lifs</Value>
+      <Value Profile="(Default)">\\mcs.br\adm\server\ActivityManager\templates\lifs</Value>
     </Setting>
     <Setting Name="DataModelsCallbackUpdateTimeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>
