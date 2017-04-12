@@ -22,126 +22,109 @@ namespace LicenseSoftware.Viewport
         {
             if (value != null)
                 return value.Value;
-            else
-                return DateTime.Now.Date;
+            return DateTime.Now.Date;
         }
 
         internal static double ValueOrDefault(double? value)
         {
             if (value != null)
                 return value.Value;
-            else
-                return 0;
+            return 0;
         }
 
         internal static int ValueOrDefault(int? value)
         {
             if (value != null)
                 return value.Value;
-            else
-                return 0;
+            return 0;
         }
 
         internal static bool ValueOrDefault(bool? value)
         {
             if (value != null)
                 return value.Value;
-            else
-                return false;
+            return false;
         }
 
         internal static decimal ValueOrDefault(decimal? value)
         {
             if (value != null)
                 return value.Value;
-            else
-                return 0;
+            return 0;
         }
 
         internal static string ValueOrNull(TextBox control)
         {
             if (String.IsNullOrEmpty(control.Text.Trim()))
                 return null;
-            else
-                return control.Text.Trim().Trim();
+            return control.Text.Trim().Trim();
         }
 
         internal static T? ValueOrNull<T>(ComboBox control) where T: struct
         {
             if (control.SelectedValue == null)
                 return null;
-            else
-                return (T?)control.SelectedValue;
+            return (T?)control.SelectedValue;
         }
 
         internal static string ValueOrNull(ComboBox control)
         {
             if (control.SelectedValue == null)
                 return null;
-            else
-                return control.SelectedValue.ToString().Trim();
+            return control.SelectedValue.ToString().Trim();
         }
 
         internal static DateTime? ValueOrNull(DateTimePicker control)
         {
             if (control.Checked)
                 return control.Value.Date;
-            else
-                return null;
+            return null;
         }
 
         internal static T? ValueOrNull<T>(DataRowView row, string property) where T : struct
         {
             if (row[property] is DBNull)
                 return null;
-            else
-                return (T?)Convert.ChangeType(row[property], typeof(T), CultureInfo.InvariantCulture);
+            return (T?)Convert.ChangeType(row[property], typeof(T), CultureInfo.InvariantCulture);
         }
 
         internal static string ValueOrNull(DataRowView row, string property)
         {
             if (row[property] is DBNull)
                 return null;
-            else
-                return row[property].ToString().Trim();
+            return row[property].ToString().Trim();
         }
 
         internal static T? ValueOrNull<T>(DataRow row, string property) where T : struct
         {
             if (row[property] is DBNull)
                 return null;
-            else
-                return (T?)Convert.ChangeType(row[property], typeof(T), CultureInfo.InvariantCulture);
+            return (T?)Convert.ChangeType(row[property], typeof(T), CultureInfo.InvariantCulture);
         }
 
         internal static string ValueOrNull(DataRow row, string property)
         {
             if (row[property] is DBNull)
                 return null;
-            else
-                return row[property].ToString().Trim();
+            return row[property].ToString().Trim();
         }
 
         internal static T? ValueOrNull<T>(DataGridViewRow row, string property) where T : struct
         {
             if (row.Cells[property].Value is DBNull)
                 return null;
-            else
             if (row.Cells[property].Value == null)
                 return null;
-            else
-                return (T?)Convert.ChangeType(row.Cells[property].Value, typeof(T), CultureInfo.InvariantCulture);
+            return (T?)Convert.ChangeType(row.Cells[property].Value, typeof(T), CultureInfo.InvariantCulture);
         }
 
         internal static string ValueOrNull(DataGridViewRow row, string property)
         {
             if (row.Cells[property].Value is DBNull)
                 return null;
-            else
             if (row.Cells[property].Value == null)
                 return null;
-            else
-                return row.Cells[property].Value.ToString().Trim();
+            return row.Cells[property].Value.ToString().Trim();
         }
 
         internal static object ValueOrDBNull(object value)

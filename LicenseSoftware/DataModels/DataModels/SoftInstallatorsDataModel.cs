@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
 using System.Data;
-using System.Windows.Forms;
-using LicenseSoftware.Entities;
+using System.Data.Common;
 using System.Data.SqlClient;
-using System.Threading;
 using System.Globalization;
+using System.Windows.Forms;
+using LicenseSoftware.DataModels;
+using LicenseSoftware.Entities;
 
-namespace LicenseSoftware.DataModels
+namespace DataModels.DataModels
 {
     public sealed class SoftInstallatorsDataModel : DataModel
     {

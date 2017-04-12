@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -475,6 +476,7 @@ namespace LicenseSoftware.Viewport
             this.idSoftLicDocType,
             this.softLicDocType});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridView.Location = new System.Drawing.Point(3, 3);
             this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";

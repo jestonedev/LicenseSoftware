@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
 using System.Data;
-using System.Windows.Forms;
-using System.Threading;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
+using LicenseSoftware.DataModels;
 
-namespace LicenseSoftware.DataModels
+namespace DataModels.DataModels
 {
     public abstract class DataModel
     {

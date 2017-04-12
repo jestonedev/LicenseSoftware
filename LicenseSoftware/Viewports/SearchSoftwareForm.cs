@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using LicenseSoftware.DataModels;
 using LicenseSoftware.CalcDataModels;
 using System.Globalization;
+using DataModels.DataModels;
 
 namespace LicenseSoftware.SearchForms
 {

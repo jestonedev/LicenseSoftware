@@ -7,6 +7,7 @@ using LicenseSoftware.Entities;
 using Security;
 using System.Globalization;
 using System.Linq;
+using DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -487,73 +488,77 @@ namespace LicenseSoftware.Viewport
 
         private void InitializeComponent()
         {
-            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftLicKeysViewport));
-            dataGridView = new DataGridView();
-            idLicenseKey = new DataGridViewTextBoxColumn();
-            idLicense = new DataGridViewTextBoxColumn();
-            LicKey = new DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
-            SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftLicKeysViewport));
+            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.idLicenseKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idLicense = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LicKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.SuspendLayout();
             // 
             // dataGridView
             // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.AllowUserToResizeRows = false;
-            dataGridView.BackgroundColor = System.Drawing.Color.White;
-            dataGridView.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Columns.AddRange(idLicenseKey, idLicense, LicKey);
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.Location = new System.Drawing.Point(3, 3);
-            dataGridView.MultiSelect = false;
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridView.ShowCellToolTips = false;
-            dataGridView.Size = new System.Drawing.Size(795, 333);
-            dataGridView.TabIndex = 0;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idLicenseKey,
+            this.idLicense,
+            this.LicKey});
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dataGridView.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView.MultiSelect = false;
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView.ShowCellToolTips = false;
+            this.dataGridView.Size = new System.Drawing.Size(795, 333);
+            this.dataGridView.TabIndex = 0;
             // 
             // idLicenseKey
             // 
-            idLicenseKey.HeaderText = @"Внутренний номер лицензионного ключа";
-            idLicenseKey.Name = "idLicenseKey";
-            idLicenseKey.Visible = false;
+            this.idLicenseKey.HeaderText = "Внутренний номер лицензионного ключа";
+            this.idLicenseKey.Name = "idLicenseKey";
+            this.idLicenseKey.Visible = false;
             // 
             // idLicense
             // 
-            idLicense.HeaderText = @"Внутренний номер лицензии";
-            idLicense.Name = "idLicense";
-            idLicense.Visible = false;
+            this.idLicense.HeaderText = "Внутренний номер лицензии";
+            this.idLicense.Name = "idLicense";
+            this.idLicense.Visible = false;
             // 
             // LicKey
             // 
-            LicKey.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            LicKey.HeaderText = @"Лицензионный ключ";
-            LicKey.MinimumWidth = 150;
-            LicKey.Name = "LicKey";
+            this.LicKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.LicKey.HeaderText = "Лицензионный ключ";
+            this.LicKey.MinimumWidth = 150;
+            this.LicKey.Name = "LicKey";
             // 
             // SoftLicKeysViewport
             // 
-            BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(801, 339);
-            Controls.Add(dataGridView);
-            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
-            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            Name = "SoftLicKeysViewport";
-            Padding = new Padding(3);
-            Text = @"Перечень лицензионных ключей";
-            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
-            ResumeLayout(false);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(801, 339);
+            this.Controls.Add(this.dataGridView);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "SoftLicKeysViewport";
+            this.Padding = new System.Windows.Forms.Padding(3);
+            this.Text = "Перечень лицензионных ключей";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.ResumeLayout(false);
 
         }
     }

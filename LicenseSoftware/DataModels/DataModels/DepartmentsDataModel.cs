@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+using LicenseSoftware.DataModels;
 
-namespace LicenseSoftware.DataModels
+namespace DataModels.DataModels
 {
     public sealed class DepartmentsDataModel : DataModel
     {

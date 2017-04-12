@@ -8,7 +8,7 @@
     <ProjectGuid>{762222B2-0E8F-4759-A673-FCC0C5F35B8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LicenseSoftware.DataModels</RootNamespace>
+    <RootNamespace>DataModels</RootNamespace>
     <AssemblyName>DataModels</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -6,6 +6,7 @@ using LicenseSoftware.DataModels;
 using System.Data;
 using System.ComponentModel;
 using System.Windows.Forms;
+using DataModels.DataModels;
 using LicenseSoftware.Entities;
 
 namespace LicenseSoftware.CalcDataModels

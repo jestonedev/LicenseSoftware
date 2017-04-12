@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using LicenseSoftware.CalcDataModels;
 using System.Globalization;
+using DataModels.DataModels;
 using LicenseSoftware.Entities;
 
 namespace LicenseSoftware.DataModels
@@ -59,32 +60,32 @@ namespace LicenseSoftware.DataModels
 
         public static IEnumerable<int> GetSoftwareIDsBySoftType(int idSoftType)
         {
-            return from software_row in DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select())
+            return from software_row in FilterRows(SoftwareDataModel.GetInstance().Select())
                    where software_row.Field<int>("ID SoftType") == idSoftType
                    select software_row.Field<int>("ID Software");
         }
 
         public static IEnumerable<int> GetSoftwareIDsBySoftMaker(int idSoftMaker)
         {
-            return from software_row in DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select())
+            return from software_row in FilterRows(SoftwareDataModel.GetInstance().Select())
                    where software_row.Field<int>("ID SoftMaker") == idSoftMaker
                    select software_row.Field<int>("ID Software");
         }
 
         public static IEnumerable<int> GetComputerIDsByDepartment(int idDepartment)
         {
-            return from computer_row in DataModelHelper.FilterRows(DevicesDataModel.GetInstance().Select())
+            return from computer_row in FilterRows(DevicesDataModel.GetInstance().Select())
                    where computer_row.Field<int>("ID Department") == idDepartment
                    select computer_row.Field<int>("ID Device");
         }
 
         public static IEnumerable<int> GetLicenseIDsByCondition(Func<DataRow, bool> condition, EntityType entity)
         {
-            var software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select());
-            var departments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+            var software = FilterRows(SoftwareDataModel.GetInstance().Select());
+            var departments = from departments_row in FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
                               where departments_row.Field<bool>("AllowSelect")
                               select departments_row.Field<int>("ID Department");
-            var licenses = from licenses_row in DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select())
+            var licenses = from licenses_row in FilterRows(SoftLicensesDataModel.GetInstance().Select())
                            where departments.Contains(licenses_row.Field<int>("ID Department"))
                            select licenses_row;
             var result = from software_row in software
@@ -97,9 +98,9 @@ namespace LicenseSoftware.DataModels
 
         public static bool KeyIsFree(int idKey)
         {
-            return (from installation_row in DataModelHelper.FilterRows(SoftInstallationsDataModel.GetInstance().Select())
-                   where installation_row.Field<int?>("ID LicenseKey") == idKey
-                   select installation_row).Count() == 0;
+            return !(from installationRow in FilterRows(SoftInstallationsDataModel.GetInstance().Select())
+                   where installationRow.Field<int?>("ID LicenseKey") == idKey
+                   select installationRow).Any();
         }
 
         /// <summary>
@@ -109,14 +110,17 @@ namespace LicenseSoftware.DataModels
         /// <returns>Список идентификаторов ключей</returns>
         public static IEnumerable<int> LicKeyIdsNotUsed(int idLicense)
         {
-            return from license_key_row in DataModelHelper.FilterRows(SoftLicKeysDataModel.GetInstance().Select())
-                   join license_row in DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select())
-                   on license_key_row.Field<int>("ID License") equals license_row.Field<int>("ID License")
-                   join installation_row in DataModelHelper.FilterRows(SoftInstallationsDataModel.GetInstance().Select())
-                   on license_key_row.Field<int>("ID LicenseKey") equals installation_row.Field<int?>("ID LicenseKey") into jg
-                   from jg_row in jg.DefaultIfEmpty()
-                   where license_key_row.Field<int>("ID License") == idLicense && (jg_row == null ||  license_row.Field<int>("ID LicType") != 13)
-                   select license_key_row.Field<int>("ID LicenseKey");
+            return from licenseKeyRow in FilterRows(SoftLicKeysDataModel.GetInstance().Select())
+                   join licenseRow in FilterRows(SoftLicensesDataModel.GetInstance().Select())
+                   on licenseKeyRow.Field<int?>("ID License") equals licenseRow.Field<int?>("ID License")
+                   join licenseTypeRow in FilterRows(SoftLicTypesDataModel.GetInstance().Select())
+                   on licenseRow.Field<int?>("ID LicType") equals licenseTypeRow.Field<int?>("ID LicType")
+                   join installationRow in FilterRows(SoftInstallationsDataModel.GetInstance().Select())
+                   on licenseKeyRow.Field<int?>("ID LicenseKey") equals installationRow.Field<int?>("ID LicenseKey") into jg
+                   from jgRow in jg.DefaultIfEmpty()
+                   where licenseKeyRow.Field<int?>("ID License") == idLicense &&
+                        (jgRow == null || licenseTypeRow.Field<bool?>("LicKeyDuplicateAllowed") == true)
+                   select licenseKeyRow.Field<int>("ID LicenseKey");
         }
     }
 }

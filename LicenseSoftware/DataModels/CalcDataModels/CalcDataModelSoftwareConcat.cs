@@ -6,6 +6,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using DataModels.DataModels;
 
 namespace LicenseSoftware.CalcDataModels
 {

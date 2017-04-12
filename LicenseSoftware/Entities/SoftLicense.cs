@@ -22,7 +22,7 @@ namespace LicenseSoftware.Entities
 
         public override bool Equals(object obj)
         {
-            return (this == (obj as SoftLicense));
+            return (this == obj as SoftLicense);
         }
 
         public bool Equals(SoftLicense other)

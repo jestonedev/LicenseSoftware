@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace LicenseSoftware.DataModels
+namespace DataModels.DataModels
 {
     public sealed class DevicesDataModel : DataModel
     {

@@ -1,34 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
-using System.Data;
-using System.Windows.Forms;
-using LicenseSoftware.Entities;
 using System.Data.SqlClient;
-using System.Threading;
 using System.Globalization;
+using System.Windows.Forms;
+using LicenseSoftware.DataModels;
+using LicenseSoftware.Entities;
 
-namespace LicenseSoftware.DataModels
+namespace DataModels.DataModels
 {
     public sealed class SoftLicTypesDataModel : DataModel
     {
-        private static SoftLicTypesDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM SoftLicTypes WHERE Deleted = 0";
-        private static string deleteQuery = "UPDATE SoftLicTypes SET Deleted = 1 WHERE [ID LicType] = @IDLicType";
-        private static string insertQuery = @"INSERT INTO SoftLicTypes (LicType) VALUES (@LicType); SELECT CONVERT(int, SCOPE_IDENTITY());";
-        private static string updateQuery = @"UPDATE SoftLicTypes SET LicType = @LicType WHERE [ID LicType] = @IDLicType";
-        private static string tableName = "SoftLicTypes";
+        private static SoftLicTypesDataModel _dataModel;
+        private const string SelectQuery = "SELECT [ID LicType], LicType, LicKeyDuplicateAllowed FROM SoftLicTypes WHERE Deleted = 0";
+        private const string DeleteQuery = "UPDATE SoftLicTypes SET Deleted = 1 WHERE [ID LicType] = @IDLicType";
+        private const string InsertQuery = @"INSERT INTO SoftLicTypes (LicType, LicKeyDuplicateAllowed) VALUES (@LicType, @LicKeyDuplicateAllowed); SELECT CONVERT(int, SCOPE_IDENTITY());";
+        private const string UpdateQuery = @"UPDATE SoftLicTypes SET LicType = @LicType, LicKeyDuplicateAllowed = @LicKeyDuplicateAllowed WHERE [ID LicType] = @IDLicType";
+        private const string TableName = "SoftLicTypes";
 
         private SoftLicTypesDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, SelectQuery, TableName)
         {   
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID LicType"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID LicType"] };
         }
 
         public static SoftLicTypesDataModel GetInstance()
@@ -38,17 +33,17 @@ namespace LicenseSoftware.DataModels
 
         public static SoftLicTypesDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
         {         
-            if (dataModel == null)
-                dataModel = new SoftLicTypesDataModel(progressBar, incrementor);
-            return dataModel;
+            if (_dataModel == null)
+                _dataModel = new SoftLicTypesDataModel(progressBar, incrementor);
+            return _dataModel;
         }
 
         public static int Delete(int id)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = deleteQuery;
+                command.CommandText = DeleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicType", id));
                 try
                 {
@@ -56,7 +51,7 @@ namespace LicenseSoftware.DataModels
                 }
                 catch (SqlException e)
                 {
-                    MessageBox.Show(String.Format(CultureInfo.InvariantCulture, 
+                    MessageBox.Show(string.Format(CultureInfo.InvariantCulture, 
                         "Не удалось удалить вид лицензии на ПО из базы данных. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
@@ -66,25 +61,26 @@ namespace LicenseSoftware.DataModels
 
         public static int Update(SoftLicType softLicType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = updateQuery;
+                command.CommandText = UpdateQuery;
                 if (softLicType == null)
                 {
                     MessageBox.Show("В метод Update не передана ссылка на объект вида лицензии", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("LicType", softLicType.LicType));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDLicType", softLicType.IdLicType));
+                command.Parameters.Add(DBConnection.CreateParameter("LicType", softLicType.LicType));
+                command.Parameters.Add(DBConnection.CreateParameter("LicKeyDuplicateAllowed", softLicType.LicKeyDuplicateAllowed));
+                command.Parameters.Add(DBConnection.CreateParameter("IDLicType", softLicType.IdLicType));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
                 }
                 catch (SqlException e)
                 {
-                    MessageBox.Show(String.Format(CultureInfo.InvariantCulture, 
+                    MessageBox.Show(string.Format(CultureInfo.InvariantCulture, 
                         "Не удалось изменить данные о виде лицензии. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
@@ -94,17 +90,18 @@ namespace LicenseSoftware.DataModels
 
         public static int Insert(SoftLicType softLicType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = insertQuery;
+                command.CommandText = InsertQuery;
                 if (softLicType == null)
                 {
                     MessageBox.Show("В метод Insert не передана ссылка на объект вида лицензии", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("LicType", softLicType.LicType));
+                command.Parameters.Add(DBConnection.CreateParameter("LicType", softLicType.LicType));
+                command.Parameters.Add(DBConnection.CreateParameter("LicKeyDuplicateAllowed", softLicType.LicKeyDuplicateAllowed));
                 try
                 {
                     return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);
@@ -112,7 +109,7 @@ namespace LicenseSoftware.DataModels
                 catch (SqlException e)
                 {
                     connection.SqlRollbackTransaction();
-                    MessageBox.Show(String.Format(CultureInfo.InvariantCulture, 
+                    MessageBox.Show(string.Format(CultureInfo.InvariantCulture, 
                         "Не удалось добавить вид лицензии в базу данных. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;

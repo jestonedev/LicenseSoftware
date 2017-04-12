@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.Common;
 using System.Data;
 using System.Globalization;
+using DataModels.DataModels;
 
 namespace LicenseSoftware.DataModels
 {
