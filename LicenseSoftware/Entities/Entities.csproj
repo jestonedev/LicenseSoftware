@@ -52,6 +52,7 @@
     <Compile Include="EntityType.cs" />
     <Compile Include="SoftInstallator.cs" />
     <Compile Include="SoftInstallation.cs" />
+    <Compile Include="SoftVersion.cs" />
     <Compile Include="SoftMaker.cs" />
     <Compile Include="SoftLicType.cs" />
     <Compile Include="SoftLicKey.cs" />

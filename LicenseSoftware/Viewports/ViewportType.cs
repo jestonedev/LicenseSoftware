@@ -16,6 +16,7 @@ namespace LicenseSoftware.Viewport
         LicensesViewport,
         InstallatorsViewport,
         InstallationsViewport,
-        LicenseKeysViewport
+        LicenseKeysViewport,
+        SoftVersionsViewport
     }
 }

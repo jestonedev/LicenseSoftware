@@ -8,13 +8,13 @@ using DataModels.DataModels;
 
 namespace LicenseSoftware.CalcDataModels
 {
-    public sealed class CalcDataModelLicensesConcat: CalcDataModel
+    public sealed class CalcDataModelLicKeyConcat: CalcDataModel
     {
-        private static CalcDataModelLicensesConcat _dataModel;
+        private static CalcDataModelLicKeyConcat _dataModel;
 
-        private const string TableName = "LicensesConcat";
+        private const string TableName = "LicKeyConcat";
 
-        private CalcDataModelLicensesConcat()
+        private CalcDataModelLicKeyConcat()
         {
             Table = InitializeTable();
             Refresh(EntityType.Unknown, null, false);
@@ -23,11 +23,10 @@ namespace LicenseSoftware.CalcDataModels
         private static DataTable InitializeTable()
         {
             var table = new DataTable(TableName) {Locale = CultureInfo.InvariantCulture};
+            table.Columns.Add("ID LicenseKey").DataType = typeof(int);
             table.Columns.Add("ID License").DataType = typeof(int);
-            table.Columns.Add("ID Version").DataType = typeof(int);
-            table.Columns.Add("ID Department").DataType = typeof(int);
-            table.Columns.Add("License").DataType = typeof(string);
-            table.PrimaryKey = new[] { table.Columns["ID License"] };
+            table.Columns.Add("LicKey").DataType = typeof(string);
+            table.PrimaryKey = new[] { table.Columns["ID LicKey"] };
             return table;
         }
 
@@ -39,24 +38,31 @@ namespace LicenseSoftware.CalcDataModels
             var config = (CalcAsyncConfig)e.Argument;
             // Фильтруем удаленные строки
             var licenses = DataModelHelper.FilterRows(SoftLicensesDataModel.GetInstance().Select(), config.Entity, config.IdObject);
+            var licKeys = DataModelHelper.FilterRows(SoftLicKeysDataModel.GetInstance().Select(), config.Entity, config.IdObject);
             // Вычисляем агрегационную информацию
             var result = from licensesRow in licenses
+                         join licKeyRow in licKeys
+                         on licensesRow.Field<int>("ID License") equals licKeyRow.Field<int>("ID License")
                          select new
                          {
+                             id_lickey = licKeyRow.Field<int>("ID LicenseKey"),
                              id_license = licensesRow.Field<int>("ID License"),
-                             id_version = licensesRow.Field<int>("ID Version"),
-                             id_department = licensesRow.Field<int>("ID Department"),
-                             license = "Документ: " + licensesRow.Field<string>("DocNumber") + "; Срок действия с " +
-                                    licensesRow.Field<DateTime>("BuyLicenseDate").ToString("dd.MM.yyyy",CultureInfo.InvariantCulture) +
+                             lickey = 
+                                string.Format("{0} (в/н лицензии: {1}; срок действия: №{2} от {3})",
+                                licKeyRow.Field<string>("LicKey"),
+                                licensesRow.Field<int>("ID License"), 
+                                licensesRow.Field<string>("DocNumber") ?? "б/н",
+                                licensesRow.Field<DateTime>("BuyLicenseDate").ToString("dd.MM.yyyy", CultureInfo.InvariantCulture) +
                                     (licensesRow.Field<DateTime?>("ExpireLicenseDate") == null ? " (бессрочно)" :
                                     " по " + licensesRow.Field<DateTime>("ExpireLicenseDate").ToString("dd.MM.yyyy", CultureInfo.InvariantCulture))
+                                )
                          };
             // Заполняем таблицу изменений
             var table = InitializeTable();
             table.BeginLoadData();
             result.ToList().ForEach(x =>
             {
-                table.Rows.Add(x.id_license, x.id_version, x.id_department, x.license);
+                table.Rows.Add(x.id_lickey, x.id_license, x.lickey);
             });
             table.EndLoadData();
             if (!DataSetManager.DataSet.Tables.Contains(TableName))
@@ -67,9 +73,9 @@ namespace LicenseSoftware.CalcDataModels
             e.Result = table;
         }
 
-        public static CalcDataModelLicensesConcat GetInstance()
+        public static CalcDataModelLicKeyConcat GetInstance()
         {
-            return _dataModel ?? (_dataModel = new CalcDataModelLicensesConcat());
+            return _dataModel ?? (_dataModel = new CalcDataModelLicKeyConcat());
         }
 
         public static bool HasInstance()

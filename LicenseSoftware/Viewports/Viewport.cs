@@ -250,6 +250,11 @@ namespace LicenseSoftware.Viewport
             return false;
         }
 
+        public virtual bool HasAssocSoftVersions()
+        {
+            return false;
+        }
+
         public virtual void ShowAssocLicenses()
         {
             throw new ViewportException("Не реализовано");
@@ -265,7 +270,11 @@ namespace LicenseSoftware.Viewport
             throw new ViewportException("Не реализовано");
         }
 
-        //блабла сюда тоже идет с IMenuController
+        public virtual void ShowAssocSoftVersions()
+        {
+            throw new ViewportException("Не реализовано");
+        }
+
         public virtual List<string> GetIdLicenses()
         {
             throw new ViewportException("Не реализовано");

@@ -34,11 +34,7 @@ namespace LicenseSoftware.DataModels
         {
             if (list1 != null && list2 != null)
                 return list1.Intersect(list2).ToList();
-            else
-                if (list1 != null)
-                    return list1;
-                else
-                    return list2;
+            return list1 ?? list2;
         }
 
         public static IEnumerable<int> GetDepartmentSubunits(int department)
@@ -50,49 +46,58 @@ namespace LicenseSoftware.DataModels
                     row.RowState != DataRowState.Detached && 
                     row["ID Parent Department"] != DBNull.Value && (int)row["ID Parent Department"] == department)
                     ((List<int>)departmentIDs).Add((int)row["ID Department"]);
-            List<IEnumerable<int>> subUnits = new List<IEnumerable<int>>();
-            foreach (int departmentID in departmentIDs)
-                subUnits.Add(GetDepartmentSubunits(departmentID));
-            foreach (IEnumerable<int> subUnit in subUnits)
+            var subUnits = new List<IEnumerable<int>>();
+            foreach (var departmentId in departmentIDs)
+                subUnits.Add(GetDepartmentSubunits(departmentId));
+            foreach (var subUnit in subUnits)
                 departmentIDs = departmentIDs.Union(subUnit);
             return departmentIDs;
         }
 
         public static IEnumerable<int> GetSoftwareIDsBySoftType(int idSoftType)
         {
-            return from software_row in FilterRows(SoftwareDataModel.GetInstance().Select())
-                   where software_row.Field<int>("ID SoftType") == idSoftType
-                   select software_row.Field<int>("ID Software");
+            return from softwareRow in FilterRows(SoftwareDataModel.GetInstance().Select())
+                   join softVersionRow in FilterRows(SoftVersionsDataModel.GetInstance().Select())
+                   on softwareRow.Field<int>("ID Software") equals softVersionRow.Field<int>("ID Software")
+                   where softwareRow.Field<int>("ID SoftType") == idSoftType
+                   select softVersionRow.Field<int>("ID Version");
         }
 
         public static IEnumerable<int> GetSoftwareIDsBySoftMaker(int idSoftMaker)
         {
-            return from software_row in FilterRows(SoftwareDataModel.GetInstance().Select())
-                   where software_row.Field<int>("ID SoftMaker") == idSoftMaker
-                   select software_row.Field<int>("ID Software");
+            return from softwareRow in FilterRows(SoftwareDataModel.GetInstance().Select())
+                   join softVersionRow in FilterRows(SoftVersionsDataModel.GetInstance().Select())
+                   on softwareRow.Field<int>("ID Software") equals softVersionRow.Field<int>("ID Software")
+                   where softwareRow.Field<int>("ID SoftMaker") == idSoftMaker
+                   select softVersionRow.Field<int>("ID Version");
         }
 
         public static IEnumerable<int> GetComputerIDsByDepartment(int idDepartment)
         {
-            return from computer_row in FilterRows(DevicesDataModel.GetInstance().Select())
-                   where computer_row.Field<int>("ID Department") == idDepartment
-                   select computer_row.Field<int>("ID Device");
+            return from computerRow in FilterRows(DevicesDataModel.GetInstance().Select())
+                   where computerRow.Field<int>("ID Department") == idDepartment
+                   select computerRow.Field<int>("ID Device");
         }
 
         public static IEnumerable<int> GetLicenseIDsByCondition(Func<DataRow, bool> condition, EntityType entity)
         {
             var software = FilterRows(SoftwareDataModel.GetInstance().Select());
-            var departments = from departments_row in FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
-                              where departments_row.Field<bool>("AllowSelect")
-                              select departments_row.Field<int>("ID Department");
-            var licenses = from licenses_row in FilterRows(SoftLicensesDataModel.GetInstance().Select())
-                           where departments.Contains(licenses_row.Field<int>("ID Department"))
-                           select licenses_row;
-            var result = from software_row in software
-                         join licenses_row in licenses
-                         on software_row.Field<int>("ID Software") equals licenses_row.Field<int>("ID Software")
-                         where entity == EntityType.Software ? condition(software_row) : (entity == EntityType.License ? condition(licenses_row) : false)
-                         select licenses_row.Field<int>("ID License");
+            var softVersions = FilterRows(SoftVersionsDataModel.GetInstance().Select());
+            var departments = from departmentsRow in FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                              where departmentsRow.Field<bool>("AllowSelect")
+                              select departmentsRow.Field<int>("ID Department");
+            var licenses = from licensesRow in FilterRows(SoftLicensesDataModel.GetInstance().Select())
+                           where departments.Contains(licensesRow.Field<int>("ID Department"))
+                           select licensesRow;
+            var result = from softwareRow in software
+                         join softVersionRow in softVersions
+                         on softwareRow.Field<int>("ID Software") equals softVersionRow.Field<int>("ID Software")
+                         join licensesRow in licenses
+                         on softVersionRow.Field<int>("ID Version") equals licensesRow.Field<int>("ID Version")
+                         where entity == EntityType.Software ? condition(softwareRow) : 
+                               entity == EntityType.SoftVersion ? condition(softVersionRow) :
+                               entity == EntityType.License && condition(licensesRow)
+                         select licensesRow.Field<int>("ID License");
             return result;
         }
 

@@ -16,31 +16,31 @@ namespace LicenseSoftware.SearchForms
 {
     internal partial class SearchInstallationsForm : SearchForm
     {
-        SoftTypesDataModel softTypes = null;
-        SoftMakersDataModel softMakers = null;
-        SoftSuppliersDataModel softSuppliers = null;
-        SoftLicTypesDataModel softLicTypes = null;
-        DepartmentsDataModel departments = null;
-        DevicesDataModel devices = null;
-        SoftLicDocTypesDataModel softLicDocTypes = null;
-        CalcDataModelSoftwareConcat software = null;
-        SoftLicKeysDataModel softLicKeys = null;
-        SoftInstallatorsDataModel softInstallators = null;
+        private  SoftTypesDataModel _softTypes;
+        private  SoftMakersDataModel _softMakers;
+        private  SoftSuppliersDataModel _softSuppliers;
+        private  SoftLicTypesDataModel _softLicTypes;
+        private  DepartmentsDataModel _departments;
+        private  DevicesDataModel _devices;
+        private  SoftLicDocTypesDataModel _softLicDocTypes;
+        private  CalcDataModelSoftwareConcat _software;
+        private  CalcDataModelLicKeyConcat _softLicKeys;
+        private  SoftInstallatorsDataModel _softInstallators;
 
 
-        BindingSource v_software = null;
-        BindingSource v_softTypes = null;
-        BindingSource v_softMakers = null;
-        BindingSource v_softSuppliers = null;
-        BindingSource v_softLicTypes = null;
-        BindingSource v_departmentsLic = null;
-        BindingSource v_departmentsInstall = null;
-        BindingSource v_devices = null;
-        BindingSource v_devicesInvNum = null;
-        BindingSource v_devicesSerialNum = null;
-        BindingSource v_softLicDocTypes = null;
-        BindingSource v_softLicKeys = null;
-        BindingSource v_softInstallators = null;
+        private  BindingSource _vSoftware;
+        private  BindingSource _vSoftTypes;
+        private  BindingSource _vSoftMakers;
+        private  BindingSource _vSoftSuppliers;
+        private  BindingSource _vSoftLicTypes;
+        private  BindingSource _vDepartmentsLic;
+        private  BindingSource _vDepartmentsInstall;
+        private  BindingSource _vDevices;
+        private  BindingSource _vDevicesInvNum;
+        private  BindingSource _vDevicesSerialNum;
+        private  BindingSource _vSoftLicDocTypes;
+        private  BindingSource _vSoftLicKeys;
+        private  BindingSource _vSoftInstallators;
 
         internal override string GetFilter()
         {
@@ -49,7 +49,7 @@ namespace LicenseSoftware.SearchForms
             if ((checkBoxSoftwareNameEnable.Checked) && (comboBoxSoftwareName.SelectedValue != null))
             {
                 var ids = DataModelHelper.GetLicenseIDsByCondition(
-                    row => row.Field<int>("ID Software") == (int)comboBoxSoftwareName.SelectedValue, Entities.EntityType.Software);
+                    row => row.Field<int>("ID Version") == (int)comboBoxSoftwareName.SelectedValue, Entities.EntityType.SoftVersion);
                 includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);    
             }
             if ((checkBoxSoftwareMakerEnable.Checked) && (comboBoxSoftwareMaker.SelectedValue != null))
@@ -93,9 +93,8 @@ namespace LicenseSoftware.SearchForms
             if ((checkBoxDocNumberEnable.Checked) && (!String.IsNullOrEmpty(textBoxDocNumber.Text.Trim())))
             {
                 var ids = DataModelHelper.GetLicenseIDsByCondition(
-                    row => { return row.Field<string>("DocNumber").ToUpper(CultureInfo.InvariantCulture)
-                        .Contains(textBoxDocNumber.Text.Trim().ToUpper(CultureInfo.InvariantCulture));
-                    }, Entities.EntityType.License);
+                    row => row.Field<string>("DocNumber").ToUpper(CultureInfo.InvariantCulture)
+                        .Contains(textBoxDocNumber.Text.Trim().ToUpper(CultureInfo.InvariantCulture)), Entities.EntityType.License);
                 includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
             if (checkBoxExpireLicenseDateEnable.Checked)
@@ -132,14 +131,13 @@ namespace LicenseSoftware.SearchForms
                             }
                             return false;
                         }
-                        else
-                            return false;
+                        return false;
                     }, Entities.EntityType.License);
                 includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
-            var allowedDepartments = from departments_row in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
-                                    where departments_row.Field<bool>("AllowSelect")
-                                    select departments_row.Field<int>("ID Department");
+            var allowedDepartments = from departmentsRow in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                                    where departmentsRow.Field<bool>("AllowSelect")
+                                    select departmentsRow.Field<int>("ID Department");
             var allowedComputers =
                 from devicesRow in DataModelHelper.FilterRows(DevicesDataModel.GetInstance().Select())
                 join depRow in allowedDepartments
@@ -215,133 +213,95 @@ namespace LicenseSoftware.SearchForms
         public SearchInstallationsForm()
         {
             InitializeComponent();
-            softMakers = SoftMakersDataModel.GetInstance();
-            softTypes = SoftTypesDataModel.GetInstance();
-            softSuppliers = SoftSuppliersDataModel.GetInstance();
-            softLicTypes = SoftLicTypesDataModel.GetInstance();
-            softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
-            departments = DepartmentsDataModel.GetInstance();
-            devices = DevicesDataModel.GetInstance();
-            software = CalcDataModelSoftwareConcat.GetInstance();
-            softLicKeys = SoftLicKeysDataModel.GetInstance();
-            softInstallators = SoftInstallatorsDataModel.GetInstance();
+            _softMakers = SoftMakersDataModel.GetInstance();
+            _softTypes = SoftTypesDataModel.GetInstance();
+            _softSuppliers = SoftSuppliersDataModel.GetInstance();
+            _softLicTypes = SoftLicTypesDataModel.GetInstance();
+            _softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
+            _departments = DepartmentsDataModel.GetInstance();
+            _softInstallators = SoftInstallatorsDataModel.GetInstance();
 
             // Ожидаем дозагрузки, если это необходимо
-            softMakers.Select();
-            softTypes.Select();
-            softSuppliers.Select();
-            softLicTypes.Select();
-            softLicDocTypes.Select();
-            departments.Select();
-            devices.Select();
-            software.Select();
-            softLicKeys.Select();
-            softInstallators.Select();
+            _softMakers.Select();
+            _softTypes.Select();
+            _softSuppliers.Select();
+            _softLicTypes.Select();
+            _softLicDocTypes.Select();
+            _departments.Select();
+            _softInstallators.Select();
 
-            v_software = new BindingSource();
-            v_software.DataMember = "SoftwareConcat";
-            v_software.DataSource = DataSetManager.DataSet;
+            _vSoftMakers = new BindingSource
+            {
+                DataMember = "SoftMakers",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_softMakers = new BindingSource();
-            v_softMakers.DataMember = "SoftMakers";
-            v_softMakers.DataSource = DataSetManager.DataSet;
+            _vSoftTypes = new BindingSource
+            {
+                DataMember = "SoftTypes",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_softTypes = new BindingSource();
-            v_softTypes.DataMember = "SoftTypes";
-            v_softTypes.DataSource = DataSetManager.DataSet;
+            _vSoftSuppliers = new BindingSource
+            {
+                DataMember = "SoftSuppliers",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_softSuppliers = new BindingSource();
-            v_softSuppliers.DataMember = "SoftSuppliers";
-            v_softSuppliers.DataSource = DataSetManager.DataSet;
+            _vSoftLicTypes = new BindingSource
+            {
+                DataMember = "SoftLicTypes",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_softLicTypes = new BindingSource();
-            v_softLicTypes.DataMember = "SoftLicTypes";
-            v_softLicTypes.DataSource = DataSetManager.DataSet;
 
-            v_softLicKeys = new BindingSource();
-            v_softLicKeys.DataMember = "SoftLicKeys";
-            v_softLicKeys.DataSource = DataSetManager.DataSet;
+            _vSoftLicDocTypes = new BindingSource
+            {
+                DataMember = "SoftLicDocTypes",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_softLicDocTypes = new BindingSource();
-            v_softLicDocTypes.DataMember = "SoftLicDocTypes";
-            v_softLicDocTypes.DataSource = DataSetManager.DataSet;
+            _vDepartmentsInstall = new BindingSource {DataSource = _departments.SelectVisibleDepartments()};
 
-            v_departmentsInstall = new BindingSource();
-            v_departmentsInstall.DataSource = departments.SelectVisibleDepartments();
+            _vDepartmentsLic = new BindingSource {DataSource = _departments.SelectVisibleDepartments()};
 
-            v_departmentsLic = new BindingSource();
-            v_departmentsLic.DataSource = departments.SelectVisibleDepartments();
+            _vSoftInstallators = new BindingSource
+            {
+                DataMember = "SoftInstallators",
+                DataSource = DataSetManager.DataSet
+            };
 
-            v_devices = new BindingSource();
-            v_devices.DataMember = "Devices";
-            v_devices.DataSource = DataSetManager.DataSet;
-            v_devices.Filter = DepartmentFilter();
-
-            v_devicesInvNum = new BindingSource();
-            v_devicesInvNum.DataMember = "Devices";
-            v_devicesInvNum.DataSource = DataSetManager.DataSet;
-            v_devicesInvNum.Filter = DepartmentFilter();
-
-            v_devicesSerialNum = new BindingSource();
-            v_devicesSerialNum.DataMember = "Devices";
-            v_devicesSerialNum.DataSource = DataSetManager.DataSet;
-            v_devicesSerialNum.Filter = DepartmentFilter();
-
-            v_softInstallators = new BindingSource();
-            v_softInstallators.DataMember = "SoftInstallators";
-            v_softInstallators.DataSource = DataSetManager.DataSet;
-
-            comboBoxSoftwareName.DataSource = v_software;
-            comboBoxSoftwareName.ValueMember = "ID Software";
-            comboBoxSoftwareName.DisplayMember = "Software";
-
-            comboBoxSoftwareMaker.DataSource = v_softMakers;
+            comboBoxSoftwareMaker.DataSource = _vSoftMakers;
             comboBoxSoftwareMaker.ValueMember = "ID SoftMaker";
             comboBoxSoftwareMaker.DisplayMember = "SoftMaker";
 
-            comboBoxSupplierID.DataSource = v_softSuppliers;
+            comboBoxSupplierID.DataSource = _vSoftSuppliers;
             comboBoxSupplierID.ValueMember = "ID Supplier";
             comboBoxSupplierID.DisplayMember = "Supplier";
 
-            comboBoxSoftwareType.DataSource = v_softTypes;
+            comboBoxSoftwareType.DataSource = _vSoftTypes;
             comboBoxSoftwareType.ValueMember = "ID SoftType";
             comboBoxSoftwareType.DisplayMember = "SoftType";
 
-            comboBoxLicType.DataSource = v_softLicTypes;
+            comboBoxLicType.DataSource = _vSoftLicTypes;
             comboBoxLicType.ValueMember = "ID LicType";
             comboBoxLicType.DisplayMember = "LicType";
 
-            comboBoxLicKey.DataSource = v_softLicKeys;
-            comboBoxLicKey.ValueMember = "ID LicenseKey";
-            comboBoxLicKey.DisplayMember = "LicKey";
-
-            comboBoxInstallator.DataSource = v_softInstallators;
+            comboBoxInstallator.DataSource = _vSoftInstallators;
             comboBoxInstallator.ValueMember = "ID Installator";
             comboBoxInstallator.DisplayMember = "FullName";
 
-            comboBoxLicDocType.DataSource = v_softLicDocTypes;
+            comboBoxLicDocType.DataSource = _vSoftLicDocTypes;
             comboBoxLicDocType.ValueMember = "ID DocType";
             comboBoxLicDocType.DisplayMember = "DocType";
 
-            comboBoxDepartmentLicID.DataSource = v_departmentsLic;
+            comboBoxDepartmentLicID.DataSource = _vDepartmentsLic;
             comboBoxDepartmentLicID.ValueMember = "ID Department";
             comboBoxDepartmentLicID.DisplayMember = "Department";
 
-            comboBoxDepartmentInstallID.DataSource = v_departmentsInstall;
+            comboBoxDepartmentInstallID.DataSource = _vDepartmentsInstall;
             comboBoxDepartmentInstallID.ValueMember = "ID Department";
             comboBoxDepartmentInstallID.DisplayMember = "Department";
-
-            comboBoxComputer.DataSource = v_devices;
-            comboBoxComputer.ValueMember = "ID Device";
-            comboBoxComputer.DisplayMember = "Device Name";
-
-            comboBoxSerialNum.DataSource = v_devicesSerialNum;
-            comboBoxSerialNum.ValueMember = "ID Device";
-            comboBoxSerialNum.DisplayMember = "SerialNumber";
-
-            comboBoxInvNum.DataSource = v_devicesInvNum;
-            comboBoxInvNum.ValueMember = "ID Device";
-            comboBoxInvNum.DisplayMember = "InventoryNumber";
 
             comboBoxOpBuyLicenseDate.SelectedIndex = 0;
             comboBoxOpExpireLicenseDate.SelectedIndex = 0;
@@ -357,19 +317,19 @@ namespace LicenseSoftware.SearchForms
                         vButtonSearch_Click(sender, e);
                     else
                         if (e.KeyCode == Keys.Escape)
-                            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                            DialogResult = DialogResult.Cancel;
                 };
         }
 
         private string DepartmentFilter()
         {
-            var DepartmentFilter = "[ID Department] IN (0";
-            for (var i = 0; i < v_departmentsInstall.Count; i++)
-                if ((bool)((DataRowView)v_departmentsInstall[i])["AllowSelect"])
-                    DepartmentFilter += ((DataRowView)v_departmentsInstall[i])["ID Department"] + ",";
-            DepartmentFilter = DepartmentFilter.TrimEnd(',');
-            DepartmentFilter += ")";
-            return DepartmentFilter;
+            var departmentFilter = "[ID Department] IN (0";
+            for (var i = 0; i < _vDepartmentsInstall.Count; i++)
+                if ((bool)((DataRowView)_vDepartmentsInstall[i])["AllowSelect"])
+                    departmentFilter += ((DataRowView)_vDepartmentsInstall[i])["ID Department"] + ",";
+            departmentFilter = departmentFilter.TrimEnd(',');
+            departmentFilter += ")";
+            return departmentFilter;
         }
 
         private void vButtonSearch_Click(object sender, EventArgs e)
@@ -494,6 +454,19 @@ namespace LicenseSoftware.SearchForms
 
         private void checkBoxSoftwareNameEnable_CheckedChanged(object sender, EventArgs e)
         {
+            if (comboBoxSoftwareName.DataSource == null)
+            {
+                _software = CalcDataModelSoftwareConcat.GetInstance();
+                _software.Select();
+                _vSoftware = new BindingSource
+                {
+                    DataMember = "SoftwareConcat",
+                    DataSource = DataSetManager.DataSet
+                };   
+            }
+            comboBoxSoftwareName.DataSource = _vSoftware;
+            comboBoxSoftwareName.ValueMember = "ID Version";
+            comboBoxSoftwareName.DisplayMember = "Software";
             comboBoxSoftwareName.Enabled = checkBoxSoftwareNameEnable.Checked;
         }
 
@@ -544,21 +517,79 @@ namespace LicenseSoftware.SearchForms
 
         private void checkBoxComputerEnable_CheckedChanged(object sender, EventArgs e)
         {
+            if (comboBoxComputer.DataSource == null)
+            {
+                _devices = DevicesDataModel.GetInstance();
+                _devices.Select();
+                _vDevices = new BindingSource
+                {
+                    DataMember = "Devices",
+                    DataSource = DataSetManager.DataSet,
+                    Filter = DepartmentFilter()
+                };
+                comboBoxComputer.DataSource = _vDevices;
+                comboBoxComputer.ValueMember = "ID Device";
+                comboBoxComputer.DisplayMember = "Device Name";
+            }
             comboBoxComputer.Enabled = checkBoxComputerEnable.Checked;
         }
 
         private void checkBoxSerialNumEnable_CheckedChanged(object sender, EventArgs e)
         {
+            if (comboBoxSerialNum.DataSource == null)
+            {
+                _devices = DevicesDataModel.GetInstance();
+                _devices.Select();
+                _vDevicesSerialNum = new BindingSource
+                {
+                    DataMember = "Devices",
+                    DataSource = DataSetManager.DataSet,
+                    Filter = DepartmentFilter()
+                };
+
+                comboBoxSerialNum.DataSource = _vDevicesSerialNum;
+                comboBoxSerialNum.ValueMember = "ID Device";
+                comboBoxSerialNum.DisplayMember = "SerialNumber";
+            }
             comboBoxSerialNum.Enabled = checkBoxSerialNumEnable.Checked;
         }
 
         private void checkBoxInvNumEnable_CheckedChanged(object sender, EventArgs e)
         {
+            if (comboBoxInvNum.DataSource == null)
+            {
+                _devices = DevicesDataModel.GetInstance();
+                _devices.Select();
+                _vDevicesInvNum = new BindingSource
+                {
+                    DataMember = "Devices",
+                    DataSource = DataSetManager.DataSet,
+                    Filter = DepartmentFilter()
+                };
+
+                comboBoxInvNum.DataSource = _vDevicesInvNum;
+                comboBoxInvNum.ValueMember = "ID Device";
+                comboBoxInvNum.DisplayMember = "InventoryNumber";
+            }
+
             comboBoxInvNum.Enabled = checkBoxInvNumEnable.Checked;
         }
 
         private void checkBoxLicKeyEnable_CheckedChanged(object sender, EventArgs e)
         {
+            if (comboBoxLicKey.DataSource == null)
+            {
+                _softLicKeys = CalcDataModelLicKeyConcat.GetInstance();
+                _softLicKeys.Select();
+                _vSoftLicKeys = new BindingSource
+                {
+                    DataMember = "LicKeyConcat",
+                    DataSource = DataSetManager.DataSet
+                };
+                comboBoxLicKey.DataSource = _vSoftLicKeys;
+                comboBoxLicKey.ValueMember = "ID LicenseKey";
+                comboBoxLicKey.DisplayMember = "LicKey";   
+            }
             comboBoxLicKey.Enabled = checkBoxLicKeyEnable.Checked;
         }
 
@@ -577,12 +608,12 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxSoftwareName.Items.Count > 0)
             {
                 if (comboBoxSoftwareName.SelectedItem == null)
-                    comboBoxSoftwareName.SelectedItem = v_software[v_software.Position];
-                comboBoxSoftwareName.Text = ((DataRowView)v_software[v_software.Position])["Software"].ToString();
+                    comboBoxSoftwareName.SelectedItem = _vSoftware[_vSoftware.Position];
+                comboBoxSoftwareName.Text = ((DataRowView)_vSoftware[_vSoftware.Position])["Software"].ToString();
             }
             if (comboBoxSoftwareName.SelectedItem == null)
             {
-                v_software.Filter = "";
+                _vSoftware.Filter = "";
                 comboBoxSoftwareName.Text = "";
                 comboBoxSoftwareName.SelectedItem = null;
             }
@@ -596,7 +627,7 @@ namespace LicenseSoftware.SearchForms
                 var text = comboBoxSoftwareName.Text;
                 var selectionStart = comboBoxSoftwareName.SelectionStart;
                 var selectionLength = comboBoxSoftwareName.SelectionLength;
-                v_software.Filter = "Software like '%" + comboBoxSoftwareName.Text + "%'";
+                _vSoftware.Filter = "Software like '%" + comboBoxSoftwareName.Text + "%'";
                 comboBoxSoftwareName.Text = text;
                 comboBoxSoftwareName.SelectionStart = selectionStart;
                 comboBoxSoftwareName.SelectionLength = selectionLength;
@@ -614,12 +645,12 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxComputer.Items.Count > 0)
             {
                 if (comboBoxComputer.SelectedItem == null)
-                    comboBoxComputer.SelectedItem = v_devices[v_devices.Position];
-                comboBoxComputer.Text = ((DataRowView)v_devices[v_devices.Position])["Device Name"].ToString();
+                    comboBoxComputer.SelectedItem = _vDevices[_vDevices.Position];
+                comboBoxComputer.Text = ((DataRowView)_vDevices[_vDevices.Position])["Device Name"].ToString();
             }
             if (comboBoxComputer.SelectedItem == null)
             {
-                v_devices.Filter = "";
+                _vDevices.Filter = "";
                 comboBoxComputer.Text = "";
                 comboBoxComputer.SelectedItem = null;
             }
@@ -633,7 +664,7 @@ namespace LicenseSoftware.SearchForms
                 var text = comboBoxComputer.Text;
                 var selectionStart = comboBoxComputer.SelectionStart;
                 var selectionLength = comboBoxComputer.SelectionLength;
-                v_devices.Filter = "[Device Name] like '%" + comboBoxComputer.Text + "%'";
+                _vDevices.Filter = "[Device Name] like '%" + comboBoxComputer.Text + "%'";
                 comboBoxComputer.Text = text;
                 comboBoxComputer.SelectionStart = selectionStart;
                 comboBoxComputer.SelectionLength = selectionLength;
@@ -651,12 +682,12 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxInvNum.Items.Count > 0)
             {
                 if (comboBoxInvNum.SelectedItem == null)
-                    comboBoxInvNum.SelectedItem = v_devicesInvNum[v_devicesInvNum.Position];
-                comboBoxInvNum.Text = ((DataRowView)v_devicesInvNum[v_devicesInvNum.Position])["InventoryNumber"].ToString();
+                    comboBoxInvNum.SelectedItem = _vDevicesInvNum[_vDevicesInvNum.Position];
+                comboBoxInvNum.Text = ((DataRowView)_vDevicesInvNum[_vDevicesInvNum.Position])["InventoryNumber"].ToString();
             }
             if (comboBoxInvNum.SelectedItem == null)
             {
-                v_devicesInvNum.Filter = "";
+                _vDevicesInvNum.Filter = "";
                 comboBoxInvNum.Text = "";
                 comboBoxInvNum.SelectedItem = null;
             }
@@ -670,7 +701,7 @@ namespace LicenseSoftware.SearchForms
                 var text = comboBoxInvNum.Text;
                 var selectionStart = comboBoxInvNum.SelectionStart;
                 var selectionLength = comboBoxInvNum.SelectionLength;
-                v_devicesInvNum.Filter = "[InventoryNumber] like '%" + comboBoxInvNum.Text + "%'";
+                _vDevicesInvNum.Filter = "[InventoryNumber] like '%" + comboBoxInvNum.Text + "%'";
                 comboBoxInvNum.Text = text;
                 comboBoxInvNum.SelectionStart = selectionStart;
                 comboBoxInvNum.SelectionLength = selectionLength;
@@ -688,12 +719,12 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxSerialNum.Items.Count > 0)
             {
                 if (comboBoxSerialNum.SelectedItem == null)
-                    comboBoxSerialNum.SelectedItem = v_devicesSerialNum[v_devicesSerialNum.Position];
-                comboBoxSerialNum.Text = ((DataRowView)v_devicesSerialNum[v_devicesSerialNum.Position])["SerialNumber"].ToString();
+                    comboBoxSerialNum.SelectedItem = _vDevicesSerialNum[_vDevicesSerialNum.Position];
+                comboBoxSerialNum.Text = ((DataRowView)_vDevicesSerialNum[_vDevicesSerialNum.Position])["SerialNumber"].ToString();
             }
             if (comboBoxSerialNum.SelectedItem == null)
             {
-                v_devicesSerialNum.Filter = "";
+                _vDevicesSerialNum.Filter = "";
                 comboBoxSerialNum.Text = "";
                 comboBoxSerialNum.SelectedItem = null;
             }
@@ -707,7 +738,7 @@ namespace LicenseSoftware.SearchForms
                 var text = comboBoxSerialNum.Text;
                 var selectionStart = comboBoxSerialNum.SelectionStart;
                 var selectionLength = comboBoxSerialNum.SelectionLength;
-                v_devicesSerialNum.Filter = "[SerialNumber] like '%" + comboBoxSerialNum.Text + "%'";
+                _vDevicesSerialNum.Filter = "[SerialNumber] like '%" + comboBoxSerialNum.Text + "%'";
                 comboBoxSerialNum.Text = text;
                 comboBoxSerialNum.SelectionStart = selectionStart;
                 comboBoxSerialNum.SelectionLength = selectionLength;
@@ -725,12 +756,12 @@ namespace LicenseSoftware.SearchForms
             if (comboBoxLicKey.Items.Count > 0)
             {
                 if (comboBoxLicKey.SelectedItem == null)
-                    comboBoxLicKey.SelectedItem = v_softLicKeys[v_softLicKeys.Position];
-                comboBoxLicKey.Text = ((DataRowView)v_softLicKeys[v_softLicKeys.Position])["LicKey"].ToString();
+                    comboBoxLicKey.SelectedItem = _vSoftLicKeys[_vSoftLicKeys.Position];
+                comboBoxLicKey.Text = ((DataRowView)_vSoftLicKeys[_vSoftLicKeys.Position])["LicKey"].ToString();
             }
             if (comboBoxLicKey.SelectedItem == null)
             {
-                v_softLicKeys.Filter = "";
+                _vSoftLicKeys.Filter = "";
                 comboBoxLicKey.Text = "";
                 comboBoxLicKey.SelectedItem = null;
             }
@@ -744,7 +775,7 @@ namespace LicenseSoftware.SearchForms
                 var text = comboBoxLicKey.Text;
                 var selectionStart = comboBoxLicKey.SelectionStart;
                 var selectionLength = comboBoxLicKey.SelectionLength;
-                v_softLicKeys.Filter = "[LicKey] like '%" + comboBoxLicKey.Text + "%'";
+                _vSoftLicKeys.Filter = "[LicKey] like '%" + comboBoxLicKey.Text + "%'";
                 comboBoxLicKey.Text = text;
                 comboBoxLicKey.SelectionStart = selectionStart;
                 comboBoxLicKey.SelectionLength = selectionLength;

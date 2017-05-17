@@ -12,12 +12,11 @@ namespace LicenseSoftware.CalcDataModels
 {
     public sealed class CalcDataModelSoftwareConcat: CalcDataModel
     {
-        private static CalcDataModelSoftwareConcat dataModel = null;
+        private static CalcDataModelSoftwareConcat dataModel;
 
-        private static string tableName = "SoftwareConcat";
+        private const string TableName = "SoftwareConcat";
 
         private CalcDataModelSoftwareConcat()
-            : base()
         {
             Table = InitializeTable();
             Refresh(EntityType.Unknown, null, false);
@@ -25,11 +24,10 @@ namespace LicenseSoftware.CalcDataModels
 
         private static DataTable InitializeTable()
         {
-            DataTable table = new DataTable(tableName);
-            table.Locale = CultureInfo.InvariantCulture;
-            table.Columns.Add("ID Software").DataType = typeof(int);
+            var table = new DataTable(TableName) {Locale = CultureInfo.InvariantCulture};
+            table.Columns.Add("ID Version").DataType = typeof(int);
             table.Columns.Add("Software").DataType = typeof(string);
-            table.PrimaryKey = new DataColumn[] { table.Columns["ID Software"] };
+            table.PrimaryKey = new[] { table.Columns["ID Version"] };
             return table;
         }
 
@@ -38,28 +36,29 @@ namespace LicenseSoftware.CalcDataModels
             DMLoadState = DataModelLoadState.Loading;
             if (e == null)
                 throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelSoftwareConcat");
-            CalcAsyncConfig config = (CalcAsyncConfig)e.Argument;
+            var config = (CalcAsyncConfig)e.Argument;
             // Фильтруем удаленные строки
             var software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), config.Entity, config.IdObject);
+            var versions = DataModelHelper.FilterRows(SoftVersionsDataModel.GetInstance().Select(), config.Entity, config.IdObject);
             // Вычисляем агрегационную информацию
-            var result = from software_row in software
+            var result = from softwareRow in software
+                         join versionRow in versions
+                         on softwareRow.Field<int>("ID Software") equals versionRow.Field<int>("ID Software")
                          select new
                          {
-                             id_software = software_row.Field<int>("ID Software"),
-                             software = software_row.Field<string>("Software") + 
-                                    (software_row.Field<string>("Version") == null ? "" : " " + software_row.Field<string>("Version"))
+                             id_version = versionRow.Field<int>("ID Version"),
+                             software = softwareRow.Field<string>("Software") +
+                                    (versionRow.Field<string>("Version") == null ? "" : " " + versionRow.Field<string>("Version"))
                          };
             // Заполняем таблицу изменений
-            DataTable table = InitializeTable();
+            var table = InitializeTable();
             table.BeginLoadData();
-            result.ToList().ForEach((x) =>
+            result.ToList().ForEach(x =>
             {
-                table.Rows.Add(new object[] { 
-                    x.id_software, 
-                    x.software });
+                table.Rows.Add(x.id_version, x.software);
             });
             table.EndLoadData();
-            if (!DataSetManager.DataSet.Tables.Contains(tableName))
+            if (!DataSetManager.DataSet.Tables.Contains(TableName))
                 DataSetManager.AddTable(table);
             else
                 DataSetManager.DataSet.Merge(table);

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DataModels.DataModels;
+using Settings;
 
 namespace LicenseSoftware.Reporting
 {

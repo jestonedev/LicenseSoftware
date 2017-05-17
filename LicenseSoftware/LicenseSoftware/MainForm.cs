@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using DataModels.DataModels;
 using LicenseSoftware.SearchForms;
+using Settings;
 
 namespace LicenseSoftware
 {
@@ -61,10 +62,11 @@ namespace LicenseSoftware
 
         private void PreLoadData()
         {
-            toolStripProgressBar.Maximum = 12;
+            toolStripProgressBar.Maximum = 13;
             DepartmentsDataModel.GetInstance(toolStripProgressBar, 1);
             DevicesDataModel.GetInstance(toolStripProgressBar, 1);
             SoftwareDataModel.GetInstance(toolStripProgressBar, 1);
+            SoftVersionsDataModel.GetInstance(toolStripProgressBar, 1);
             SoftInstallationsDataModel.GetInstance(toolStripProgressBar, 1);
             SoftInstallatorsDataModel.GetInstance(toolStripProgressBar, 1);
             SoftLicDocTypesDataModel.GetInstance(toolStripProgressBar, 1);
@@ -93,7 +95,7 @@ namespace LicenseSoftware
         {
             if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
                 return;
-            LicenseSoftware.Viewport.Viewport viewport = (dockPanel.ActiveDocument as IMenuController).Duplicate();
+            Viewport.Viewport viewport = (dockPanel.ActiveDocument as IMenuController).Duplicate();
             viewport.Show(dockPanel, DockState.Document);
         }
 
@@ -203,15 +205,17 @@ namespace LicenseSoftware
         public void RelationsStateUpdate()
         {
             ribbonPanelRelations.Items.Clear();
-            bool hasActiveDocument = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null);
+            var hasActiveDocument = dockPanel.ActiveDocument is IMenuController;
             ribbon1.SuspendUpdating();
             
-            if (hasActiveDocument && (dockPanel.ActiveDocument as IMenuController).HasAssocLicenses())
+            if (hasActiveDocument && ((IMenuController) dockPanel.ActiveDocument).HasAssocLicenses())
                 ribbonPanelRelations.Items.Add(ribbonButtonLicenses);
-            if (hasActiveDocument && (dockPanel.ActiveDocument as IMenuController).HasAssocInstallations())
+            if (hasActiveDocument && ((IMenuController) dockPanel.ActiveDocument).HasAssocInstallations())
                 ribbonPanelRelations.Items.Add(ribbonButtonInstallations);
-            if (hasActiveDocument && (dockPanel.ActiveDocument as IMenuController).HasAssocLicKeys())
+            if (hasActiveDocument && ((IMenuController) dockPanel.ActiveDocument).HasAssocLicKeys())
                 ribbonPanelRelations.Items.Add(ribbonButtonLicKeys);
+            if (hasActiveDocument && ((IMenuController) dockPanel.ActiveDocument).HasAssocSoftVersions())
+                ribbonPanelRelations.Items.Add(ribbonButtonSoftVersions);
 
             if (ribbonPanelRelations.Items.Count == 0)
                 ribbonTabGeneral.Panels.Remove(ribbonPanelRelations);
@@ -296,20 +300,23 @@ namespace LicenseSoftware
 
         private void ribbonButtonAssocLicenses_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).ShowAssocLicenses();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.ShowAssocLicenses();
         }
 
         private void ribbonButtonAssocInstallations_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).ShowAssocInstallations();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.ShowAssocInstallations();
         }
 
         private void ribbonButtonLicKeys_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).ShowAssocLicKeys();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.ShowAssocLicKeys();
         }
 
         private void ribbonOrbMenuItemSoftware_Click(object sender, EventArgs e)
@@ -357,9 +364,16 @@ namespace LicenseSoftware
             CreateViewport(ViewportType.InstallatorsViewport);
         }
 
+        private void ribbonButtonSoftVersions_Click(object sender, EventArgs e)
+        {
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.ShowAssocSoftVersions();
+        }
+
         private void CreateViewport(ViewportType viewportType)
         {
-            LicenseSoftware.Viewport.Viewport viewport = LicenseSoftware.Viewport.ViewportFactory.CreateViewport(this, viewportType);
+            var viewport = ViewportFactory.CreateViewport(this, viewportType);
             if ((viewport as IMenuController).CanLoadData())
                 (viewport as IMenuController).LoadData();
             AddViewport(viewport);
@@ -377,7 +391,7 @@ namespace LicenseSoftware
         private void MainForm_Load(object sender, EventArgs e)
         {
             UserDomain user = null;
-            if (LicenseSoftwareSettings.UseLDAP)
+            if (LicenseSoftwareSettings.UseLdap)
                 user = UserDomain.Current;
             if (user == null)
                 toolStripLabelHelloUser.Text = "";
@@ -400,7 +414,7 @@ namespace LicenseSoftware
             MainMenuStateUpdate();
         }
 
-        private void RunReport(Reporting.ReporterType reporterType)
+        private void RunReport(ReporterType reporterType)
         {
             Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
             reporter.ReportOutputStreamResponse += new EventHandler<ReportOutputStreamEventArgs>(reporter_ReportOutputStreamResponse);

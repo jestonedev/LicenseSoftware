@@ -4,7 +4,6 @@ using LicenseSoftware.Entities;
 using LicenseSoftware.SearchForms;
 using Security;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -33,34 +32,6 @@ namespace LicenseSoftware.Viewport
         private GroupBox groupBox2;
         private ComboBox comboBoxInstallatorID;
         private Label label5;
-        #endregion Components
-
-        #region Models
-
-        CalcDataModelSoftwareConcat softwareDM;
-        CalcDataModelLicensesConcat licenses;
-        SoftLicKeysDataModel softLicKeys;
-        SoftInstallationsDataModel softInstallations;
-        DepartmentsDataModel departments;
-        SoftInstallatorsDataModel softInstallators;
-        DevicesDataModel devices;
-        #endregion Models
-
-        #region Views
-        BindingSource v_software;
-        BindingSource v_licenses;
-        BindingSource v_softLicKeys;
-        BindingSource v_softInstallations;
-        BindingSource v_departments;
-        BindingSource v_softInstallators;
-        BindingSource v_devices;
-        #endregion Views
-
-        //State
-        private ViewportState viewportState = ViewportState.ReadState;
-
-        private bool is_editable;
-        private SearchForm sSearchForm;
         private DataGridViewTextBoxColumn idInstallation;
         private DataGridViewTextBoxColumn software;
         private DataGridViewTextBoxColumn licKey;
@@ -72,7 +43,41 @@ namespace LicenseSoftware.Viewport
         private DataGridViewTextBoxColumn license;
         private Label label1;
         private TextBox textBoxDescription;
-        private bool is_first_visibility = true;
+        private ComboBox comboBoxSoftVersionID;
+        private Label label6;
+        #endregion Components
+
+        #region Models
+
+        private CalcDataModelSoftwareConcat _softwareConcat;
+        private CalcDataModelLicensesConcat _licenses;
+        private SoftLicKeysDataModel _softLicKeys;
+        private SoftInstallationsDataModel _softInstallations;
+        private DepartmentsDataModel _departments;
+        private SoftInstallatorsDataModel _softInstallators;
+        private DevicesDataModel _devices;
+        private SoftVersionsDataModel _softVersions;
+        private SoftwareDataModel _softwareDataModel;
+        #endregion Models
+
+        #region Views
+
+        private BindingSource _vLicenses;
+        private BindingSource _vSoftLicKeys;
+        private BindingSource _vSoftInstallations;
+        private BindingSource _vDepartments;
+        private BindingSource _vSoftInstallators;
+        private BindingSource _vDevices;
+        private BindingSource _vSoftware;
+        private BindingSource _vSoftVersions;
+        #endregion Views
+
+        //State
+        private ViewportState _viewportState = ViewportState.ReadState;
+
+        private bool _isEditable;
+        private SearchForm _sSearchForm;
+        private bool _isFirstVisibility = true;
 
         private InstallationsViewport()
             : this(null)
@@ -96,7 +101,7 @@ namespace LicenseSoftware.Viewport
 
         private void SetViewportCaption()
         {
-            if (viewportState == ViewportState.NewRowState)
+            if (_viewportState == ViewportState.NewRowState)
             {
                 if ((ParentRow != null) && (ParentType == ParentTypeEnum.License))
                 {
@@ -106,14 +111,14 @@ namespace LicenseSoftware.Viewport
                     Text = "Новая установка";
             }
             else
-                if (v_softInstallations.Position != -1)
+                if (_vSoftInstallations.Position != -1)
                 {
                     if ((ParentRow != null) && (ParentType == ParentTypeEnum.License))
                         Text = string.Format(CultureInfo.InvariantCulture, "Установка №{0} по лицензии №{1}",
-                            ((DataRowView)v_softInstallations[v_softInstallations.Position])["ID Installation"], ParentRow["ID License"]);
+                            ((DataRowView)_vSoftInstallations[_vSoftInstallations.Position])["ID Installation"], ParentRow["ID License"]);
                     else
                         Text = string.Format(CultureInfo.InvariantCulture, "Установка №{0}",
-                            ((DataRowView)v_softInstallations[v_softInstallations.Position])["ID Installation"]);
+                            ((DataRowView)_vSoftInstallations[_vSoftInstallations.Position])["ID Installation"]);
                 }
                 else
                 {
@@ -126,47 +131,53 @@ namespace LicenseSoftware.Viewport
 
         private void SelectCurrentAutoCompleteValue()
         {
-            if (v_softInstallations.Position == -1)
+            if (_vSoftInstallations.Position == -1)
                 return;
-            var installationRow = (DataRowView)v_softInstallations[v_softInstallations.Position];
-            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
-                !string.IsNullOrEmpty(comboBoxSoftwareID.ValueMember) &&
-                !string.IsNullOrEmpty(comboBoxLicenseID.ValueMember) &&
-                !string.IsNullOrEmpty(comboBoxLicKeysID.ValueMember))
+            var installationRow = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
+            if ((comboBoxSoftwareID.DataSource == null) || (comboBoxLicenseID.DataSource == null) ||
+                (comboBoxLicKeysID.DataSource == null) || comboBoxSoftVersionID.DataSource == null)
+                return;
+            if (string.IsNullOrEmpty(comboBoxSoftwareID.ValueMember) || string.IsNullOrEmpty(comboBoxLicenseID.ValueMember) ||
+                string.IsNullOrEmpty(comboBoxLicKeysID.ValueMember) || string.IsNullOrEmpty(comboBoxSoftVersionID.ValueMember))
+                return;
+            int? idSoftware = null;
+            int? idVersion = null;
+            int? idLicense = null;
+            int? idLicKey = null;
+            if (installationRow["ID License"] != DBNull.Value)
+                idLicense = Convert.ToInt32(installationRow["ID License"], CultureInfo.InvariantCulture);
+            else
+                if ((ParentRow != null) && (ParentType == ParentTypeEnum.License))
+                    idLicense = Convert.ToInt32(ParentRow["ID License"], CultureInfo.InvariantCulture);
+            if (idLicense != null)
             {
-                v_software.Filter = "";
-                v_licenses.Filter = "";
-                int? idSoftware = null;
-                int? idLicense = null;
-                int? idLicKey = null;
-                if (installationRow["ID License"] != DBNull.Value)
-                    idLicense = Convert.ToInt32(installationRow["ID License"], CultureInfo.InvariantCulture);
-                else
-                    if ((ParentRow != null) && (ParentType == ParentTypeEnum.License))
-                        idLicense = Convert.ToInt32(ParentRow["ID License"], CultureInfo.InvariantCulture);
-                if (idLicense != null)
-                {
-                    var index = v_licenses.Find("ID License", idLicense);
-                    if (index != -1)
-                        idSoftware = (int)((DataRowView)v_licenses[index])["ID Software"];
-                    if (installationRow["ID LicenseKey"] != DBNull.Value)
-                        idLicKey = Convert.ToInt32(installationRow["ID LicenseKey"], CultureInfo.InvariantCulture);
-                }
-                comboBoxSoftwareID.SelectedValue = (object)idSoftware ?? DBNull.Value;
-                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + ((DataRowView)v_software[v_software.Position])["ID Software"];
-                comboBoxLicenseID.SelectedValue = (object)idLicense ?? DBNull.Value;
-                if (v_licenses.Position != -1)
-                {
-                    v_softLicKeys.Filter = "[ID License] = " + ((DataRowView)v_licenses[v_licenses.Position])["ID License"]
-                         + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((int)((DataRowView)v_licenses[v_licenses.Position])["ID License"]) + ")";
-                    comboBoxLicKeysID.SelectedValue = (object)idLicKey ?? DBNull.Value;
-                }
-                else
-                    comboBoxLicKeysID.SelectedValue = DBNull.Value;
+                var licesneRow = _licenses.Select().Rows.Find(idLicense);
+                if (licesneRow != null)
+                    idVersion = (int)licesneRow["ID Version"];
             }
+            if (idVersion != null)
+            {
+                var versionRow = _softVersions.Select().Rows.Find(idVersion);
+                if (versionRow != null)
+                    idSoftware = (int)versionRow["ID Software"];
+            }
+            if (installationRow["ID LicenseKey"] != DBNull.Value)
+                idLicKey = Convert.ToInt32(installationRow["ID LicenseKey"], CultureInfo.InvariantCulture);
+            _vSoftware.Filter = "";
+            comboBoxSoftwareID.SelectedValue = (object)idSoftware ?? DBNull.Value;
+            comboBoxSoftVersionID.SelectedValue = (object)idVersion ?? DBNull.Value;
+            comboBoxLicenseID.SelectedValue = (object)idLicense ?? DBNull.Value;
+            if (_vLicenses.Position != -1)
+            {
+                _vSoftLicKeys.Filter = "[ID License] = " + ((DataRowView)_vLicenses[_vLicenses.Position])["ID License"]
+                     + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((int)((DataRowView)_vLicenses[_vLicenses.Position])["ID License"]) + ")";
+                comboBoxLicKeysID.SelectedValue = (object)idLicKey ?? DBNull.Value;
+            }
+            else
+                comboBoxLicKeysID.SelectedValue = DBNull.Value;
             if (comboBoxComputerID.DataSource != null && !string.IsNullOrEmpty(comboBoxComputerID.ValueMember))
             {
-                v_devices.Filter = GetAllowedDepartmentFilter();
+                _vDevices.Filter = GetAllowedDepartmentFilter();
                 int? idComputer = null;
                 if (installationRow["ID Computer"] != DBNull.Value)
                     idComputer = (int)installationRow["ID Computer"];
@@ -176,55 +187,59 @@ namespace LicenseSoftware.Viewport
 
         private void DataBind()
         {
-            comboBoxComputerID.DataSource = v_devices;
+            comboBoxComputerID.DataSource = _vDevices;
             comboBoxComputerID.ValueMember = "ID Device";
             comboBoxComputerID.DisplayMember = "Device Name";
             
-            comboBoxInstallatorID.DataSource = v_softInstallators;
+            comboBoxInstallatorID.DataSource = _vSoftInstallators;
             comboBoxInstallatorID.ValueMember = "ID Installator";
             comboBoxInstallatorID.DisplayMember = "FullName";
             comboBoxInstallatorID.DataBindings.Clear();
-            comboBoxInstallatorID.DataBindings.Add("SelectedValue", v_softInstallations, "ID Installator", true, DataSourceUpdateMode.Never, DBNull.Value);
+            comboBoxInstallatorID.DataBindings.Add("SelectedValue", _vSoftInstallations, "ID Installator", true, DataSourceUpdateMode.Never, DBNull.Value);
 
-            comboBoxLicKeysID.DataSource = v_softLicKeys;
+            comboBoxLicKeysID.DataSource = _vSoftLicKeys;
             comboBoxLicKeysID.ValueMember = "ID LicenseKey";
             comboBoxLicKeysID.DisplayMember = "LicKey";
 
-            comboBoxLicenseID.DataSource = v_licenses;
+            comboBoxLicenseID.DataSource = _vLicenses;
             comboBoxLicenseID.ValueMember = "ID License";
             comboBoxLicenseID.DisplayMember = "License";
 
-            comboBoxSoftwareID.DataSource = v_software;
+            comboBoxSoftwareID.DataSource = _vSoftware;
             comboBoxSoftwareID.ValueMember = "ID Software";
             comboBoxSoftwareID.DisplayMember = "Software";
 
+            comboBoxSoftVersionID.DataSource = _vSoftVersions;
+            comboBoxSoftVersionID.ValueMember = "ID Version";
+            comboBoxSoftVersionID.DisplayMember = "Version";
+
             dateTimePickerInstallDate.DataBindings.Clear();
-            dateTimePickerInstallDate.DataBindings.Add("Value", v_softInstallations, "InstallationDate", true, DataSourceUpdateMode.Never, DateTime.Now.Date);
+            dateTimePickerInstallDate.DataBindings.Add("Value", _vSoftInstallations, "InstallationDate", true, DataSourceUpdateMode.Never, DateTime.Now.Date);
             
             textBoxDescription.DataBindings.Clear();
-            textBoxDescription.DataBindings.Add("Text", v_softInstallations, "Description", true, DataSourceUpdateMode.Never, "");
+            textBoxDescription.DataBindings.Add("Text", _vSoftInstallations, "Description", true, DataSourceUpdateMode.Never, "");
         }
 
         private void CheckViewportModifications()
         {
-            if (!is_editable)
+            if (!_isEditable)
                 return;
             if ((!ContainsFocus) || (dataGridView.Focused))
                 return;
-            if ((v_softInstallations.Position != -1) && (InstallationFromView() != InstallationFromViewport()))
+            if ((_vSoftInstallations.Position != -1) && (InstallationFromView() != InstallationFromViewport()))
             {
-                if (viewportState == ViewportState.ReadState)
+                if (_viewportState == ViewportState.ReadState)
                 {
-                    viewportState = ViewportState.ModifyRowState;
+                    _viewportState = ViewportState.ModifyRowState;
                     MenuCallback.EditingStateUpdate();
                     dataGridView.Enabled = false;
                 }
             }
             else
             {
-                if (viewportState == ViewportState.ModifyRowState)
+                if (_viewportState == ViewportState.ModifyRowState)
                 {
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     MenuCallback.EditingStateUpdate();
                     dataGridView.Enabled = true;
                 }
@@ -235,13 +250,13 @@ namespace LicenseSoftware.Viewport
         {
             if (!AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite))
             {
-                viewportState = ViewportState.ReadState;
+                _viewportState = ViewportState.ReadState;
                 return true;
             }
             switch (state)
             {
                 case ViewportState.ReadState:
-                    switch (viewportState)
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
                             return true;
@@ -255,21 +270,21 @@ namespace LicenseSoftware.Viewport
                                 if (result == DialogResult.No)
                                     CancelRecord();
                                 else return false;
-                            if (viewportState == ViewportState.ReadState)
+                            if (_viewportState == ViewportState.ReadState)
                                 return true;
                             else
                                 return false;
                     }
                     break;
                 case ViewportState.NewRowState:
-                    switch (viewportState)
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
-                            if (softInstallations.EditingNewRecord)
+                            if (_softInstallations.EditingNewRecord)
                                 return false;
                             else
                             {
-                                viewportState = ViewportState.NewRowState;
+                                _viewportState = ViewportState.NewRowState;
                                 return true;
                             }
                         case ViewportState.NewRowState:
@@ -284,17 +299,17 @@ namespace LicenseSoftware.Viewport
                                     CancelRecord();
                                 else
                                     return false;
-                            if (viewportState == ViewportState.ReadState)
+                            if (_viewportState == ViewportState.ReadState)
                                 return ChangeViewportStateTo(ViewportState.NewRowState);
                             else
                                 return false;
                     }
                     break;
                 case ViewportState.ModifyRowState: ;
-                    switch (viewportState)
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
-                            viewportState = ViewportState.ModifyRowState;
+                            _viewportState = ViewportState.ModifyRowState;
                             return true;
                         case ViewportState.ModifyRowState:
                             return true;
@@ -308,7 +323,7 @@ namespace LicenseSoftware.Viewport
                                     CancelRecord();
                                 else
                                     return false;
-                            if (viewportState == ViewportState.ReadState)
+                            if (_viewportState == ViewportState.ReadState)
                                 return ChangeViewportStateTo(ViewportState.ModifyRowState);
                             else
                                 return false;
@@ -320,26 +335,33 @@ namespace LicenseSoftware.Viewport
 
         private void LocateInstallation(int id)
         {
-            var Position = v_softInstallations.Find("ID Installation", id);
-            is_editable = false;
+            var Position = _vSoftInstallations.Find("ID Installation", id);
+            _isEditable = false;
             if (Position > 0)
-                v_softInstallations.Position = Position;
-            is_editable = true;
+                _vSoftInstallations.Position = Position;
+            _isEditable = true;
         }
 
         private void ViewportFromInstallation(SoftInstallation installation)
         {
             if (installation.IdLicense != null)
             {
-                v_software.Filter = "";
-                v_licenses.Filter = "";
-                v_softLicKeys.Filter = "";
-                var index = v_licenses.Find("ID License", installation.IdLicense);
+                _vSoftware.Filter = "";
+                _vSoftVersions.Filter = "";
+                _vLicenses.Filter = "";
+                _vSoftLicKeys.Filter = "";
+                var index = _vLicenses.Find("ID License", installation.IdLicense);
                 if (index != -1)
                 {
-                    comboBoxSoftwareID.SelectedValue = ((DataRowView)v_licenses[index])["ID Software"];
-                    comboBoxLicenseID.SelectedValue = ViewportHelper.ValueOrDBNull(installation.IdLicense);
-                    comboBoxLicKeysID.SelectedValue = ViewportHelper.ValueOrDBNull(installation.IdLicenseKey);
+                    var licenseRow = (DataRowView) _vLicenses[index];
+                    var softVersionRow = _softVersions.Select().Rows.Find(licenseRow["ID Version"]);
+                    if (softVersionRow != null)
+                    {
+                        comboBoxSoftwareID.SelectedValue = softVersionRow["ID Software"];
+                        comboBoxSoftVersionID.SelectedValue = licenseRow["ID Version"];
+                        comboBoxLicenseID.SelectedValue = ViewportHelper.ValueOrDBNull(installation.IdLicense);
+                        comboBoxLicKeysID.SelectedValue = ViewportHelper.ValueOrDBNull(installation.IdLicenseKey);   
+                    }
                 }
             }
 
@@ -354,10 +376,10 @@ namespace LicenseSoftware.Viewport
             var installation = new SoftInstallation
             {
                 IdInstallation =
-                    v_softInstallations.Position == -1
+                    _vSoftInstallations.Position == -1
                         ? null
                         : ViewportHelper.ValueOrNull<int>(
-                            (DataRowView) v_softInstallations[v_softInstallations.Position], "ID Installation"),
+                            (DataRowView) _vSoftInstallations[_vSoftInstallations.Position], "ID Installation"),
                 IdLicense = ViewportHelper.ValueOrNull<int>(comboBoxLicenseID),
                 IdInstallator = ViewportHelper.ValueOrNull<int>(comboBoxInstallatorID),
                 IdLicenseKey = ViewportHelper.ValueOrNull<int>(comboBoxLicKeysID),
@@ -371,7 +393,7 @@ namespace LicenseSoftware.Viewport
         private SoftInstallation InstallationFromView()
         {
             var installation = new SoftInstallation();
-            var row = (DataRowView)v_softInstallations[v_softInstallations.Position];
+            var row = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
             installation.IdInstallation = ViewportHelper.ValueOrNull<int>(row, "ID Installation");
             installation.IdLicense = ViewportHelper.ValueOrNull<int>(row, "ID License");
             installation.IdComputer = ViewportHelper.ValueOrNull<int>(row, "ID Computer");
@@ -399,21 +421,21 @@ namespace LicenseSoftware.Viewport
         {
             if (installation.IdLicense == null)
             {
-                MessageBox.Show("Необходимо выбрать лицензию на программное обеспечение, по которой осуществляется установка", "Ошибка",
+                MessageBox.Show(@"Необходимо выбрать лицензию на программное обеспечение, по которой осуществляется установка", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicenseID.Focus();
                 return false;
             }
             if (installation.IdComputer == null)
             {
-                MessageBox.Show("Необходимо выбрать компьютер, на который производится установка программного обеспечения", "Ошибка",
+                MessageBox.Show(@"Необходимо выбрать компьютер, на который производится установка программного обеспечения", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxComputerID.Focus();
                 return false;
             }
             if (installation.IdInstallator == null)
             {
-                MessageBox.Show("Необходимо выбрать установщика программного обеспечения", "Ошибка",
+                MessageBox.Show(@"Необходимо выбрать установщика программного обеспечения", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicenseID.Focus();
                 return false;
@@ -421,7 +443,7 @@ namespace LicenseSoftware.Viewport
             if (installation.IdLicenseKey != null && (int)SoftLicensesDataModel.GetInstance().Select().Rows.Find(installation.IdLicense)["ID LicType"] != 1 &&
                 !DataModelHelper.KeyIsFree(installation.IdLicenseKey.Value))
             {
-                var result = MessageBox.Show("Данный лицензионный ключ уже используется. Вы уверены, что хотите продолжить сохранение?", "Внимание",
+                var result = MessageBox.Show(@"Данный лицензионный ключ уже используется. Вы уверены, что хотите продолжить сохранение?", @"Внимание",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 if (result != DialogResult.Yes)
                     return false;
@@ -431,63 +453,63 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_softInstallations.Count;
+            return _vSoftInstallations.Count;
         }
 
         public override void MoveFirst()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_softInstallations.MoveFirst();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftInstallations.MoveFirst();
+            _isEditable = true;
         }
 
         public override void MoveLast()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_softInstallations.MoveLast();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftInstallations.MoveLast();
+            _isEditable = true;
         }
 
         public override void MoveNext()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_softInstallations.MoveNext();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftInstallations.MoveNext();
+            _isEditable = true;
         }
 
         public override void MovePrev()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_softInstallations.MovePrevious();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftInstallations.MovePrevious();
+            _isEditable = true;
         }
 
         public override bool CanMoveFirst()
         {
-            return v_softInstallations.Position > 0;
+            return _vSoftInstallations.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_softInstallations.Position > 0;
+            return _vSoftInstallations.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_softInstallations.Position > -1) && (v_softInstallations.Position < (v_softInstallations.Count - 1));
+            return (_vSoftInstallations.Position > -1) && (_vSoftInstallations.Position < (_vSoftInstallations.Count - 1));
         }
 
         public override bool CanMoveLast()
         {
-            return (v_softInstallations.Position > -1) && (v_softInstallations.Position < (v_softInstallations.Count - 1));
+            return (_vSoftInstallations.Position > -1) && (_vSoftInstallations.Position < (_vSoftInstallations.Count - 1));
         }
 
         public override bool CanLoadData()
@@ -499,73 +521,92 @@ namespace LicenseSoftware.Viewport
         {
             dataGridView.AutoGenerateColumns = false;
             DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softwareDM = CalcDataModelSoftwareConcat.GetInstance();
-            licenses = CalcDataModelLicensesConcat.GetInstance();
-            softLicKeys = SoftLicKeysDataModel.GetInstance();
-            devices = DevicesDataModel.GetInstance();
-            departments = DepartmentsDataModel.GetInstance();
-            softInstallators = SoftInstallatorsDataModel.GetInstance();
-            softInstallations = SoftInstallationsDataModel.GetInstance();
+            _softwareConcat = CalcDataModelSoftwareConcat.GetInstance();
+            _licenses = CalcDataModelLicensesConcat.GetInstance();
+            _softLicKeys = SoftLicKeysDataModel.GetInstance();
+            _devices = DevicesDataModel.GetInstance();
+            _departments = DepartmentsDataModel.GetInstance();
+            _softInstallators = SoftInstallatorsDataModel.GetInstance();
+            _softInstallations = SoftInstallationsDataModel.GetInstance();
+            _softVersions = SoftVersionsDataModel.GetInstance();
+            _softwareDataModel = SoftwareDataModel.GetInstance();
 
             // Ожидаем дозагрузки, если это необходимо
-            softwareDM.Select();
-            licenses.Select();
-            softLicKeys.Select();
-            devices.Select();
-            departments.Select();
-            softInstallators.Select();
-            softInstallations.Select();
+            _softwareDataModel.Select();
+            _softVersions.Select();
+            _licenses.Select();
+            _softLicKeys.Select();
+            _devices.Select();
+            _departments.Select();
+            _softInstallators.Select();
+            _softInstallations.Select();
+            _softwareConcat.Select();
 
             var ds = DataSetManager.DataSet;
 
-            v_departments = new BindingSource();
-            v_departments.DataSource = departments.SelectVisibleDepartments();
+            _vDepartments = new BindingSource {DataSource = _departments.SelectVisibleDepartments()};
 
-            v_devices = new BindingSource();
-            v_devices.DataMember = "Devices";
-            v_devices.DataSource = ds;
-            v_devices.Filter = GetAllowedDepartmentFilter();
+            _vDevices = new BindingSource
+            {
+                DataMember = "Devices",
+                DataSource = ds,
+                Filter = GetAllowedDepartmentFilter()
+            };
 
-            v_software = new BindingSource();
-            v_software.DataMember = "SoftwareConcat";
-            v_software.DataSource = ds;
+            _vSoftware = new BindingSource
+            {
+                DataMember = "Software",
+                DataSource = ds
+            };
 
-            v_licenses = new BindingSource();
-            v_licenses.DataMember = "LicensesConcat";
-            v_licenses.DataSource = ds;
-            v_licenses.Filter = GetAllowedDepartmentFilter();
+            _vSoftVersions = new BindingSource
+            {
+                DataMember = "SoftVersions",
+                DataSource = ds
+            };
 
-            v_softLicKeys = new BindingSource();
-            v_softLicKeys.DataMember = "SoftLicKeys";
-            v_softLicKeys.DataSource = ds;
+            _vLicenses = new BindingSource
+            {
+                DataMember = "LicensesConcat",
+                DataSource = ds,
+                Filter = GetAllowedDepartmentFilter()
+            };
 
-            v_softInstallators = new BindingSource();
-            v_softInstallators.DataMember = "SoftInstallators";
-            v_softInstallators.DataSource = ds;
+            _vSoftLicKeys = new BindingSource
+            {
+                DataMember = "SoftLicKeys",
+                DataSource = ds
+            };
 
-            v_softInstallations = new BindingSource();
-            v_softInstallations.CurrentItemChanged += new EventHandler(v_softInstallations_CurrentItemChanged);
-            v_softInstallations.DataMember = "SoftInstallations";
-            v_softInstallations.DataSource = ds;
+            _vSoftInstallators = new BindingSource
+            {
+                DataMember = "SoftInstallators",
+                DataSource = ds
+            };
+
+            _vSoftInstallations = new BindingSource();
+            _vSoftInstallations.CurrentItemChanged += v_softInstallations_CurrentItemChanged;
+            _vSoftInstallations.DataMember = "SoftInstallations";
+            _vSoftInstallations.DataSource = ds;
             RebuildFilter();
 
             DataBind();
 
-            softInstallations.Select().RowChanged += InstallationsViewport_RowChanged;
-            softInstallations.Select().RowDeleted += InstallationsViewport_RowDeleted;
+            _softInstallations.Select().RowChanged += InstallationsViewport_RowChanged;
+            _softInstallations.Select().RowDeleted += InstallationsViewport_RowDeleted;
 
-            softLicKeys.Select().RowChanged += softLicKeys_RowChanged;
-            softLicKeys.Select().RowDeleted += softLicKeys_RowDeleted;
+            _softLicKeys.Select().RowChanged += softLicKeys_RowChanged;
+            _softLicKeys.Select().RowDeleted += softLicKeys_RowDeleted;
 
-            dataGridView.RowCount = v_softInstallations.Count;
+            dataGridView.RowCount = _vSoftInstallations.Count;
             SetViewportCaption();
 
-            softwareDM.RefreshEvent += softwareDM_RefreshEvent;
-            licenses.RefreshEvent += licenses_RefreshEvent;
+            _softwareConcat.RefreshEvent += SoftwareConcatRefreshEvent;
+            _licenses.RefreshEvent += licenses_RefreshEvent;
 
-            devices.Select().RowChanged += Devices_RowChanged;
+            _devices.Select().RowChanged += Devices_RowChanged;
             ViewportHelper.SetDoubleBuffered(dataGridView);
-            is_editable = true;
+            _isEditable = true;
         }
 
         private void RebuildFilter()
@@ -578,30 +619,30 @@ namespace LicenseSoftware.Viewport
             if (!string.IsNullOrEmpty(filter) && !string.IsNullOrEmpty(DynamicFilter))
                 filter += " AND ";
             filter += DynamicFilter;
-            v_softInstallations.Filter = filter;
+            _vSoftInstallations.Filter = filter;
         }
 
         private string ComputerFilter()
         {
-            var deviceFilter = v_devices.Filter;
-            var devicePosition = v_devices.Position;
-            v_devices.Filter = GetAllowedDepartmentFilter();
+            var deviceFilter = _vDevices.Filter;
+            var devicePosition = _vDevices.Position;
+            _vDevices.Filter = GetAllowedDepartmentFilter();
             var filter = "[ID Computer] IN (0";
-            for (var i = 0; i < v_devices.Count; i++)
-                filter += ((DataRowView)v_devices[i])["ID Device"] + ",";
+            for (var i = 0; i < _vDevices.Count; i++)
+                filter += ((DataRowView)_vDevices[i])["ID Device"] + ",";
             filter = filter.TrimEnd(',');
             filter += ")";
-            v_devices.Filter = deviceFilter;
-            v_devices.Position = devicePosition;
+            _vDevices.Filter = deviceFilter;
+            _vDevices.Position = devicePosition;
             return filter;
         }
 
         private string GetAllowedDepartmentFilter()
         {
             var departmentFilter = "[ID Department] IN (0";
-            for (var i = 0; i < v_departments.Count; i++)
-                if ((bool)((DataRowView)v_departments[i])["AllowSelect"])
-                    departmentFilter += ((DataRowView)v_departments[i])["ID Department"] + ",";
+            for (var i = 0; i < _vDepartments.Count; i++)
+                if ((bool)((DataRowView)_vDepartments[i])["AllowSelect"])
+                    departmentFilter += ((DataRowView)_vDepartments[i])["ID Department"] + ",";
             departmentFilter = departmentFilter.TrimEnd(',');
             departmentFilter += ")";
             return departmentFilter;
@@ -622,25 +663,25 @@ namespace LicenseSoftware.Viewport
 
         public override void SearchRecord()
         {
-            if (sSearchForm == null)
-                sSearchForm = new SearchInstallationsForm();
-            if (sSearchForm.ShowDialog() != DialogResult.OK)
+            if (_sSearchForm == null)
+                _sSearchForm = new SearchInstallationsForm();
+            if (_sSearchForm.ShowDialog() != DialogResult.OK)
                 return;
-            DynamicFilter = sSearchForm.GetFilter();
+            DynamicFilter = _sSearchForm.GetFilter();
             var Filter = StaticFilter;
             if (!string.IsNullOrEmpty(StaticFilter) && !string.IsNullOrEmpty(DynamicFilter))
                 Filter += " AND ";
             Filter += DynamicFilter;
             dataGridView.RowCount = 0;
-            v_softInstallations.Filter = Filter;
-            dataGridView.RowCount = v_softInstallations.Count;
+            _vSoftInstallations.Filter = Filter;
+            dataGridView.RowCount = _vSoftInstallations.Count;
         }
 
         public override void ClearSearch()
         {
             DynamicFilter = "";
             RebuildFilter();
-            dataGridView.RowCount = v_softInstallations.Count;
+            dataGridView.RowCount = _vSoftInstallations.Count;
             MenuCallback.EditingStateUpdate();
             MenuCallback.StatusBarStateUpdate();
             MenuCallback.NavigationStateUpdate();
@@ -648,32 +689,41 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanInsertRecord()
         {
-            return (!softInstallations.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
+            return (!_softInstallations.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
         public override void InsertRecord()
         {
             if (!ChangeViewportStateTo(ViewportState.NewRowState))
                 return;
-            is_editable = false;
+            _isEditable = false;
             dataGridView.RowCount = dataGridView.RowCount + 1;
-            v_softInstallations.AddNew();
+            _vSoftInstallations.AddNew();
             if (ParentRow != null && ParentType == ParentTypeEnum.License)
             {
-                comboBoxSoftwareID.SelectedValue = ParentRow["ID Software"];
+                var versionRow = _softVersions.Select().Rows.Find((int) ParentRow["ID Version"]);
+                if (versionRow != null)
+                {
+                    comboBoxSoftwareID.SelectedValue = versionRow["ID Software"];
+                }
+                else
+                {
+                    comboBoxSoftwareID.SelectedValue = DBNull.Value;
+                }
+                comboBoxSoftVersionID.SelectedValue = ParentRow["ID Version"];
                 comboBoxLicenseID.SelectedValue = ParentRow["ID License"];
             }
-            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
+            _vSoftInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
             ChangeCbEditing(comboBoxComputerID, true);
             ChangeCbEditing(comboBoxInstallatorID, true);
             dataGridView.Enabled = false;
-            is_editable = true;
-            softInstallations.EditingNewRecord = true;
+            _isEditable = true;
+            _softInstallations.EditingNewRecord = true;
         }
 
         public override bool CanCopyRecord()
         {
-            return (v_softInstallations.Position != -1) && (!softInstallations.EditingNewRecord)
+            return (_vSoftInstallations.Position != -1) && (!_softInstallations.EditingNewRecord)
                 && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
@@ -681,17 +731,17 @@ namespace LicenseSoftware.Viewport
         {
             if (!ChangeViewportStateTo(ViewportState.NewRowState))
                 return;
-            is_editable = false;
+            _isEditable = false;
             dataGridView.RowCount = dataGridView.RowCount + 1;
             var installation = InstallationFromView();
-            v_softInstallations.AddNew();
-            v_softInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
+            _vSoftInstallations.AddNew();
+            _vSoftInstallators.Filter = "[ID User] = " + AccessControl.UserID + " AND " + "Inactive = 0";
             ChangeCbEditing(comboBoxComputerID, true);
             ChangeCbEditing(comboBoxInstallatorID, true);
             dataGridView.Enabled = false;
-            softInstallations.EditingNewRecord = true;
+            _softInstallations.EditingNewRecord = true;
             ViewportFromInstallation(installation);
-            is_editable = true;
+            _isEditable = true;
         }
 
         public override void DeleteRecord()
@@ -699,12 +749,12 @@ namespace LicenseSoftware.Viewport
             if (MessageBox.Show("Вы действительно хотите удалить эту запись?", "Внимание", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
             {
-                if (SoftInstallationsDataModel.Delete((int)((DataRowView)v_softInstallations.Current)["ID Installation"]) == -1)
+                if (SoftInstallationsDataModel.Delete((int)((DataRowView)_vSoftInstallations.Current)["ID Installation"]) == -1)
                     return;
-                is_editable = false;
-                ((DataRowView)v_softInstallations[v_softInstallations.Position]).Delete();
-                is_editable = true;
-                viewportState = ViewportState.ReadState;
+                _isEditable = false;
+                ((DataRowView)_vSoftInstallations[_vSoftInstallations.Position]).Delete();
+                _isEditable = true;
+                _viewportState = ViewportState.ReadState;
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.ForceCloseDetachedViewports();
             }
@@ -712,8 +762,8 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanDeleteRecord()
         {
-            return (v_softInstallations.Position > -1)
-                && (viewportState != ViewportState.NewRowState)
+            return (_vSoftInstallations.Position > -1)
+                && (_viewportState != ViewportState.NewRowState)
                 && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
@@ -727,19 +777,19 @@ namespace LicenseSoftware.Viewport
             var viewport = new InstallationsViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
-            if (v_softInstallations.Count > 0)
-                viewport.LocateInstallation((((DataRowView)v_softInstallations[v_softInstallations.Position])["ID Installation"] as int?) ?? -1);
+            if (_vSoftInstallations.Count > 0)
+                viewport.LocateInstallation((((DataRowView)_vSoftInstallations[_vSoftInstallations.Position])["ID Installation"] as int?) ?? -1);
             return viewport;
         }
 
         public override bool CanCancelRecord()
         {
-            return (viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState);
+            return (_viewportState == ViewportState.NewRowState) || (_viewportState == ViewportState.ModifyRowState);
         }
 
         public override bool CanSaveRecord()
         {
-            return ((viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState))
+            return ((_viewportState == ViewportState.NewRowState) || (_viewportState == ViewportState.ModifyRowState))
                 && AccessControl.HasPrivelege(Priveleges.InstallationsReadWrite);
         }
 
@@ -748,7 +798,7 @@ namespace LicenseSoftware.Viewport
             var installation = InstallationFromViewport();
             if (!ValidateInstallation(installation))
                 return;
-            switch (viewportState)
+            switch (_viewportState)
             {
                 case ViewportState.ReadState:
                     MessageBox.Show("Нельзя сохранить неизмененные данные. Если вы видите это сообщение, обратитесь к системному администратору", "Ошибка",
@@ -760,14 +810,14 @@ namespace LicenseSoftware.Viewport
                         return;
                     DataRowView newRow;
                     installation.IdInstallation = idInstallation;
-                    is_editable = false;
-                    if (v_softInstallations.Position == -1)
-                        newRow = (DataRowView)v_softInstallations.AddNew();
+                    _isEditable = false;
+                    if (_vSoftInstallations.Position == -1)
+                        newRow = (DataRowView)_vSoftInstallations.AddNew();
                     else
-                        newRow = ((DataRowView)v_softInstallations[v_softInstallations.Position]);
+                        newRow = ((DataRowView)_vSoftInstallations[_vSoftInstallations.Position]);
                     FillRowFromInstallation(installation, newRow);
-                    softInstallations.EditingNewRecord = false;
-                    is_editable = true;
+                    _softInstallations.EditingNewRecord = false;
+                    _isEditable = true;
                     break;
                 case ViewportState.ModifyRowState:
                     if (installation.IdLicense == null)
@@ -779,55 +829,57 @@ namespace LicenseSoftware.Viewport
                     }
                     if (SoftInstallationsDataModel.Update(installation) == -1)
                         return;
-                    var row = ((DataRowView)v_softInstallations[v_softInstallations.Position]);
-                    is_editable = false;
+                    var row = ((DataRowView)_vSoftInstallations[_vSoftInstallations.Position]);
+                    _isEditable = false;
                     FillRowFromInstallation(installation, row);
                     break;
             }
             dataGridView.Enabled = true;
-            is_editable = true;
-            dataGridView.RowCount = v_softInstallations.Count;
-            viewportState = ViewportState.ReadState;
+            _isEditable = true;
+            dataGridView.RowCount = _vSoftInstallations.Count;
+            _viewportState = ViewportState.ReadState;
             MenuCallback.EditingStateUpdate();
             SetViewportCaption();
         }
 
         public override void CancelRecord()
         {
-            switch (viewportState)
+            switch (_viewportState)
             {
                 case ViewportState.ReadState: return;
                 case ViewportState.NewRowState:
-                    softInstallations.EditingNewRecord = false;
-                    if (v_softInstallations.Position != -1)
+                    _softInstallations.EditingNewRecord = false;
+                    if (_vSoftInstallations.Position != -1)
                     {
-                        is_editable = false;
+                        _isEditable = false;
                         dataGridView.Enabled = true;
-                        var row = (DataRowView)v_softInstallations[v_softInstallations.Position];
+                        var row = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
                         row.Delete();
                         dataGridView.RowCount = dataGridView.RowCount - 1;
-                        if (v_softInstallations.Position != -1)
-                            dataGridView.Rows[v_softInstallations.Position].Selected = true;
-                        var idInstallator = 0;
-                        var currentRow = (DataRowView)v_softInstallations[v_softInstallations.Position];
-                        if (currentRow["ID Installator"] != DBNull.Value)
-                            idInstallator = (int)currentRow["ID Installator"];
-                        v_softInstallators.Filter =
-                            string.Format("Inactive = 0 OR [ID Installator] = {0}", idInstallator);
+                        if (_vSoftInstallations.Position != -1)
+                        {
+                            dataGridView.Rows[_vSoftInstallations.Position].Selected = true;
+                            var idInstallator = 0;
+                            var currentRow = (DataRowView) _vSoftInstallations[_vSoftInstallations.Position];
+                            if (currentRow["ID Installator"] != DBNull.Value)
+                                idInstallator = (int) currentRow["ID Installator"];
+                            _vSoftInstallators.Filter =
+                                string.Format("Inactive = 0 OR [ID Installator] = {0}", idInstallator);
+                        }
                     }
                     ChangeCbEditing(comboBoxComputerID, false);
                     ChangeCbEditing(comboBoxInstallatorID, false);
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     break;
                 case ViewportState.ModifyRowState:
                     dataGridView.Enabled = true;
-                    is_editable = false;
+                    _isEditable = false;
                     DataBind();
                     SelectCurrentAutoCompleteValue();
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     break;
             }
-            is_editable = true;
+            _isEditable = true;
             MenuCallback.EditingStateUpdate();
             SetViewportCaption();
         }
@@ -838,44 +890,44 @@ namespace LicenseSoftware.Viewport
                 return;
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 e.Cancel = true;
-            softInstallations.Select().RowChanged -= InstallationsViewport_RowChanged;
-            softInstallations.Select().RowDeleted -= InstallationsViewport_RowDeleted;
-            softwareDM.RefreshEvent -= softwareDM_RefreshEvent;
-            licenses.RefreshEvent -= licenses_RefreshEvent;
-            devices.Select().RowChanged -= Devices_RowChanged;
-            softLicKeys.Select().RowChanged -= softLicKeys_RowChanged;
-            softLicKeys.Select().RowDeleted -= softLicKeys_RowDeleted;
+            _softInstallations.Select().RowChanged -= InstallationsViewport_RowChanged;
+            _softInstallations.Select().RowDeleted -= InstallationsViewport_RowDeleted;
+            _softwareConcat.RefreshEvent -= SoftwareConcatRefreshEvent;
+            _licenses.RefreshEvent -= licenses_RefreshEvent;
+            _devices.Select().RowChanged -= Devices_RowChanged;
+            _softLicKeys.Select().RowChanged -= softLicKeys_RowChanged;
+            _softLicKeys.Select().RowDeleted -= softLicKeys_RowDeleted;
         }
 
         public override void ForceClose()
         {
-            if (viewportState == ViewportState.NewRowState)
-                softInstallations.EditingNewRecord = false;
-            softInstallations.Select().RowChanged -= InstallationsViewport_RowChanged;
-            softInstallations.Select().RowDeleted -= InstallationsViewport_RowDeleted;
-            softwareDM.RefreshEvent -= softwareDM_RefreshEvent;
-            licenses.RefreshEvent -= licenses_RefreshEvent;
-            devices.Select().RowChanged -= Devices_RowChanged;
-            softLicKeys.Select().RowChanged -= softLicKeys_RowChanged;
-            softLicKeys.Select().RowDeleted -= softLicKeys_RowDeleted;
+            if (_viewportState == ViewportState.NewRowState)
+                _softInstallations.EditingNewRecord = false;
+            _softInstallations.Select().RowChanged -= InstallationsViewport_RowChanged;
+            _softInstallations.Select().RowDeleted -= InstallationsViewport_RowDeleted;
+            _softwareConcat.RefreshEvent -= SoftwareConcatRefreshEvent;
+            _licenses.RefreshEvent -= licenses_RefreshEvent;
+            _devices.Select().RowChanged -= Devices_RowChanged;
+            _softLicKeys.Select().RowChanged -= softLicKeys_RowChanged;
+            _softLicKeys.Select().RowDeleted -= softLicKeys_RowDeleted;
             Close();
         }
 
-        void softwareDM_RefreshEvent(object sender, EventArgs e)
+        private void SoftwareConcatRefreshEvent(object sender, EventArgs e)
         {
             dataGridView.Refresh();
         }
 
-        void licenses_RefreshEvent(object sender, EventArgs e)
+        private void licenses_RefreshEvent(object sender, EventArgs e)
         {
             dataGridView.Refresh();
         }
 
-        void InstallationsViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
+        private void InstallationsViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Delete)
             {
-                dataGridView.RowCount = v_softInstallations.Count;
+                dataGridView.RowCount = _vSoftInstallations.Count;
                 dataGridView.Refresh();
                 MenuCallback.ForceCloseDetachedViewports();
                 if (Selected)
@@ -883,11 +935,11 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void InstallationsViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void InstallationsViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (e.Action == DataRowAction.Change || e.Action == DataRowAction.ChangeCurrentAndOriginal || e.Action == DataRowAction.ChangeOriginal)
                 dataGridView.Refresh();
-            dataGridView.RowCount = v_softInstallations.Count;
+            dataGridView.RowCount = _vSoftInstallations.Count;
             if (Selected)
                 MenuCallback.StatusBarStateUpdate();
         }
@@ -908,25 +960,25 @@ namespace LicenseSoftware.Viewport
                 RebuildFilter();
         }
 
-        void v_softInstallations_CurrentItemChanged(object sender, EventArgs e)
+        private void v_softInstallations_CurrentItemChanged(object sender, EventArgs e)
         {
-            var currentIsEditable = is_editable;
-            is_editable = false;
+            var currentIsEditable = _isEditable;
+            _isEditable = false;
             SetViewportCaption(); 
             SelectCurrentAutoCompleteValue();
-            if (v_softInstallations.Position == -1 || dataGridView.RowCount == 0)
+            if (_vSoftInstallations.Position == -1 || dataGridView.RowCount == 0)
                 dataGridView.ClearSelection();
             else
-                if (v_softInstallations.Position >= dataGridView.RowCount)
+                if (_vSoftInstallations.Position >= dataGridView.RowCount)
                 {
                     dataGridView.Rows[dataGridView.RowCount - 1].Selected = true;
                     dataGridView.CurrentCell = dataGridView.Rows[dataGridView.RowCount - 1].Cells[1];
                 }
                 else
-                    if (dataGridView.Rows[v_softInstallations.Position].Selected != true)
+                    if (dataGridView.Rows[_vSoftInstallations.Position].Selected != true)
                     {
-                        dataGridView.Rows[v_softInstallations.Position].Selected = true;
-                        dataGridView.CurrentCell = dataGridView.Rows[v_softInstallations.Position].Cells[1];
+                        dataGridView.Rows[_vSoftInstallations.Position].Selected = true;
+                        dataGridView.CurrentCell = dataGridView.Rows[_vSoftInstallations.Position].Cells[1];
                     }
             if (Selected)
             {
@@ -934,13 +986,13 @@ namespace LicenseSoftware.Viewport
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.RelationsStateUpdate();
             }
-            if (v_softInstallations.Position == -1)
+            if (_vSoftInstallations.Position == -1)
                 return;
-            if (viewportState == ViewportState.NewRowState)
+            if (_viewportState == ViewportState.NewRowState)
                 return;
             dataGridView.Enabled = true;
-            viewportState = ViewportState.ReadState;
-            is_editable = currentIsEditable;
+            _viewportState = ViewportState.ReadState;
+            _isEditable = currentIsEditable;
         }
 
         private void comboBoxSoftwareID_KeyUp(object sender, KeyEventArgs e)
@@ -951,7 +1003,7 @@ namespace LicenseSoftware.Viewport
                 var text = comboBoxSoftwareID.Text;
                 var selectionStart = comboBoxSoftwareID.SelectionStart;
                 var selectionLength = comboBoxSoftwareID.SelectionLength;
-                v_software.Filter = "Software like '%" + comboBoxSoftwareID.Text + "%'";
+                _vSoftware.Filter = "Software like '%" + comboBoxSoftwareID.Text + "%'";
                 comboBoxSoftwareID.Text = text;
                 comboBoxSoftwareID.SelectionStart = selectionStart;
                 comboBoxSoftwareID.SelectionLength = selectionLength;
@@ -969,12 +1021,12 @@ namespace LicenseSoftware.Viewport
             if (comboBoxSoftwareID.Items.Count > 0)
             {
                 if (comboBoxSoftwareID.SelectedItem == null)
-                    comboBoxSoftwareID.SelectedItem = v_software[v_software.Position];
+                    comboBoxSoftwareID.SelectedItem = _vSoftware[_vSoftware.Position];
             }
             if (comboBoxSoftwareID.SelectedItem == null)
             {
                 comboBoxSoftwareID.Text = "";
-                v_software.Filter = "";
+                _vSoftware.Filter = "";
             }
         }
 
@@ -986,7 +1038,7 @@ namespace LicenseSoftware.Viewport
                 var text = comboBoxLicenseID.Text;
                 var selectionStart = comboBoxLicenseID.SelectionStart;
                 var selectionLength = comboBoxLicenseID.SelectionLength;
-                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0") + " AND License like '%" + comboBoxLicenseID.Text + "%'";
+                _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0") + " AND License like '%" + comboBoxLicenseID.Text + "%'";
                 comboBoxLicenseID.Text = text;
                 comboBoxLicenseID.SelectionStart = selectionStart;
                 comboBoxLicenseID.SelectionLength = selectionLength;
@@ -998,12 +1050,12 @@ namespace LicenseSoftware.Viewport
             if (comboBoxLicenseID.Items.Count > 0)
             {
                 if (comboBoxLicenseID.SelectedItem == null)
-                    comboBoxLicenseID.SelectedItem = v_licenses[v_licenses.Position];
+                    comboBoxLicenseID.SelectedItem = _vLicenses[_vLicenses.Position];
             }
             if (comboBoxLicenseID.SelectedItem == null)
             {
                 comboBoxLicenseID.Text = "";
-                v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue != null ? comboBoxSoftwareID.SelectedValue : "0");
+                _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Version] = " + (comboBoxSoftVersionID.SelectedValue ?? "0");
             }
         }
 
@@ -1021,7 +1073,7 @@ namespace LicenseSoftware.Viewport
                 var text = comboBoxLicKeysID.Text;
                 var selectionStart = comboBoxLicKeysID.SelectionStart;
                 var selectionLength = comboBoxLicKeysID.SelectionLength;
-                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0") 
+                _vSoftLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0") 
                     + " AND LicKey like '%" + comboBoxLicKeysID.Text + "%'"
                     + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
                 comboBoxLicKeysID.Text = text;
@@ -1035,7 +1087,7 @@ namespace LicenseSoftware.Viewport
             if (comboBoxLicKeysID.SelectedItem == null)
             {
                 comboBoxLicKeysID.Text = "";
-                v_softLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0")
+                _vSoftLicKeys.Filter = "[ID License] = " + (comboBoxLicenseID.SelectedValue != null ? comboBoxLicenseID.SelectedValue : "0")
                      + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((comboBoxLicenseID.SelectedValue != null ? (int)comboBoxLicenseID.SelectedValue : 0)) + ")";
             }
             if (string.IsNullOrEmpty(comboBoxLicKeysID.Text))
@@ -1063,7 +1115,7 @@ namespace LicenseSoftware.Viewport
                 filter = !string.IsNullOrEmpty(filter) ? 
                     string.Format("({0}) AND {1}", filter, deviceFilter) : 
                     deviceFilter;
-                v_devices.Filter = filter;
+                _vDevices.Filter = filter;
             }
             comboBoxComputerID.Text = text;
             comboBoxComputerID.SelectionStart = selectionStart;
@@ -1075,12 +1127,12 @@ namespace LicenseSoftware.Viewport
             if (comboBoxComputerID.Items.Count > 0)
             {
                 if (comboBoxComputerID.SelectedItem == null)
-                    comboBoxComputerID.SelectedItem = v_devices[v_devices.Position];
+                    comboBoxComputerID.SelectedItem = _vDevices[_vDevices.Position];
             }
             if (comboBoxComputerID.SelectedItem == null)
             {
                 comboBoxComputerID.Text = "";
-                v_devices.Filter = GetDeviceFilter();
+                _vDevices.Filter = GetDeviceFilter();
             }
         }
 
@@ -1107,31 +1159,49 @@ namespace LicenseSoftware.Viewport
 
         private void comboBoxSoftwareID_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
+            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxSoftVersionID.DataSource != null) &&
+                (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
                 !string.IsNullOrEmpty(comboBoxSoftwareID.ValueMember))
             {
                 var idSoftware = (int?)comboBoxSoftwareID.SelectedValue;
                 if (idSoftware != null)
-                    v_licenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + idSoftware;
+                    _vSoftVersions.Filter = "[ID Software] = " + idSoftware;
                 else
-                    v_licenses.Filter = "1 = 0";
+                    _vSoftVersions.Filter = "1 = 0";
             }
+            CheckViewportModifications();
+        }
+
+        private void comboBoxSoftVersionID_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxSoftVersionID.DataSource != null) && 
+                (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
+                !string.IsNullOrEmpty(comboBoxSoftVersionID.ValueMember))
+            {
+                var idVersion = (int?)comboBoxSoftVersionID.SelectedValue;
+                if (idVersion != null)
+                    _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Version] = " + idVersion;
+                else
+                    _vLicenses.Filter = "1 = 0";
+            }
+            CheckViewportModifications();
         }
 
         private void comboBoxLicenseID_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
+            if ((comboBoxSoftwareID.DataSource != null) && (comboBoxSoftVersionID.DataSource != null) && 
+                (comboBoxLicenseID.DataSource != null) && (comboBoxLicKeysID.DataSource != null) &&
                 !string.IsNullOrEmpty(comboBoxLicenseID.ValueMember))
             {
                 var idLicense = (int?)comboBoxLicenseID.SelectedValue;
                 if (idLicense != null)
                 {
-                    v_softLicKeys.Filter = "[ID License] = " + idLicense + " AND [ID LicenseKey] IN (0" +
+                    _vSoftLicKeys.Filter = "[ID License] = " + idLicense + " AND [ID LicenseKey] IN (0" +
                                            GetLicKeysFilter(idLicense.Value) + ")";
-                    v_devices.Filter = GetDeviceFilter();
+                    _vDevices.Filter = GetDeviceFilter();
                 }
                 else
-                    v_softLicKeys.Filter = "1 = 0";
+                    _vSoftLicKeys.Filter = "1 = 0";
             }
             CheckViewportModifications();
         }
@@ -1142,10 +1212,10 @@ namespace LicenseSoftware.Viewport
             var licenseId = comboBoxLicenseID.SelectedValue;
             if (licenseId != null)
             {
-                var vLicensesRowIndex = v_licenses.Find("ID License", licenseId);
+                var vLicensesRowIndex = _vLicenses.Find("ID License", licenseId);
                 if (vLicensesRowIndex != -1)
                 {
-                    var vLicensesRow = (DataRowView)v_licenses[vLicensesRowIndex];
+                    var vLicensesRow = (DataRowView)_vLicenses[vLicensesRowIndex];
                     if (!string.IsNullOrEmpty(filter))
                     {
                         filter += " AND ";
@@ -1157,8 +1227,8 @@ namespace LicenseSoftware.Viewport
                 }
             }
 
-            var vSoftInstallationsRow = v_softInstallations.Position > -1
-                ? (DataRowView) v_softInstallations[v_softInstallations.Position] : null;
+            var vSoftInstallationsRow = _vSoftInstallations.Position > -1
+                ? (DataRowView) _vSoftInstallations[_vSoftInstallations.Position] : null;
             if (vSoftInstallationsRow != null && vSoftInstallationsRow["ID Computer"] != DBNull.Value)
             {
                 var idComputer = (int) vSoftInstallationsRow["ID Computer"];
@@ -1175,9 +1245,9 @@ namespace LicenseSoftware.Viewport
             var licKeys = "";
             foreach (var licKey in licKeyIds)
                 licKeys += licKey.ToString(CultureInfo.InvariantCulture) + ",";
-            if (v_softInstallations.Position != -1)
+            if (_vSoftInstallations.Position != -1)
             {
-                var row = (DataRowView)v_softInstallations[v_softInstallations.Position];
+                var row = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
                 if (row["ID LicenseKey"] != DBNull.Value)
                     licKeys += row["ID LicenseKey"].ToString();
             }
@@ -1189,63 +1259,63 @@ namespace LicenseSoftware.Viewport
             CheckViewportModifications();
         }
 
-        void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;
         }
 
         private void dataGridView_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
-            if (v_softInstallations.Count <= e.RowIndex) return;
+            if (_vSoftInstallations.Count <= e.RowIndex) return;
             switch (dataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "idInstallation":
-                    e.Value = ((DataRowView)v_softInstallations[e.RowIndex])["ID Installation"];
+                    e.Value = ((DataRowView)_vSoftInstallations[e.RowIndex])["ID Installation"];
                     break;
                 case "installationDate":
-                    e.Value = ((DataRowView)v_softInstallations[e.RowIndex])["InstallationDate"] == DBNull.Value ? "" :
-                        ((DateTime)((DataRowView)v_softInstallations[e.RowIndex])["InstallationDate"]).ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    e.Value = ((DataRowView)_vSoftInstallations[e.RowIndex])["InstallationDate"] == DBNull.Value ? "" :
+                        ((DateTime)((DataRowView)_vSoftInstallations[e.RowIndex])["InstallationDate"]).ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
                     break;
                 case "software":
-                    var row = licenses.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID License"]);
+                    var row = _licenses.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID License"]);
                     if (row != null)
                     {
-                        row = softwareDM.Select().Rows.Find(row["ID Software"]);
+                        row = _softwareConcat.Select().Rows.Find(row["ID Version"]);
                         if (row != null)
                             e.Value = row["Software"];
                     }
                     break;
                 case "department":
-                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    row = _devices.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID Computer"]);
                     if (row != null)
                     {
-                        var rowIndex = v_departments.Find("ID Department", row["ID Department"]);
+                        var rowIndex = _vDepartments.Find("ID Department", row["ID Department"]);
                         if (rowIndex != -1)
-                            e.Value = ((DataRowView)v_departments[rowIndex])["Department"].ToString().Trim();
+                            e.Value = ((DataRowView)_vDepartments[rowIndex])["Department"].ToString().Trim();
                     }
                     break;
                 case "computer":
-                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    row = _devices.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID Computer"]);
                     if (row != null)
                         e.Value = row["Device Name"];
                     break;
                 case "invNum":
-                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    row = _devices.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID Computer"]);
                     if (row != null)
                         e.Value = row["InventoryNumber"];
                     break;
                 case "serialNum":
-                    row = devices.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID Computer"]);
+                    row = _devices.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID Computer"]);
                     if (row != null)
                         e.Value = row["SerialNumber"];
                     break;
                 case "license":
-                    row = licenses.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID License"]);
+                    row = _licenses.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID License"]);
                     if (row != null)
                         e.Value = row["License"];
                     break;
                 case "licKey":
-                    row = softLicKeys.Select().Rows.Find(((DataRowView)v_softInstallations[e.RowIndex])["ID LicenseKey"]);
+                    row = _softLicKeys.Select().Rows.Find(((DataRowView)_vSoftInstallations[e.RowIndex])["ID LicenseKey"]);
                     if (row != null)
                         e.Value = row["LicKey"];
                     break;
@@ -1255,9 +1325,9 @@ namespace LicenseSoftware.Viewport
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView.SelectedRows.Count > 0)
-                v_softInstallations.Position = dataGridView.SelectedRows[0].Index;
+                _vSoftInstallations.Position = dataGridView.SelectedRows[0].Index;
             else
-                v_softInstallations.Position = -1;
+                _vSoftInstallations.Position = -1;
         }
 
         private void dataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1268,7 +1338,7 @@ namespace LicenseSoftware.Viewport
             {
                 foreach (DataGridViewColumn column in dataGridView.Columns)
                     column.HeaderCell.SortGlyphDirection = SortOrder.None;
-                v_softInstallations.Sort = dataGridView.Columns[e.ColumnIndex].Name + " " + ((way == SortOrder.Ascending) ? "ASC" : "DESC");
+                _vSoftInstallations.Sort = dataGridView.Columns[e.ColumnIndex].Name + " " + ((way == SortOrder.Ascending) ? "ASC" : "DESC");
                 dataGridView.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = way;
                 return true;
             };
@@ -1281,10 +1351,10 @@ namespace LicenseSoftware.Viewport
 
         private void comboBoxSoftwareID_VisibleChanged(object sender, EventArgs e)
         {
-            if (is_first_visibility)
+            if (_isFirstVisibility)
             {
                 SelectCurrentAutoCompleteValue();
-                is_first_visibility = false;
+                _isFirstVisibility = false;
             }
         }
 
@@ -1309,6 +1379,8 @@ namespace LicenseSoftware.Viewport
             this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBoxSoftVersionID = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.comboBoxLicenseID = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxLicKeysID = new System.Windows.Forms.ComboBox();
@@ -1473,6 +1545,8 @@ namespace LicenseSoftware.Viewport
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBoxSoftVersionID);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.comboBoxLicenseID);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.comboBoxLicKeysID);
@@ -1487,15 +1561,36 @@ namespace LicenseSoftware.Viewport
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Сведения о лицензии";
             // 
+            // comboBoxSoftVersionID
+            // 
+            this.comboBoxSoftVersionID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSoftVersionID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSoftVersionID.FormattingEnabled = true;
+            this.comboBoxSoftVersionID.Location = new System.Drawing.Point(161, 50);
+            this.comboBoxSoftVersionID.Name = "comboBoxSoftVersionID";
+            this.comboBoxSoftVersionID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxSoftVersionID.TabIndex = 1;
+            this.comboBoxSoftVersionID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftVersionID_SelectedValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 53);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 15);
+            this.label6.TabIndex = 88;
+            this.label6.Text = "Версия ПО";
+            // 
             // comboBoxLicenseID
             // 
             this.comboBoxLicenseID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicenseID.FormattingEnabled = true;
-            this.comboBoxLicenseID.Location = new System.Drawing.Point(161, 51);
+            this.comboBoxLicenseID.Location = new System.Drawing.Point(161, 78);
             this.comboBoxLicenseID.Name = "comboBoxLicenseID";
             this.comboBoxLicenseID.Size = new System.Drawing.Size(330, 23);
-            this.comboBoxLicenseID.TabIndex = 1;
+            this.comboBoxLicenseID.TabIndex = 2;
             this.comboBoxLicenseID.DropDownClosed += new System.EventHandler(this.comboBoxLicenseID_DropDownClosed);
             this.comboBoxLicenseID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicenseID_SelectedValueChanged);
             this.comboBoxLicenseID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicenseID_KeyUp);
@@ -1504,7 +1599,7 @@ namespace LicenseSoftware.Viewport
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 54);
+            this.label3.Location = new System.Drawing.Point(7, 81);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(63, 15);
             this.label3.TabIndex = 75;
@@ -1515,10 +1610,10 @@ namespace LicenseSoftware.Viewport
             this.comboBoxLicKeysID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxLicKeysID.FormattingEnabled = true;
-            this.comboBoxLicKeysID.Location = new System.Drawing.Point(161, 80);
+            this.comboBoxLicKeysID.Location = new System.Drawing.Point(161, 107);
             this.comboBoxLicKeysID.Name = "comboBoxLicKeysID";
             this.comboBoxLicKeysID.Size = new System.Drawing.Size(330, 23);
-            this.comboBoxLicKeysID.TabIndex = 2;
+            this.comboBoxLicKeysID.TabIndex = 3;
             this.comboBoxLicKeysID.DropDownClosed += new System.EventHandler(this.comboBoxLicKeysID_DropDownClosed);
             this.comboBoxLicKeysID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicKeysID_SelectedValueChanged);
             this.comboBoxLicKeysID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicKeysID_KeyUp);
@@ -1527,7 +1622,7 @@ namespace LicenseSoftware.Viewport
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 83);
+            this.label8.Location = new System.Drawing.Point(7, 110);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(124, 15);
             this.label8.TabIndex = 86;

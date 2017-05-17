@@ -36,36 +36,41 @@ namespace LicenseSoftware.DataModels
 
         private static void RebuildRelations()
         {
-            DataSetManager.AddRelation("SoftType", "ID SoftType", "Software", "ID SoftType", true);
-            DataSetManager.AddRelation("SoftMakers", "ID SoftMaker", "Software", "ID SoftMaker", true);
-            DataSetManager.AddRelation("SoftSuppliers", "ID Supplier", "SoftLicenses", "ID Supplier", true);
-            DataSetManager.AddRelation("Software", "ID Software", "SoftLicenses", "ID Software", true);
-            DataSetManager.AddRelation("SoftLicTypes", "ID LicType", "SoftLicenses", "ID LicType", true);
-            DataSetManager.AddRelation("SoftLicDocTypes", "ID DocType", "SoftLicenses", "ID DocType", true);
-            DataSetManager.AddRelation("SoftLicenses", "ID License", "SoftInstallations", "ID License", true);
-            DataSetManager.AddRelation("SoftLicenses", "ID License", "SoftLicKeys", "ID License", true);
-            DataSetManager.AddRelation("SoftInstallators", "ID Installator", "SoftInstallations", "ID Installator", true);
-            DataSetManager.AddRelation("SoftLicKeys", "ID LicenseKey", "SoftInstallations", "ID LicenseKey", true);
-            DataSetManager.AddRelation("Devices", "ID Device", "SoftInstallations", "ID Computer", true);
-            DataSetManager.AddRelation("Departments", "ID Department", "SoftLicenses", "ID Department", true);
-            DataSetManager.AddRelation("Departments", "ID Department", "Departments", "ID Parent Department", true);
-            DataSetManager.AddRelation("Software", "ID Software", "SoftwareConcat", "ID Software", true);
-            DataSetManager.AddRelation("SoftLicenses", "ID License", "LicensesConcat", "ID License", true);
+            AddRelation("SoftType", "ID SoftType", "Software", "ID SoftType", true);
+            AddRelation("SoftMakers", "ID SoftMaker", "Software", "ID SoftMaker", true);
+            AddRelation("SoftSuppliers", "ID Supplier", "SoftLicenses", "ID Supplier", true);
+            AddRelation("SoftLicTypes", "ID LicType", "SoftLicenses", "ID LicType", true);
+            AddRelation("SoftLicDocTypes", "ID DocType", "SoftLicenses", "ID DocType", true);
+            AddRelation("SoftLicenses", "ID License", "SoftInstallations", "ID License", true);
+            AddRelation("SoftLicenses", "ID License", "SoftLicKeys", "ID License", true);
+            AddRelation("SoftInstallators", "ID Installator", "SoftInstallations", "ID Installator", true);
+            AddRelation("SoftLicKeys", "ID LicenseKey", "SoftInstallations", "ID LicenseKey", true);
+            AddRelation("Devices", "ID Device", "SoftInstallations", "ID Computer", true);
+            AddRelation("Departments", "ID Department", "SoftLicenses", "ID Department", true);
+            AddRelation("Departments", "ID Department", "Departments", "ID Parent Department", true);
+            AddRelation("Software", "ID Software", "SoftVersions", "ID Software", true);
+            AddRelation("SoftVersions", "ID Version", "SoftwareConcat", "ID Version", true);
+            AddRelation("SoftLicenses", "ID License", "LicensesConcat", "ID License", true);
         }
 
-        private static void AddRelation(string master_table_name, string master_column_name, string slave_table_name, 
-            string slave_column_name, bool create_constraints)
+        private static readonly object LockObj = new object();
+
+        private static void AddRelation(string masterTableName, string masterColumnName, string slaveTableName, 
+            string slaveColumnName, bool createConstraints)
         {
-            if (!dataSet.Tables.Contains(master_table_name))
-                return;
-            if (!dataSet.Tables.Contains(slave_table_name))
-                return;
-            if (!dataSet.Relations.Contains(master_table_name+"_"+slave_table_name))
+            lock (LockObj)
             {
-                DataRelation relation = new DataRelation(master_table_name + "_" + slave_table_name, 
-                    dataSet.Tables[master_table_name].Columns[master_column_name], 
-                    dataSet.Tables[slave_table_name].Columns[slave_column_name], create_constraints);
-                dataSet.Relations.Add(relation);
+                if (!dataSet.Tables.Contains(masterTableName))
+                    return;
+                if (!dataSet.Tables.Contains(slaveTableName))
+                    return;
+                if (!dataSet.Relations.Contains(masterTableName + "_" + slaveTableName))
+                {
+                    var relation = new DataRelation(masterTableName + "_" + slaveTableName,
+                        dataSet.Tables[masterTableName].Columns[masterColumnName],
+                        dataSet.Tables[slaveTableName].Columns[slaveColumnName], createConstraints);
+                    dataSet.Relations.Add(relation);
+                }   
             }
         }
     }

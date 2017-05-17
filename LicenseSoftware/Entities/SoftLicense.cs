@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LicenseSoftware.Entities
 {
     public sealed class SoftLicense
     {
         public int? IdLicense { get; set; }
-        public int? IdSoftware { get; set; }
+        public int? IdVersion { get; set; }
         public int? IdLicType { get; set; }
         public int? IdDocType { get; set; }
         public int? IdSupplier { get; set; }
@@ -27,28 +24,26 @@ namespace LicenseSoftware.Entities
 
         public bool Equals(SoftLicense other)
         {
-            return this.Equals((object)other);
+            return Equals((object)other);
         }
 
         public static bool operator ==(SoftLicense first, SoftLicense second)
         {
             if ((object)first == null && (object)second == null)
                 return true;
-            else
-                if ((object)first == null || (object)second == null)
-                    return false;
-                else
-                    return first.IdLicense == second.IdLicense &&
-                        first.IdSoftware == second.IdSoftware &&
-                        first.IdLicType == second.IdLicType &&
-                        first.IdDocType == second.IdDocType &&
-                        first.IdSupplier == second.IdSupplier &&
-                        first.IdDepartment == second.IdDepartment &&
-                        first.BuyLicenseDate == second.BuyLicenseDate &&
-                        first.ExpireLicenseDate == second.ExpireLicenseDate &&
-                        first.DocNumber == second.DocNumber &&
-                        first.InstallationsCount == second.InstallationsCount &&
-                        first.Description == second.Description;
+            if ((object)first == null || (object)second == null)
+                return false;
+            return first.IdLicense == second.IdLicense &&
+                   first.IdVersion == second.IdVersion &&
+                   first.IdLicType == second.IdLicType &&
+                   first.IdDocType == second.IdDocType &&
+                   first.IdSupplier == second.IdSupplier &&
+                   first.IdDepartment == second.IdDepartment &&
+                   first.BuyLicenseDate == second.BuyLicenseDate &&
+                   first.ExpireLicenseDate == second.ExpireLicenseDate &&
+                   first.DocNumber == second.DocNumber &&
+                   first.InstallationsCount == second.InstallationsCount &&
+                   first.Description == second.Description;
         }
 
         public static bool operator !=(SoftLicense first, SoftLicense second)

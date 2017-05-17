@@ -32,6 +32,8 @@ namespace LicenseSoftware.Viewport
                     return new SoftTypesViewport(menuCallback);
                 case ViewportType.SoftSuppliersViewport:
                     return new SoftSuppliersViewport(menuCallback);
+                case ViewportType.SoftVersionsViewport:
+                    return new SoftVersionsViewport(menuCallback);
             }
             throw new ViewportException(
                 String.Format(CultureInfo.InvariantCulture, "В фабрику ViewportFactory передан неизвестный тип {0}", viewportType.ToString()));

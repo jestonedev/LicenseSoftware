@@ -4,11 +4,8 @@ using LicenseSoftware.Entities;
 using LicenseSoftware.SearchForms;
 using Security;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DataModels.DataModels;
 
@@ -37,22 +34,20 @@ namespace LicenseSoftware.Viewport
         private ViewportState viewportState = ViewportState.ReadState;
         private GroupBox groupBox32;
         private TableLayoutPanel tableLayoutPanel1;
-        private Panel panel1;
-        private TextBox textBoxSoftwareName;
-        private Label label87;
-        private Label label86;
-        private TextBox textBoxVersion;
-        private Panel panel2;
-        private ComboBox comboBoxSoftMaker;
-        private Label label1;
-        private ComboBox comboBoxSoftType;
-        private Label label84;
         private bool is_editable = false;
         private DataGridViewTextBoxColumn idSoftware;
         private DataGridViewTextBoxColumn software;
-        private DataGridViewTextBoxColumn version;
         private DataGridViewTextBoxColumn idSoftType;
         private DataGridViewTextBoxColumn idSoftMaker;
+        private Panel panel1;
+        private TextBox textBoxSoftwareName;
+        private Label label86;
+        private Panel panel2;
+        private ComboBox comboBoxSoftType;
+        private Label label84;
+        private Panel panel3;
+        private Label label1;
+        private ComboBox comboBoxSoftMaker;
 
 
         private SearchForm sSearchForm = null;
@@ -105,8 +100,6 @@ namespace LicenseSoftware.Viewport
             
             textBoxSoftwareName.DataBindings.Clear();
             textBoxSoftwareName.DataBindings.Add("Text", v_software, "Software", true, DataSourceUpdateMode.Never, "");
-            textBoxVersion.DataBindings.Clear();
-            textBoxVersion.DataBindings.Add("Text", v_software, "Version", true, DataSourceUpdateMode.Never, "");
         }
 
         private void CheckViewportModifications()
@@ -236,7 +229,6 @@ namespace LicenseSoftware.Viewport
             comboBoxSoftType.SelectedValue = ViewportHelper.ValueOrDBNull(software.IdSoftType);
             comboBoxSoftMaker.SelectedValue = ViewportHelper.ValueOrDBNull(software.IdSoftMaker);
             textBoxSoftwareName.Text = software.SoftwareName;
-            textBoxVersion.Text = software.Version;
         }
 
         private Software SoftwareFromViewport()
@@ -248,7 +240,6 @@ namespace LicenseSoftware.Viewport
                 software.IdSoftware = ViewportHelper.ValueOrNull<int>((DataRowView)v_software[v_software.Position], "ID Software");
             software.IdSoftType = ViewportHelper.ValueOrNull<int>(comboBoxSoftType);
             software.IdSoftMaker = ViewportHelper.ValueOrNull<int>(comboBoxSoftMaker);
-            software.Version = ViewportHelper.ValueOrNull(textBoxVersion);
             software.SoftwareName = ViewportHelper.ValueOrNull(textBoxSoftwareName);
             return software;
         }
@@ -261,7 +252,6 @@ namespace LicenseSoftware.Viewport
             software.IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType");
             software.IdSoftMaker = ViewportHelper.ValueOrNull<int>(row, "ID SoftMaker");
             software.SoftwareName = ViewportHelper.ValueOrNull(row, "Software");
-            software.Version = ViewportHelper.ValueOrNull(row, "Version");
             return software;
         }
 
@@ -273,7 +263,6 @@ namespace LicenseSoftware.Viewport
             row["ID SoftType"] = ViewportHelper.ValueOrDBNull(software.IdSoftType);
             row["ID SoftMaker"] = ViewportHelper.ValueOrDBNull(software.IdSoftMaker);
             row["Software"] = ViewportHelper.ValueOrDBNull(software.SoftwareName);
-            row["Version"] = ViewportHelper.ValueOrDBNull(software.Version);
             row.EndEdit();
         }
 
@@ -633,11 +622,32 @@ namespace LicenseSoftware.Viewport
                 return;
             if (v_software.Position == -1)
             {
-                MessageBox.Show("Не выбрано программное обеспечение для отображения списка лицензий", "Ошибка", 
+                MessageBox.Show(@"Не выбрано программное обеспечение для отображения списка лицензий", @"Ошибка", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
             ShowAssocViewport(MenuCallback, ViewportType.LicensesViewport,
+                "[ID Software] = " + Convert.ToInt32(((DataRowView)v_software[v_software.Position])["ID Software"], CultureInfo.InvariantCulture),
+                ((DataRowView)v_software[v_software.Position]).Row,
+                ParentTypeEnum.Software);
+        }
+
+        public override bool HasAssocSoftVersions()
+        {
+            return v_software.Position > -1;
+        }
+
+        public override void ShowAssocSoftVersions()
+        {
+            if (!ChangeViewportStateTo(ViewportState.ReadState))
+                return;
+            if (v_software.Position == -1)
+            {
+                MessageBox.Show(@"Не выбрано программное обеспечение для отображения списка версий", @"Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                return;
+            }
+            ShowAssocViewport(MenuCallback, ViewportType.SoftVersionsViewport,
                 "[ID Software] = " + Convert.ToInt32(((DataRowView)v_software[v_software.Position])["ID Software"], CultureInfo.InvariantCulture),
                 ((DataRowView)v_software[v_software.Position]).Row,
                 ParentTypeEnum.Software);
@@ -715,7 +725,7 @@ namespace LicenseSoftware.Viewport
             is_editable = true;
         }
 
-        private void comboBoxSoftType_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxSoftType_SelectedValueChanged(object sender, EventArgs e)
         {
             CheckViewportModifications();
         }
@@ -726,11 +736,6 @@ namespace LicenseSoftware.Viewport
         }
 
         private void textBoxSoftwareName_TextChanged(object sender, EventArgs e)
-        {
-            CheckViewportModifications();
-        }
-
-        private void textBoxVersion_TextChanged(object sender, EventArgs e)
         {
             CheckViewportModifications();
         }
@@ -801,35 +806,33 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox32 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.textBoxSoftwareName = new System.Windows.Forms.TextBox();
-            this.label87 = new System.Windows.Forms.Label();
-            this.label86 = new System.Windows.Forms.Label();
-            this.textBoxVersion = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.comboBoxSoftMaker = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.comboBoxSoftType = new System.Windows.Forms.ComboBox();
             this.label84 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxSoftMaker = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.textBoxSoftwareName = new System.Windows.Forms.TextBox();
+            this.label86 = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.idSoftware = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.version = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idSoftType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idSoftMaker = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel14.SuspendLayout();
             this.groupBox32.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel14
             // 
-            this.tableLayoutPanel14.ColumnCount = 2;
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.ColumnCount = 1;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel14.Controls.Add(this.groupBox32, 0, 0);
             this.tableLayoutPanel14.Controls.Add(this.dataGridView, 0, 1);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -838,17 +841,16 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel14.RowCount = 2;
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 94F));
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(818, 340);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(1002, 724);
             this.tableLayoutPanel14.TabIndex = 0;
             // 
             // groupBox32
             // 
-            this.tableLayoutPanel14.SetColumnSpan(this.groupBox32, 2);
             this.groupBox32.Controls.Add(this.tableLayoutPanel1);
             this.groupBox32.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox32.Location = new System.Drawing.Point(3, 3);
             this.groupBox32.Name = "groupBox32";
-            this.groupBox32.Size = new System.Drawing.Size(812, 88);
+            this.groupBox32.Size = new System.Drawing.Size(996, 88);
             this.groupBox32.TabIndex = 1;
             this.groupBox32.TabStop = false;
             this.groupBox32.Text = "Сведения о программном обеспечении";
@@ -858,108 +860,29 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 20);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(806, 65);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(990, 68);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.textBoxSoftwareName);
-            this.panel1.Controls.Add(this.label87);
-            this.panel1.Controls.Add(this.label86);
-            this.panel1.Controls.Add(this.textBoxVersion);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(403, 65);
-            this.panel1.TabIndex = 0;
-            // 
-            // textBoxSoftwareName
-            // 
-            this.textBoxSoftwareName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSoftwareName.Location = new System.Drawing.Point(121, 8);
-            this.textBoxSoftwareName.MaxLength = 500;
-            this.textBoxSoftwareName.Name = "textBoxSoftwareName";
-            this.textBoxSoftwareName.Size = new System.Drawing.Size(267, 24);
-            this.textBoxSoftwareName.TabIndex = 0;
-            this.textBoxSoftwareName.TextChanged += new System.EventHandler(this.textBoxSoftwareName_TextChanged);
-            // 
-            // label87
-            // 
-            this.label87.AutoSize = true;
-            this.label87.Location = new System.Drawing.Point(10, 41);
-            this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(85, 18);
-            this.label87.TabIndex = 74;
-            this.label87.Text = "Версия ПО";
-            // 
-            // label86
-            // 
-            this.label86.AutoSize = true;
-            this.label86.Location = new System.Drawing.Point(10, 10);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(111, 18);
-            this.label86.TabIndex = 73;
-            this.label86.Text = "Наименование";
-            // 
-            // textBoxVersion
-            // 
-            this.textBoxVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxVersion.Location = new System.Drawing.Point(121, 37);
-            this.textBoxVersion.MaxLength = 50;
-            this.textBoxVersion.Name = "textBoxVersion";
-            this.textBoxVersion.Size = new System.Drawing.Size(267, 24);
-            this.textBoxVersion.TabIndex = 1;
-            this.textBoxVersion.TextChanged += new System.EventHandler(this.textBoxVersion_TextChanged);
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.comboBoxSoftMaker);
-            this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.comboBoxSoftType);
             this.panel2.Controls.Add(this.label84);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(403, 0);
+            this.panel2.Location = new System.Drawing.Point(0, 34);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(403, 65);
-            this.panel2.TabIndex = 1;
-            // 
-            // comboBoxSoftMaker
-            // 
-            this.comboBoxSoftMaker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSoftMaker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSoftMaker.FormattingEnabled = true;
-            this.comboBoxSoftMaker.Location = new System.Drawing.Point(127, 37);
-            this.comboBoxSoftMaker.Name = "comboBoxSoftMaker";
-            this.comboBoxSoftMaker.Size = new System.Drawing.Size(266, 26);
-            this.comboBoxSoftMaker.TabIndex = 1;
-            this.comboBoxSoftMaker.SelectedIndexChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedIndexChanged);
-            this.comboBoxSoftMaker.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 41);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 18);
-            this.label1.TabIndex = 73;
-            this.label1.Text = "Разработчик ПО";
+            this.panel2.Size = new System.Drawing.Size(495, 34);
+            this.panel2.TabIndex = 76;
             // 
             // comboBoxSoftType
             // 
@@ -967,20 +890,84 @@ namespace LicenseSoftware.Viewport
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSoftType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSoftType.FormattingEnabled = true;
-            this.comboBoxSoftType.Location = new System.Drawing.Point(127, 8);
+            this.comboBoxSoftType.Location = new System.Drawing.Point(112, 5);
             this.comboBoxSoftType.Name = "comboBoxSoftType";
-            this.comboBoxSoftType.Size = new System.Drawing.Size(266, 26);
+            this.comboBoxSoftType.Size = new System.Drawing.Size(380, 23);
             this.comboBoxSoftType.TabIndex = 0;
-            this.comboBoxSoftType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSoftType_SelectedIndexChanged);
+            this.comboBoxSoftType.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftType_SelectedValueChanged);
             // 
             // label84
             // 
             this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(10, 10);
+            this.label84.Location = new System.Drawing.Point(10, 9);
             this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(62, 18);
+            this.label84.Size = new System.Drawing.Size(50, 15);
             this.label84.TabIndex = 71;
             this.label84.Text = "Вид ПО";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.comboBoxSoftMaker);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(495, 34);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(495, 34);
+            this.panel3.TabIndex = 75;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(103, 15);
+            this.label1.TabIndex = 73;
+            this.label1.Text = "Разработчик ПО";
+            // 
+            // comboBoxSoftMaker
+            // 
+            this.comboBoxSoftMaker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSoftMaker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSoftMaker.FormattingEnabled = true;
+            this.comboBoxSoftMaker.Location = new System.Drawing.Point(109, 5);
+            this.comboBoxSoftMaker.Name = "comboBoxSoftMaker";
+            this.comboBoxSoftMaker.Size = new System.Drawing.Size(380, 23);
+            this.comboBoxSoftMaker.TabIndex = 1;
+            this.comboBoxSoftMaker.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedValueChanged);
+            // 
+            // panel1
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
+            this.panel1.Controls.Add(this.textBoxSoftwareName);
+            this.panel1.Controls.Add(this.label86);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(990, 34);
+            this.panel1.TabIndex = 0;
+            // 
+            // textBoxSoftwareName
+            // 
+            this.textBoxSoftwareName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSoftwareName.Location = new System.Drawing.Point(112, 8);
+            this.textBoxSoftwareName.MaxLength = 500;
+            this.textBoxSoftwareName.Name = "textBoxSoftwareName";
+            this.textBoxSoftwareName.Size = new System.Drawing.Size(871, 21);
+            this.textBoxSoftwareName.TabIndex = 0;
+            this.textBoxSoftwareName.TextChanged += new System.EventHandler(this.textBoxSoftwareName_TextChanged);
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Location = new System.Drawing.Point(10, 10);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(95, 15);
+            this.label86.TabIndex = 73;
+            this.label86.Text = "Наименование";
             // 
             // dataGridView
             // 
@@ -1003,17 +990,15 @@ namespace LicenseSoftware.Viewport
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idSoftware,
             this.software,
-            this.version,
             this.idSoftType,
             this.idSoftMaker});
-            this.tableLayoutPanel14.SetColumnSpan(this.dataGridView, 2);
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(3, 97);
             this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(812, 240);
+            this.dataGridView.Size = new System.Drawing.Size(996, 624);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.VirtualMode = true;
             this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
@@ -1037,43 +1022,34 @@ namespace LicenseSoftware.Viewport
             this.software.Name = "software";
             this.software.ReadOnly = true;
             // 
-            // version
-            // 
-            this.version.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.version.HeaderText = "Версия ПО";
-            this.version.MinimumWidth = 150;
-            this.version.Name = "version";
-            this.version.ReadOnly = true;
-            this.version.Width = 150;
-            // 
             // idSoftType
             // 
             this.idSoftType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.idSoftType.HeaderText = "Вид ПО";
-            this.idSoftType.MinimumWidth = 150;
+            this.idSoftType.MinimumWidth = 200;
             this.idSoftType.Name = "idSoftType";
             this.idSoftType.ReadOnly = true;
             this.idSoftType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.idSoftType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.idSoftType.Width = 150;
+            this.idSoftType.Width = 200;
             // 
             // idSoftMaker
             // 
             this.idSoftMaker.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.idSoftMaker.HeaderText = "Разработчик ПО";
-            this.idSoftMaker.MinimumWidth = 150;
+            this.idSoftMaker.MinimumWidth = 200;
             this.idSoftMaker.Name = "idSoftMaker";
             this.idSoftMaker.ReadOnly = true;
             this.idSoftMaker.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.idSoftMaker.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.idSoftMaker.Width = 150;
+            this.idSoftMaker.Width = 200;
             // 
             // SoftwareViewport
             // 
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(800, 300);
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(824, 346);
+            this.ClientSize = new System.Drawing.Size(1008, 730);
             this.Controls.Add(this.tableLayoutPanel14);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1083,17 +1059,14 @@ namespace LicenseSoftware.Viewport
             this.tableLayoutPanel14.ResumeLayout(false);
             this.groupBox32.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
-
-        }
-
-        private void comboBoxSoftMaker_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
     }

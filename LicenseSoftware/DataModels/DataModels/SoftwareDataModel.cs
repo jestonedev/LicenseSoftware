@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -11,25 +10,24 @@ namespace DataModels.DataModels
 {
     public sealed class SoftwareDataModel : DataModel
     {
-        private static SoftwareDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM Software WHERE Deleted = 0";
-        private static string deleteQuery = "UPDATE Software SET Deleted = 1 WHERE [ID Software] = @IDSoftware";
-        private static string insertQuery = @"INSERT INTO Software
-                            ([ID SoftType], [ID SoftMaker], Software, [Version])
-                            VALUES (@IDSoftType, @IDSoftMaker, @Software, @Version); SELECT CONVERT(int, SCOPE_IDENTITY());";
-        private static string updateQuery = 
-                @"UPDATE Software SET [ID SoftType] = @IDSoftType, [ID SoftMaker] = @IDSoftMaker, Software = @Software, [Version] = @Version 
+        private static SoftwareDataModel _dataModel;
+        private const string SelectQuery = "SELECT * FROM Software WHERE Deleted = 0";
+        private const string DeleteQuery = "UPDATE Software SET Deleted = 1 WHERE [ID Software] = @IDSoftware";
+        private const string InsertQuery = @"INSERT INTO Software
+                            ([ID SoftType], [ID SoftMaker], Software)
+                            VALUES (@IDSoftType, @IDSoftMaker, @Software); SELECT CONVERT(int, SCOPE_IDENTITY());";
+        private const string UpdateQuery = @"UPDATE Software SET [ID SoftType] = @IDSoftType, [ID SoftMaker] = @IDSoftMaker, Software = @Software 
                   WHERE [ID Software] = @IDSoftware";
-        private static string tableName = "Software";
+        private const string TableName = "Software";
 
         public bool EditingNewRecord { get; set; }
-        private SoftwareDataModel(ToolStripProgressBar progressBar, int incrementor): base(progressBar, incrementor, selectQuery, tableName)
+        private SoftwareDataModel(ToolStripProgressBar progressBar, int incrementor): base(progressBar, incrementor, SelectQuery, TableName)
         {   
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID Software"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID Software"] };
         }
 
         public static SoftwareDataModel GetInstance()
@@ -39,9 +37,9 @@ namespace DataModels.DataModels
 
         public static SoftwareDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
         {         
-            if (dataModel == null)
-                dataModel = new SoftwareDataModel(progressBar, incrementor);
-            return dataModel;
+            if (_dataModel == null)
+                _dataModel = new SoftwareDataModel(progressBar, incrementor);
+            return _dataModel;
         }
 
         public static int Delete(int id)
@@ -49,7 +47,7 @@ namespace DataModels.DataModels
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
-                command.CommandText = deleteQuery;
+                command.CommandText = DeleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftware", id));
                 try
                 {
@@ -70,18 +68,17 @@ namespace DataModels.DataModels
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
-                command.CommandText = updateQuery;
+                command.CommandText = UpdateQuery;
                 if (software == null)
                 {
                     MessageBox.Show("В метод Update не передана ссылка на объект ПО", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", software.IdSoftType));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftMaker", software.IdSoftMaker));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Software", software.SoftwareName));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Version", software.Version));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftware", software.IdSoftware));
+                command.Parameters.Add(DBConnection.CreateParameter("IDSoftType", software.IdSoftType));
+                command.Parameters.Add(DBConnection.CreateParameter("IDSoftMaker", software.IdSoftMaker));
+                command.Parameters.Add(DBConnection.CreateParameter("Software", software.SoftwareName));
+                command.Parameters.Add(DBConnection.CreateParameter("IDSoftware", software.IdSoftware));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
@@ -101,17 +98,16 @@ namespace DataModels.DataModels
             using (DBConnection connection = new DBConnection())
             using (DbCommand command = DBConnection.CreateCommand())
             {
-                command.CommandText = insertQuery;
+                command.CommandText = InsertQuery;
                 if (software == null)
                 {
                     MessageBox.Show("В метод Insert не передана ссылка на объект ПО", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IdSoftType", software.IdSoftType));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IdSoftMaker", software.IdSoftMaker));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Software", software.SoftwareName));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Version", software.Version));
+                command.Parameters.Add(DBConnection.CreateParameter("IdSoftType", software.IdSoftType));
+                command.Parameters.Add(DBConnection.CreateParameter("IdSoftMaker", software.IdSoftMaker));
+                command.Parameters.Add(DBConnection.CreateParameter("Software", software.SoftwareName));
 
                 try
                 {                

@@ -46,12 +46,14 @@ namespace LicenseSoftware.Viewport
 
         bool Selected { get; set; }
 
+        bool HasAssocSoftVersions();
         bool HasAssocLicenses();
 
         bool HasAssocInstallations();
 
         bool HasAssocLicKeys();
 
+        void ShowAssocSoftVersions();
         void ShowAssocLicenses();
 
         void ShowAssocInstallations();

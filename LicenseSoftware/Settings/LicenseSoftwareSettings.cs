@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Configuration;
 using System.Security.Cryptography;
+using System.Text;
 
-namespace LicenseSoftware
+namespace Settings
 {
     public static class LicenseSoftwareSettings
     {
-        private static string key = "Z33wYQs+rZOGMUH0RGj8GIKggOB82xwhACg9JCA6/kw=";
-        private static string IV = "E0Ci3P9JPj43jUdKNSvtmQ==";
-        private static Aes aes = Aes.Create();
+        private const string Key = "Z33wYQs+rZOGMUH0RGj8GIKggOB82xwhACg9JCA6/kw=";
+        private const string Iv = "E0Ci3P9JPj43jUdKNSvtmQ==";
+        private static readonly Aes Aes = Aes.Create();
 
         public static string ConnectionString {
             get {
                 try
                 {
-                    byte[] inputBuffer = Convert.FromBase64String(Settings.Properties.Settings.Default.ConnectionString);
-                    var decryptor = aes.CreateDecryptor(Convert.FromBase64String(key), Convert.FromBase64String(IV));
-                    byte[] outputBuffer = decryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
+                    var inputBuffer = Convert.FromBase64String(Settings.Properties.Settings.Default.ConnectionString);
+                    var decryptor = Aes.CreateDecryptor(Convert.FromBase64String(Key), Convert.FromBase64String(Iv));
+                    var outputBuffer = decryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
                     return Encoding.UTF8.GetString(outputBuffer);
                 }
                 catch (CryptographicException)
@@ -33,34 +30,34 @@ namespace LicenseSoftware
             }
             set
             {
-                byte[] inputBuffer = Encoding.UTF8.GetBytes(value);
-                var encryptor = aes.CreateEncryptor(Convert.FromBase64String(key), Convert.FromBase64String(IV));
-                byte[] outputBuffer = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
-                Settings.Properties.Settings.Default.ConnectionString = Convert.ToBase64String(outputBuffer);
+                var inputBuffer = Encoding.UTF8.GetBytes(value);
+                var encryptor = Aes.CreateEncryptor(Convert.FromBase64String(Key), Convert.FromBase64String(Iv));
+                var outputBuffer = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
+                Properties.Settings.Default.ConnectionString = Convert.ToBase64String(outputBuffer);
             }
         }
 
-        public static string LDAPUserName
+        public static string LdapUserName
         {
             get
             {
-                return Settings.Properties.Settings.Default.LDAPUserName;
+                return Properties.Settings.Default.LDAPUserName;
             }
             set
             {
-                Settings.Properties.Settings.Default.LDAPUserName = value;
+                Properties.Settings.Default.LDAPUserName = value;
             }
         }
 
-        public static string LDAPPassword
+        public static string LdapPassword
         {
             get
             {
                 try
                 {
-                    byte[] inputBuffer = Convert.FromBase64String(Settings.Properties.Settings.Default.LDAPEncryptedPassword);
-                    var decryptor = aes.CreateDecryptor(Convert.FromBase64String(key), Convert.FromBase64String(IV));
-                    byte[] outputBuffer = decryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
+                    var inputBuffer = Convert.FromBase64String(Properties.Settings.Default.LDAPEncryptedPassword);
+                    var decryptor = Aes.CreateDecryptor(Convert.FromBase64String(Key), Convert.FromBase64String(Iv));
+                    var outputBuffer = decryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
                     return Encoding.UTF8.GetString(outputBuffer);
                 }
                 catch (CryptographicException)
@@ -74,22 +71,22 @@ namespace LicenseSoftware
             }
             set
             {
-                byte[] inputBuffer = Encoding.UTF8.GetBytes(value);
-                var encryptor = aes.CreateEncryptor(Convert.FromBase64String(key), Convert.FromBase64String(IV));
-                byte[] outputBuffer = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
-                Settings.Properties.Settings.Default.LDAPEncryptedPassword = Convert.ToBase64String(outputBuffer);
+                var inputBuffer = Encoding.UTF8.GetBytes(value);
+                var encryptor = Aes.CreateEncryptor(Convert.FromBase64String(Key), Convert.FromBase64String(Iv));
+                var outputBuffer = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
+                Properties.Settings.Default.LDAPEncryptedPassword = Convert.ToBase64String(outputBuffer);
             }
         }
 
-        public static bool UseLDAP
+        public static bool UseLdap
         {
             get
             {
-                return Settings.Properties.Settings.Default.UseLDAP;
+                return Properties.Settings.Default.UseLDAP;
             }
             set
             {
-                Settings.Properties.Settings.Default.UseLDAP = value;
+                Properties.Settings.Default.UseLDAP = value;
             }
         }
 
@@ -97,11 +94,11 @@ namespace LicenseSoftware
         {
             get
             {
-                return Settings.Properties.Settings.Default.ActivityManagerPath;
+                return Properties.Settings.Default.ActivityManagerPath;
             }
             set
             {
-                Settings.Properties.Settings.Default.ActivityManagerPath = value;
+                Properties.Settings.Default.ActivityManagerPath = value;
             }
         }
 
@@ -109,11 +106,11 @@ namespace LicenseSoftware
         {
             get
             {
-                return Settings.Properties.Settings.Default.ActivityManagerOutputCodePage;
+                return Properties.Settings.Default.ActivityManagerOutputCodePage;
             }
             set
             {
-                Settings.Properties.Settings.Default.ActivityManagerOutputCodePage = value;
+                Properties.Settings.Default.ActivityManagerOutputCodePage = value;
             }
         }
 
@@ -121,23 +118,23 @@ namespace LicenseSoftware
         {
             get
             {
-                return Settings.Properties.Settings.Default.ActivityManagerConfigsPath;
+                return Properties.Settings.Default.ActivityManagerConfigsPath;
             }
             set
             {
-                Settings.Properties.Settings.Default.ActivityManagerConfigsPath = value;
+                Properties.Settings.Default.ActivityManagerConfigsPath = value;
             }
         }
 
-        public static int MaxDBConnectionCount
+        public static int MaxDbConnectionCount
         {
             get
             {
-                return Settings.Properties.Settings.Default.MaxDBConnectionCount;
+                return Properties.Settings.Default.MaxDBConnectionCount;
             }
             set
             {
-                Settings.Properties.Settings.Default.MaxDBConnectionCount = value;
+                Properties.Settings.Default.MaxDBConnectionCount = value;
             }
         }
 
@@ -145,11 +142,11 @@ namespace LicenseSoftware
         {
             get
             {
-                return Settings.Properties.Settings.Default.DataModelsCallbackUpdateTimeout;
+                return Properties.Settings.Default.DataModelsCallbackUpdateTimeout;
             }
             set
             {
-                Settings.Properties.Settings.Default.DataModelsCallbackUpdateTimeout = value;
+                Properties.Settings.Default.DataModelsCallbackUpdateTimeout = value;
             }
         }
 
@@ -157,17 +154,17 @@ namespace LicenseSoftware
         {
             get
             {
-                return Settings.Properties.Settings.Default.CalcDataModelsUpdateTimeout;
+                return Properties.Settings.Default.CalcDataModelsUpdateTimeout;
             }
             set
             {
-                Settings.Properties.Settings.Default.CalcDataModelsUpdateTimeout = value;
+                Properties.Settings.Default.CalcDataModelsUpdateTimeout = value;
             }
         }
 
         public static void Save()
         {
-            Settings.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
         }
     }
 }

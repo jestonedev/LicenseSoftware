@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Globalization;
 using System.Windows.Forms;
+using Settings;
 
 namespace LicenseSoftware.Reporting
 {

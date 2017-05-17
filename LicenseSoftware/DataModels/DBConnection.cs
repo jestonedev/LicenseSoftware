@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using LicenseSoftware.Entities;
 using System.Windows.Forms;
 using System.Globalization;
+using Settings;
 
 namespace LicenseSoftware.DataModels
 {

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Settings;
 
 namespace LicenseSoftware
 {
@@ -22,12 +23,12 @@ namespace LicenseSoftware
             textBoxActivityManagerOutputCodepage.Text = LicenseSoftwareSettings.ActivityManagerOutputCodePage;
             textBoxActivityManagerPath.Text = LicenseSoftwareSettings.ActivityManagerPath;
             textBoxConnectionString.Text = LicenseSoftwareSettings.ConnectionString;
-            textBoxLDAPPassword.Text = LicenseSoftwareSettings.LDAPPassword;
-            textBoxLDAPUserName.Text = LicenseSoftwareSettings.LDAPUserName;
-            numericUpDownMaxDBConnectionCount.Value = LicenseSoftwareSettings.MaxDBConnectionCount;
+            textBoxLDAPPassword.Text = LicenseSoftwareSettings.LdapPassword;
+            textBoxLDAPUserName.Text = LicenseSoftwareSettings.LdapUserName;
+            numericUpDownMaxDBConnectionCount.Value = LicenseSoftwareSettings.MaxDbConnectionCount;
             numericUpDownDataModelsCallbackUpdateTimeout.Value = LicenseSoftwareSettings.DataModelsCallbackUpdateTimeout;
             numericUpDownCalcDataModelsUpdateTimeout.Value = LicenseSoftwareSettings.CalcDataModelsUpdateTimeout;
-            checkBoxUseLDAP.Checked = LicenseSoftwareSettings.UseLDAP;
+            checkBoxUseLDAP.Checked = LicenseSoftwareSettings.UseLdap;
         }
 
         private void vButton2_Click(object sender, EventArgs e)
@@ -36,12 +37,12 @@ namespace LicenseSoftware
             LicenseSoftwareSettings.ActivityManagerOutputCodePage = textBoxActivityManagerOutputCodepage.Text;
             LicenseSoftwareSettings.ActivityManagerPath = textBoxActivityManagerPath.Text;
             LicenseSoftwareSettings.ConnectionString = textBoxConnectionString.Text;
-            LicenseSoftwareSettings.LDAPPassword = textBoxLDAPPassword.Text;
-            LicenseSoftwareSettings.LDAPUserName = textBoxLDAPUserName.Text;
-            LicenseSoftwareSettings.MaxDBConnectionCount = Convert.ToInt32(numericUpDownMaxDBConnectionCount.Value);
+            LicenseSoftwareSettings.LdapPassword = textBoxLDAPPassword.Text;
+            LicenseSoftwareSettings.LdapUserName = textBoxLDAPUserName.Text;
+            LicenseSoftwareSettings.MaxDbConnectionCount = Convert.ToInt32(numericUpDownMaxDBConnectionCount.Value);
             LicenseSoftwareSettings.DataModelsCallbackUpdateTimeout = Convert.ToInt32(numericUpDownDataModelsCallbackUpdateTimeout.Value);
             LicenseSoftwareSettings.CalcDataModelsUpdateTimeout = Convert.ToInt32(numericUpDownCalcDataModelsUpdateTimeout.Value);
-            LicenseSoftwareSettings.UseLDAP = checkBoxUseLDAP.Checked;
+            LicenseSoftwareSettings.UseLdap = checkBoxUseLDAP.Checked;
             LicenseSoftwareSettings.Save();
             Close();
         }

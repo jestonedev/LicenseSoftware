@@ -10,6 +10,7 @@ namespace LicenseSoftware.Entities
         Unknown,
         Software,
         License,
-        Installation
+        Installation,
+        SoftVersion
     }
 }

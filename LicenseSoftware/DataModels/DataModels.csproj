@@ -52,10 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalcDataModelsUpdater.cs" />
+    <Compile Include="CalcDataModels\CalcDataModelLicKeyConcat.cs" />
     <Compile Include="CalcDataModels\CalcDataModelLicensesConcat.cs" />
     <Compile Include="CalcDataModels\CalcDataModelSoftwareConcat.cs" />
     <Compile Include="DataModelsCallbackUpdater.cs" />
     <Compile Include="DataModelHelper.cs" />
+    <Compile Include="DataModels\SoftVersionsDataModel.cs" />
     <Compile Include="DataModels\SoftTypesDataModel.cs" />
     <Compile Include="DataModels\SoftSuppliersDataModel.cs" />
     <Compile Include="DataModels\SoftMakersDataModel.cs" />

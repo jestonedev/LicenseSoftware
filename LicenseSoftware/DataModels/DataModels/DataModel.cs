@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 using LicenseSoftware.DataModels;
+using Settings;
 
 namespace DataModels.DataModels
 {
@@ -21,8 +22,8 @@ namespace DataModels.DataModels
 
         private static object lock_obj = new object();
         // Не больше MaxDBConnectionCount потоков одновременно делают запросы к БД
-        private static Semaphore db_access_semaphore = new Semaphore(LicenseSoftware.LicenseSoftwareSettings.MaxDBConnectionCount,
-            LicenseSoftware.LicenseSoftwareSettings.MaxDBConnectionCount);
+        private static Semaphore db_access_semaphore = new Semaphore(LicenseSoftwareSettings.MaxDbConnectionCount,
+            LicenseSoftwareSettings.MaxDbConnectionCount);
 
         protected DataModel()
         {

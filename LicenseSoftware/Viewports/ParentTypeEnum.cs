@@ -9,6 +9,7 @@ namespace LicenseSoftware.Viewport
     {
         None,
         Software,
-        License
+        License,
+        SoftVersion
     }
 }

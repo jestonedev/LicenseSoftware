@@ -121,6 +121,9 @@
     <Compile Include="SoftLicDocTypesViewport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SoftVersionsViewport.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SoftLicKeysViewport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -200,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SoftLicDocTypesViewport.resx">
       <DependentUpon>SoftLicDocTypesViewport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SoftVersionsViewport.resx">
+      <DependentUpon>SoftVersionsViewport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SoftLicKeysViewport.resx">
       <DependentUpon>SoftLicKeysViewport.cs</DependentUpon>
