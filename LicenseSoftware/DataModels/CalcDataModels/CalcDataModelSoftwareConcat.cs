@@ -20,6 +20,7 @@ namespace LicenseSoftware.CalcDataModels
         {
             Table = InitializeTable();
             Refresh(EntityType.Unknown, null, false);
+            
         }
 
         private static DataTable InitializeTable()

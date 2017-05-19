@@ -185,6 +185,10 @@ namespace LicenseSoftware.DataModels
                     if (CalcDataModelSoftwareConcat.HasInstance())
                         CalcDataModelSoftwareConcat.GetInstance().DefferedUpdate = true;
                     break;
+                case "SoftVersions":
+                    if (CalcDataModelSoftwareConcat.HasInstance())
+                        CalcDataModelSoftwareConcat.GetInstance().DefferedUpdate = true;
+                    break;
                 case "SoftLicenses":
                     if (CalcDataModelLicensesConcat.HasInstance())
                         CalcDataModelLicensesConcat.GetInstance().DefferedUpdate = true;
