@@ -655,12 +655,11 @@ namespace LicenseSoftware.Viewport
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 e.Cancel = true;
             softwareDM.Select().RowChanged -= SoftwareViewport_RowChanged;
             softwareDM.Select().RowDeleted -= SoftwareViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override void ForceClose()

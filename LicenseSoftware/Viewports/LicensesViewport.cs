@@ -978,6 +978,7 @@ namespace LicenseSoftware.Viewport
             _departments.Select().RowChanged -= Departments_RowChanged;
             _departments.Select().RowDeleted -= Departments_RowDeleted;
             _softwareConcat.RefreshEvent -= SoftwareConcatRefreshEvent;
+            base.OnClosing(e);
         }
 
         public override void ForceClose()

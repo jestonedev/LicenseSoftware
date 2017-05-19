@@ -172,7 +172,7 @@ namespace LicenseSoftware.Viewport
                 snapshotSoftSuppliers.Rows.Add(DataRowViewToArray(((DataRowView)v_softSuppliers[i])));
             v_snapshotSoftSuppliers = new BindingSource();
             v_snapshotSoftSuppliers.DataSource = snapshotSoftSuppliers;
-            v_snapshotSoftSuppliers.CurrentItemChanged += new EventHandler(v_snapshotSuppliers_CurrentItemChanged);
+            v_snapshotSoftSuppliers.CurrentItemChanged += v_snapshotSuppliers_CurrentItemChanged;
 
             dataGridView.DataSource = v_snapshotSoftSuppliers;
             idSoftSupplier.DataPropertyName = "ID Supplier";
@@ -180,12 +180,12 @@ namespace LicenseSoftware.Viewport
 
             dataGridView.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
 
-            dataGridView.CellValidated += new DataGridViewCellEventHandler(dataGridView_CellValidated);
+            dataGridView.CellValidated += dataGridView_CellValidated;
             //События изменения данных для проверки соответствия реальным данным в модели
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softSuppliers.Select().RowChanged += new DataRowChangeEventHandler(SoftSuppliersViewport_RowChanged);
-            softSuppliers.Select().RowDeleting += new DataRowChangeEventHandler(SoftSuppliersViewport_RowDeleting);
+            softSuppliers.Select().RowChanged += SoftSuppliersViewport_RowChanged;
+            softSuppliers.Select().RowDeleting += SoftSuppliersViewport_RowDeleting;
             softSuppliers.Select().RowDeleted += SoftSuppliersViewport_RowDeleted;
         }
 
@@ -242,8 +242,6 @@ namespace LicenseSoftware.Viewport
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (SnapshotHasChanges())
             {
                 DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
@@ -259,9 +257,10 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softSuppliers.Select().RowChanged -= new DataRowChangeEventHandler(SoftSuppliersViewport_RowChanged);
-            softSuppliers.Select().RowDeleting -= new DataRowChangeEventHandler(SoftSuppliersViewport_RowDeleting);
-            softSuppliers.Select().RowDeleted -= new DataRowChangeEventHandler(SoftSuppliersViewport_RowDeleted);
+            softSuppliers.Select().RowChanged -= SoftSuppliersViewport_RowChanged;
+            softSuppliers.Select().RowDeleting -= SoftSuppliersViewport_RowDeleting;
+            softSuppliers.Select().RowDeleted -= SoftSuppliersViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()

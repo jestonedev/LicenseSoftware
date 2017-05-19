@@ -398,6 +398,7 @@ namespace LicenseSoftware.Viewport
             softLicKeys.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
             softLicKeys.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
             softLicKeys.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override void ForceClose()

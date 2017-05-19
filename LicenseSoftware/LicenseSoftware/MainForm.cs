@@ -80,8 +80,11 @@ namespace LicenseSoftware
 
         private void ribbonButtonTabClose_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).Close();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+            {
+                document.Close();
+            }
         }
 
         private void ribbonButtonTabsClose_Click(object sender, EventArgs e)

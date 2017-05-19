@@ -36,15 +36,12 @@ namespace LicenseSoftware.Viewport
             this.MenuCallback = menuCallback;
         }
 
-        public new virtual void Close()
-        {
-            MenuCallback.SwitchToPreviousViewport();
-            base.Close();
-        }
-
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            MenuCallback.SwitchToPreviousViewport();
+            if (e.Cancel != true)
+            {
+                MenuCallback.SwitchToPreviousViewport();
+            }
             base.OnClosing(e);
         }
 

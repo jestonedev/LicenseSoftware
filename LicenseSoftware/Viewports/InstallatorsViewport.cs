@@ -218,7 +218,7 @@ namespace LicenseSoftware.Viewport
                 snapshotInstallators.Rows.Add(DataRowViewToArray(((DataRowView)v_installators[i])));
             v_snapshotInstallators = new BindingSource();
             v_snapshotInstallators.DataSource = snapshotInstallators;
-            v_snapshotInstallators.CurrentItemChanged += new EventHandler(v_snapshotInstallators_CurrentItemChanged);
+            v_snapshotInstallators.CurrentItemChanged += v_snapshotInstallators_CurrentItemChanged;
 
             dataGridView.DataSource = v_snapshotInstallators;
             idInstallator.DataPropertyName = "ID Installator";
@@ -228,13 +228,13 @@ namespace LicenseSoftware.Viewport
 
             dataGridView.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
 
-            dataGridView.CellValidated += new DataGridViewCellEventHandler(dataGridView_CellValidated);
+            dataGridView.CellValidated += dataGridView_CellValidated;
             //События изменения данных для проверки соответствия реальным данным в модели
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            installators.Select().RowChanged += new DataRowChangeEventHandler(InstallatorsViewport_RowChanged);
-            installators.Select().RowDeleting += new DataRowChangeEventHandler(InstallatorsViewport_RowDeleting);
-            installators.Select().RowDeleted += new DataRowChangeEventHandler(InstallatorsViewport_RowDeleted);
+            installators.Select().RowChanged += InstallatorsViewport_RowChanged;
+            installators.Select().RowDeleting += InstallatorsViewport_RowDeleting;
+            installators.Select().RowDeleted += InstallatorsViewport_RowDeleted;
         }
 
         public override bool CanInsertRecord()
@@ -353,8 +353,6 @@ namespace LicenseSoftware.Viewport
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (SnapshotHasChanges())
             {
                 DialogResult result = MessageBox.Show("Сохранить изменения об установщиках в базу данных в базу данных?", "Внимание",
@@ -370,9 +368,10 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            installators.Select().RowChanged -= new DataRowChangeEventHandler(InstallatorsViewport_RowChanged);
-            installators.Select().RowDeleting -= new DataRowChangeEventHandler(InstallatorsViewport_RowDeleting);
-            installators.Select().RowDeleted -= new DataRowChangeEventHandler(InstallatorsViewport_RowDeleted);
+            installators.Select().RowChanged -= InstallatorsViewport_RowChanged;
+            installators.Select().RowDeleting -= InstallatorsViewport_RowDeleting;
+            installators.Select().RowDeleted -= InstallatorsViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)

@@ -886,8 +886,6 @@ namespace LicenseSoftware.Viewport
         
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 e.Cancel = true;
             _softInstallations.Select().RowChanged -= InstallationsViewport_RowChanged;
@@ -897,6 +895,7 @@ namespace LicenseSoftware.Viewport
             _devices.Select().RowChanged -= Devices_RowChanged;
             _softLicKeys.Select().RowChanged -= softLicKeys_RowChanged;
             _softLicKeys.Select().RowDeleted -= softLicKeys_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override void ForceClose()

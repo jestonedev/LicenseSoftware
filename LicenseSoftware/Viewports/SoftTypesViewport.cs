@@ -172,7 +172,7 @@ namespace LicenseSoftware.Viewport
                 snapshotSoftTypes.Rows.Add(DataRowViewToArray(((DataRowView)v_softTypes[i])));
             v_snapshotSoftTypes = new BindingSource();
             v_snapshotSoftTypes.DataSource = snapshotSoftTypes;
-            v_snapshotSoftTypes.CurrentItemChanged += new EventHandler(v_snapshotSoftTypes_CurrentItemChanged);
+            v_snapshotSoftTypes.CurrentItemChanged += v_snapshotSoftTypes_CurrentItemChanged;
 
             dataGridView.DataSource = v_snapshotSoftTypes;
             idSoftType.DataPropertyName = "ID SoftType";
@@ -180,12 +180,12 @@ namespace LicenseSoftware.Viewport
 
             dataGridView.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
 
-            dataGridView.CellValidated += new DataGridViewCellEventHandler(dataGridView_CellValidated);
+            dataGridView.CellValidated += dataGridView_CellValidated;
             //События изменения данных для проверки соответствия реальным данным в модели
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softTypes.Select().RowChanged += new DataRowChangeEventHandler(SoftTypesViewport_RowChanged);
-            softTypes.Select().RowDeleting += new DataRowChangeEventHandler(SoftTypesViewport_RowDeleting);
+            softTypes.Select().RowChanged += SoftTypesViewport_RowChanged;
+            softTypes.Select().RowDeleting += SoftTypesViewport_RowDeleting;
             softTypes.Select().RowDeleted += SoftTypesViewport_RowDeleted;
         }
 
@@ -259,9 +259,10 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softTypes.Select().RowChanged -= new DataRowChangeEventHandler(SoftTypesViewport_RowChanged);
-            softTypes.Select().RowDeleting -= new DataRowChangeEventHandler(SoftTypesViewport_RowDeleting);
-            softTypes.Select().RowDeleted -= new DataRowChangeEventHandler(SoftTypesViewport_RowDeleted);
+            softTypes.Select().RowChanged -= SoftTypesViewport_RowChanged;
+            softTypes.Select().RowDeleting -= SoftTypesViewport_RowDeleting;
+            softTypes.Select().RowDeleted -= SoftTypesViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()

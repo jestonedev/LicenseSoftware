@@ -172,7 +172,7 @@ namespace LicenseSoftware.Viewport
                 snapshotSoftMakers.Rows.Add(DataRowViewToArray(((DataRowView)v_softMakers[i])));
             v_snapshotSoftMakers = new BindingSource();
             v_snapshotSoftMakers.DataSource = snapshotSoftMakers;
-            v_snapshotSoftMakers.CurrentItemChanged += new EventHandler(v_snapshotSoftMakers_CurrentItemChanged);
+            v_snapshotSoftMakers.CurrentItemChanged += v_snapshotSoftMakers_CurrentItemChanged;
 
             dataGridView.DataSource = v_snapshotSoftMakers;
             idSoftMaker.DataPropertyName = "ID SoftMaker";
@@ -180,12 +180,12 @@ namespace LicenseSoftware.Viewport
 
             dataGridView.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
 
-            dataGridView.CellValidated += new DataGridViewCellEventHandler(dataGridView_CellValidated);
+            dataGridView.CellValidated += dataGridView_CellValidated;
             //События изменения данных для проверки соответствия реальным данным в модели
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softMakers.Select().RowChanged += new DataRowChangeEventHandler(SoftMakersViewport_RowChanged);
-            softMakers.Select().RowDeleting += new DataRowChangeEventHandler(SoftMakersViewport_RowDeleting);
+            softMakers.Select().RowChanged += SoftMakersViewport_RowChanged;
+            softMakers.Select().RowDeleting += SoftMakersViewport_RowDeleting;
             softMakers.Select().RowDeleted += SoftMakersViewport_RowDeleted;
         }
 
@@ -242,8 +242,6 @@ namespace LicenseSoftware.Viewport
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (SnapshotHasChanges())
             {
                 DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
@@ -259,9 +257,10 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softMakers.Select().RowChanged -= new DataRowChangeEventHandler(SoftMakersViewport_RowChanged);
-            softMakers.Select().RowDeleting -= new DataRowChangeEventHandler(SoftMakersViewport_RowDeleting);
-            softMakers.Select().RowDeleted -= new DataRowChangeEventHandler(SoftMakersViewport_RowDeleted);
+            softMakers.Select().RowChanged -= SoftMakersViewport_RowChanged;
+            softMakers.Select().RowDeleting -= SoftMakersViewport_RowDeleting;
+            softMakers.Select().RowDeleted -= SoftMakersViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()

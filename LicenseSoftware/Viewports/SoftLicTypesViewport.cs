@@ -266,6 +266,7 @@ namespace LicenseSoftware.Viewport
             softLicTypes.Select().RowChanged -= SoftLicTypesViewport_RowChanged;
             softLicTypes.Select().RowDeleting -= SoftLicTypesViewport_RowDeleting;
             softLicTypes.Select().RowDeleted -= SoftLicTypesViewport_RowDeleted;
+            base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()
