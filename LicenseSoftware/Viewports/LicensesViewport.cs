@@ -360,6 +360,7 @@ namespace LicenseSoftware.Viewport
             comboBoxDocTypeID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdDocType);
             comboBoxLicTypeID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdLicType);
             comboBoxSupplierID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdSupplier);
+            comboBoxDepartmentID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdDepartment);
             textBoxDocNumber.Text = license.DocNumber;
             textBoxDescription.Text = license.Description;
             dateTimePickerBuyLicenseDate.Value = ViewportHelper.ValueOrDefault(license.BuyLicenseDate);
