@@ -440,7 +440,7 @@ namespace LicenseSoftware.Viewport
                 comboBoxLicenseID.Focus();
                 return false;
             }
-            if (installation.IdLicenseKey != null && (int)SoftLicensesDataModel.GetInstance().Select().Rows.Find(installation.IdLicense)["ID LicType"] != 1 &&
+            if (installation.IdLicenseKey != null &&
                 !DataModelHelper.KeyIsFree(installation.IdLicenseKey.Value))
             {
                 var result = MessageBox.Show(@"Данный лицензионный ключ уже используется. Вы уверены, что хотите продолжить сохранение?", @"Внимание",
