@@ -27,14 +27,14 @@ namespace LicenseSoftware
                     Application.SetCompatibleTextRenderingDefault(false);
                     if (args.Length > 0 && args.Contains("--config"))
                     {
-                        using (SettingsForm sf = new SettingsForm())
+                        using (var sf = new SettingsForm())
                         {
                             sf.ShowDialog();
                         }
                     }
                     try
                     {
-                        Application.Run(new MainForm());
+                        Application.Run(new MainForm(args));
                     }
                     catch (TargetInvocationException)
                     {
@@ -43,7 +43,7 @@ namespace LicenseSoftware
                 }
                 else
                 {
-                    MessageBox.Show("Приложение уже запущено", "Ошибка",
+                    MessageBox.Show(@"Приложение уже запущено", @"Ошибка",
                             MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 }
             }

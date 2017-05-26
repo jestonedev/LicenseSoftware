@@ -27,6 +27,7 @@ namespace LicenseSoftware
     {
         private ReportLogForm reportLogForm = new ReportLogForm();
         private int reportCounter = 0;
+        private readonly string _computerNameCommandLineArg;
 
         private void ChangeViewportsSelectProprty()
         {
@@ -53,9 +54,15 @@ namespace LicenseSoftware
                 toolStripLabelRecordCount.Text = "";
         }
 
-        public MainForm()
+        public MainForm(string[] args)
         {
             InitializeComponent();
+            var arguments = args.Select(r => r.Split(new[] { '=' }, 2));
+            var computerCommandLineArg = arguments.FirstOrDefault(r => r.Length > 1 && r[0] == "--computer");
+            if (computerCommandLineArg != null)
+            {
+                _computerNameCommandLineArg = computerCommandLineArg[1];
+            }
             ChangeMainMenuState();
             StatusBarStateUpdate();
         }
@@ -377,8 +384,8 @@ namespace LicenseSoftware
         private void CreateViewport(ViewportType viewportType)
         {
             var viewport = ViewportFactory.CreateViewport(this, viewportType);
-            if ((viewport as IMenuController).CanLoadData())
-                (viewport as IMenuController).LoadData();
+            if (((IMenuController) viewport).CanLoadData())
+                ((IMenuController) viewport).LoadData();
             AddViewport(viewport);
             ChangeMainMenuState();
             StatusBarStateUpdate();
@@ -399,12 +406,12 @@ namespace LicenseSoftware
             if (user == null)
                 toolStripLabelHelloUser.Text = "";
             else
-                toolStripLabelHelloUser.Text = "Здравствуйте, " + user.DisplayName;
+                toolStripLabelHelloUser.Text = @"Здравствуйте, " + user.DisplayName;
             //Загружаем права пользователя
             AccessControl.LoadPriveleges();
             if (AccessControl.HasNoPriveleges())
             {
-                MessageBox.Show("У вас нет прав на использование данного приложения", "Ошибка",
+                MessageBox.Show(@"У вас нет прав на использование данного приложения", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 Application.Exit();
                 return;
@@ -415,14 +422,27 @@ namespace LicenseSoftware
             PreLoadData();
             //Обновляем состояние главного меню
             MainMenuStateUpdate();
+            if (string.IsNullOrEmpty(_computerNameCommandLineArg)) return;
+            var device = DataModelHelper.FilterRows(DevicesDataModel.GetInstance().Select())
+                .FirstOrDefault(r => r.Field<string>("Device Name").Contains(_computerNameCommandLineArg));
+            if (device == null) return;
+            var viewport = ViewportFactory.CreateViewport(this, ViewportType.InstallationsViewport);
+            viewport.DynamicFilter = string.Format("[ID Computer] = {0}", device.Field<int>("ID Device"));
+
+            if (((IMenuController)viewport).CanLoadData())
+                ((IMenuController)viewport).LoadData();
+            AddViewport(viewport);
+            ChangeMainMenuState();
+            StatusBarStateUpdate();
+            ChangeViewportsSelectProprty();
         }
 
         private void RunReport(ReporterType reporterType)
         {
             Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
-            reporter.ReportOutputStreamResponse += new EventHandler<ReportOutputStreamEventArgs>(reporter_ReportOutputStreamResponse);
-            reporter.ReportComplete += new EventHandler<EventArgs>(reporter_ReportComplete);
-            reporter.ReportCanceled += new EventHandler<EventArgs>(reporter_ReportCanceled);
+            reporter.ReportOutputStreamResponse += reporter_ReportOutputStreamResponse;
+            reporter.ReportComplete += reporter_ReportComplete;
+            reporter.ReportCanceled += reporter_ReportCanceled;
             reportCounter++;
             reporter.Run();
         }
@@ -582,9 +602,9 @@ namespace LicenseSoftware
         private void RunDepReport(Reporting.ReporterType reporterType, List<string> args)
         {
             Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
-            reporter.ReportOutputStreamResponse += new EventHandler<ReportOutputStreamEventArgs>(reporter_ReportOutputStreamResponse);
-            reporter.ReportComplete += new EventHandler<EventArgs>(reporter_ReportComplete);
-            reporter.ReportCanceled += new EventHandler<EventArgs>(reporter_ReportCanceled);
+            reporter.ReportOutputStreamResponse += reporter_ReportOutputStreamResponse;
+            reporter.ReportComplete += reporter_ReportComplete;
+            reporter.ReportCanceled += reporter_ReportCanceled;
             reportCounter++;
             reporter.Run(args);
         }
