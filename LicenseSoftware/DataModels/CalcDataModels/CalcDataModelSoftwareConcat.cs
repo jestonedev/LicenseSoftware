@@ -27,6 +27,7 @@ namespace LicenseSoftware.CalcDataModels
         {
             var table = new DataTable(TableName) {Locale = CultureInfo.InvariantCulture};
             table.Columns.Add("ID Version").DataType = typeof(int);
+            table.Columns.Add("ID Software").DataType = typeof(int);
             table.Columns.Add("Software").DataType = typeof(string);
             table.PrimaryKey = new[] { table.Columns["ID Version"] };
             return table;
@@ -39,8 +40,28 @@ namespace LicenseSoftware.CalcDataModels
                 throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelSoftwareConcat");
             var config = (CalcAsyncConfig)e.Argument;
             // Фильтруем удаленные строки
-            var software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), config.Entity, config.IdObject);
-            var versions = DataModelHelper.FilterRows(SoftVersionsDataModel.GetInstance().Select(), config.Entity, config.IdObject);
+            IEnumerable<DataRow> software;
+            IEnumerable<DataRow> versions;
+            if (config.Entity == EntityType.Software)
+            {
+                software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), config.Entity,
+                    config.IdObject);
+                versions = DataModelHelper.FilterRows(SoftVersionsDataModel.GetInstance().Select(), config.Entity,
+                    config.IdObject);
+            } else if (config.Entity == EntityType.SoftVersion)
+            {
+                software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), EntityType.Unknown, 
+                    null);
+                versions = DataModelHelper.FilterRows(SoftVersionsDataModel.GetInstance().Select(), config.Entity,
+                    config.IdObject);
+            }
+            else
+            {
+                software = DataModelHelper.FilterRows(SoftwareDataModel.GetInstance().Select(), EntityType.Unknown,
+                    null);
+                versions = DataModelHelper.FilterRows(SoftVersionsDataModel.GetInstance().Select(), EntityType.Unknown,
+                    null);
+            }
             // Вычисляем агрегационную информацию
             var result = from softwareRow in software
                          join versionRow in versions
@@ -48,6 +69,7 @@ namespace LicenseSoftware.CalcDataModels
                          select new
                          {
                              id_version = versionRow.Field<int>("ID Version"),
+                             id_software = versionRow.Field<int>("ID Software"),
                              software = softwareRow.Field<string>("Software") +
                                     (versionRow.Field<string>("Version") == null ? "" : " " + versionRow.Field<string>("Version"))
                          };
@@ -56,7 +78,7 @@ namespace LicenseSoftware.CalcDataModels
             table.BeginLoadData();
             result.ToList().ForEach(x =>
             {
-                table.Rows.Add(x.id_version, x.software);
+                table.Rows.Add(x.id_version, x.id_software, x.software);
             });
             table.EndLoadData();
             if (!DataSetManager.DataSet.Tables.Contains(TableName))

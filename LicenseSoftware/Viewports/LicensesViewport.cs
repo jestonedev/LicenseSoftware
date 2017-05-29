@@ -875,6 +875,8 @@ namespace LicenseSoftware.Viewport
                     break;
                 case ViewportState.ModifyRowState:
                     _vSoftware.Filter = "";
+                    _vSoftSuppliers.Filter = "";
+                    _vDepartments.Filter = "";
                     dataGridView.Enabled = true;
                     is_editable = false;
                     DataBind();
@@ -1028,6 +1030,8 @@ namespace LicenseSoftware.Viewport
         {
             SetViewportCaption();
             SelectCurrentSoftware();
+            _vDepartments.Filter = "";
+            _vSoftSuppliers.Filter = "";
             if (_vLicenses.Position == -1 || dataGridView.RowCount == 0)
                 dataGridView.ClearSelection();
             else
@@ -1117,6 +1121,85 @@ namespace LicenseSoftware.Viewport
                 comboBoxSoftwareID.Text = "";
                 _vSoftware.Filter = "";
             }
+        }
+
+        private void comboBoxSoftVersionID_SelectedValueChanged(object sender, EventArgs e)
+        {
+            CheckViewportModifications();
+        }
+
+        private void comboBoxSupplierID_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) ||
+                (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                var text = comboBoxSupplierID.Text;
+                var selectionStart = comboBoxSupplierID.SelectionStart;
+                var selectionLength = comboBoxSupplierID.SelectionLength;
+                _vSoftSuppliers.Filter = "Supplier like '%" + comboBoxSupplierID.Text + "%'";
+                comboBoxSupplierID.Text = text;
+                comboBoxSupplierID.SelectionStart = selectionStart;
+                comboBoxSupplierID.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxSupplierID_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count > 0)
+            {
+                if (comboBoxSupplierID.SelectedItem == null)
+                    comboBoxSupplierID.SelectedItem = _vSoftSuppliers[_vSoftSuppliers.Position];
+                comboBoxSupplierID.Text = ((DataRowView)_vSoftSuppliers[_vSoftSuppliers.Position])["Supplier"].ToString();
+            }
+            if (comboBoxSupplierID.SelectedItem == null)
+            {
+                comboBoxSupplierID.Text = "";
+                _vSoftSuppliers.Filter = "";
+            }
+        }
+
+        private void comboBoxSupplierID_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count == 0)
+                comboBoxSupplierID.SelectedIndex = -1;
+        }
+
+        private void comboBoxDepartmentID_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) ||
+                (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                var text = comboBoxDepartmentID.Text;
+                var selectionStart = comboBoxDepartmentID.SelectionStart;
+                var selectionLength = comboBoxDepartmentID.SelectionLength;
+                _vDepartments.Filter = "Department like '%" + comboBoxDepartmentID.Text + "%' OR Department not like '    %'";
+                comboBoxDepartmentID.Text = text;
+                comboBoxDepartmentID.SelectionStart = selectionStart;
+                comboBoxDepartmentID.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxDepartmentID_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count > 0)
+            {
+                if (comboBoxDepartmentID.SelectedItem == null)
+                    comboBoxDepartmentID.SelectedItem = _vDepartments[_vDepartments.Position];
+                comboBoxDepartmentID.Text = ((DataRowView)_vDepartments[_vDepartments.Position])["Department"].ToString();
+            }
+            if (comboBoxDepartmentID.SelectedItem == null)
+            {
+                comboBoxDepartmentID.Text = "";
+                _vDepartments.Filter = "";
+            }
+        }
+
+        private void comboBoxDepartmentID_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxDepartmentID.Items.Count == 0)
+                comboBoxDepartmentID.SelectedIndex = -1;
         }
 
         private void comboBoxSupplierID_SelectedValueChanged(object sender, EventArgs e)
@@ -1560,13 +1643,15 @@ namespace LicenseSoftware.Viewport
             // 
             this.comboBoxSupplierID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSupplierID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSupplierID.FormattingEnabled = true;
             this.comboBoxSupplierID.Location = new System.Drawing.Point(161, 84);
             this.comboBoxSupplierID.Name = "comboBoxSupplierID";
             this.comboBoxSupplierID.Size = new System.Drawing.Size(220, 23);
             this.comboBoxSupplierID.TabIndex = 2;
+            this.comboBoxSupplierID.DropDownClosed += new System.EventHandler(this.comboBoxSupplierID_DropDownClosed);
             this.comboBoxSupplierID.SelectedValueChanged += new System.EventHandler(this.comboBoxSupplierID_SelectedValueChanged);
+            this.comboBoxSupplierID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxSupplierID_KeyUp);
+            this.comboBoxSupplierID.Leave += new System.EventHandler(this.comboBoxSupplierID_Leave);
             // 
             // label3
             // 
@@ -1623,13 +1708,15 @@ namespace LicenseSoftware.Viewport
             // 
             this.comboBoxDepartmentID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxDepartmentID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentID.FormattingEnabled = true;
             this.comboBoxDepartmentID.Location = new System.Drawing.Point(161, 25);
             this.comboBoxDepartmentID.Name = "comboBoxDepartmentID";
             this.comboBoxDepartmentID.Size = new System.Drawing.Size(220, 23);
             this.comboBoxDepartmentID.TabIndex = 0;
+            this.comboBoxDepartmentID.DropDownClosed += new System.EventHandler(this.comboBoxDepartmentID_DropDownClosed);
             this.comboBoxDepartmentID.SelectedValueChanged += new System.EventHandler(this.comboBoxDepartmentID_SelectedValueChanged);
+            this.comboBoxDepartmentID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxDepartmentID_KeyUp);
+            this.comboBoxDepartmentID.Leave += new System.EventHandler(this.comboBoxDepartmentID_Leave);
             // 
             // label4
             // 
@@ -1746,11 +1833,6 @@ namespace LicenseSoftware.Viewport
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInstallationsCount)).EndInit();
             this.ResumeLayout(false);
 
-        }
-
-        private void comboBoxSoftVersionID_SelectedValueChanged(object sender, EventArgs e)
-        {
-            CheckViewportModifications();
         }
     }
 }

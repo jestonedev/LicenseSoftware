@@ -38,6 +38,7 @@ namespace LicenseSoftware.CalcDataModels
                 {
                     var remove_rows = (from row in Table.AsEnumerable()
                                        where entity == EntityType.Software ? row.Field<int?>("ID Software") == idObject :
+                                             entity == EntityType.SoftVersion ? row.Field<int?>("ID Version") == idObject :
                                              entity == EntityType.License ? row.Field<int?>("ID License") == idObject :
                                              entity == EntityType.Installation ? row.Field<int?>("ID Installation") == idObject : false
                                        select row);

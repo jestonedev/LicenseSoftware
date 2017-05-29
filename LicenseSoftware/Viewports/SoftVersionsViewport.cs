@@ -8,6 +8,7 @@ using Security;
 using System.Globalization;
 using System.Linq;
 using DataModels.DataModels;
+using LicenseSoftware.CalcDataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -353,6 +354,8 @@ namespace LicenseSoftware.Viewport
             }
             _syncViews = true;
             MenuCallback.EditingStateUpdate();
+            if (CalcDataModelSoftwareConcat.HasInstance())
+                CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Unknown, null, true);
         }
 
         public override bool CanDuplicate()
