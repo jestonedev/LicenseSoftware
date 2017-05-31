@@ -1457,7 +1457,7 @@ namespace LicenseSoftware.Viewport
             this.groupBox32.Size = new System.Drawing.Size(393, 83);
             this.groupBox32.TabIndex = 2;
             this.groupBox32.TabStop = false;
-            this.groupBox32.Text = "Документе-основании на приобретение";
+            this.groupBox32.Text = "Документ-основание на приобретение";
             // 
             // comboBoxDocTypeID
             // 
