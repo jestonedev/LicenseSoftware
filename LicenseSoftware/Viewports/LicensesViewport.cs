@@ -636,9 +636,9 @@ namespace LicenseSoftware.Viewport
             else
             if (ParentType == ParentTypeEnum.Software && ParentRow != null)
             {
-                filter = "[ID Version] IN (0" + (from row in DataModelHelper.FilterRows(_softVersions.Select())
+                filter = "[ID Version] IN (" + (from row in DataModelHelper.FilterRows(_softVersions.Select())
                     where row.Field<int>("ID Software") == (int)ParentRow["ID Software"]
-                    select row.Field<int>("ID Version").ToString())
+                    select row.Field<int>("ID Version").ToString()).Concat(new []{ "0" })
                     .Aggregate((acc, v) => acc + "," + v)+")";
             }
             // Фильтрация по правам на департаменты
