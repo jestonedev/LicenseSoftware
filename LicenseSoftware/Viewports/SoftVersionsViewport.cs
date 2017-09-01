@@ -254,7 +254,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanInsertRecord()
         {
             return (ParentType == ParentTypeEnum.Software) && (ParentRow != null) &&
-                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
+                AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void InsertRecord()
@@ -270,7 +270,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanDeleteRecord()
         {
             return (v_snapshotSoftVersions.Position != -1) &&
-                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
+                AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
@@ -294,7 +294,7 @@ namespace LicenseSoftware.Viewport
         public override bool CanSaveRecord()
         {
             return SnapshotHasChanges() &&
-                AccessControl.HasPrivelege(Priveleges.LicensesReadWrite);
+                AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void SaveRecord()
