@@ -1,9 +1,4 @@
-﻿using LicenseSoftware.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LicenseSoftware.SearchForms;
+﻿using System.Collections.Generic;
 
 namespace LicenseSoftware.Viewport
 {

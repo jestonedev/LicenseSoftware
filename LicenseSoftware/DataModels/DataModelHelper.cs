@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Data;
-using LicenseSoftware.CalcDataModels;
-using System.Globalization;
 using DataModels.DataModels;
 using LicenseSoftware.Entities;
 
@@ -74,9 +71,13 @@ namespace LicenseSoftware.DataModels
 
         public static IEnumerable<int> GetComputerIDsByDepartment(int idDepartment)
         {
-            return from computerRow in FilterRows(DevicesDataModel.GetInstance().Select())
+            var childDepartments = from department in FilterRows(DepartmentsDataModel.GetInstance().Select())
+                where department.Field<int?>("ID Parent Department") == idDepartment
+                select department.Field<int>("ID Department");
+            var computers = childDepartments.SelectMany(GetComputerIDsByDepartment);
+            return computers.Concat(from computerRow in FilterRows(DevicesDataModel.GetInstance().Select())
                    where computerRow.Field<int>("ID Department") == idDepartment
-                   select computerRow.Field<int>("ID Device");
+                   select computerRow.Field<int>("ID Device"));
         }
 
         public static IEnumerable<int> GetLicenseIDsByCondition(Func<DataRow, bool> condition, EntityType entity)
