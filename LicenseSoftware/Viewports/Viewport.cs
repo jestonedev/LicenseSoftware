@@ -6,12 +6,9 @@ namespace LicenseSoftware.Viewport
 {
     public class Viewport: DockContent, IMenuController
     {
-        private IMenuCallback menuCallback;
+        protected IMenuCallback MenuCallback { get; set; }
 
-        protected IMenuCallback MenuCallback { get { return menuCallback; } set { menuCallback = value; } }
-        private bool selected_ = false;
 
-        
         public string StaticFilter { get; set; }
         public string DynamicFilter { get; set; }
         public DataRow ParentRow { get; set; }
@@ -27,7 +24,7 @@ namespace LicenseSoftware.Viewport
             DynamicFilter = "";
             ParentRow = null;
             ParentType = ParentTypeEnum.None;
-            this.MenuCallback = menuCallback;
+            MenuCallback = menuCallback;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -153,8 +150,8 @@ namespace LicenseSoftware.Viewport
             viewport.StaticFilter = staticFilter;
             viewport.ParentRow = parentRow;
             viewport.ParentType = parentType;
-            if ((viewport as IMenuController).CanLoadData())
-                (viewport as IMenuController).LoadData();
+            if (((IMenuController) viewport).CanLoadData())
+                ((IMenuController) viewport).LoadData();
             menuCallback.AddViewport(viewport);
             return viewport;
         }
@@ -214,17 +211,7 @@ namespace LicenseSoftware.Viewport
             return ((ParentRow != null) && ((ParentRow.RowState == DataRowState.Detached) || (ParentRow.RowState == DataRowState.Deleted)));
         }
 
-        public bool Selected
-        {
-            get
-            {
-                return selected_;
-            }
-            set
-            {
-                selected_ = value;
-            }
-        }
+        public bool Selected { get; set; }
 
         public virtual bool HasAssocLicenses()
         {

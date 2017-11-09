@@ -1,7 +1,5 @@
-﻿using LicenseSoftware.CalcDataModels;
-using LicenseSoftware.DataModels;
+﻿using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
-using LicenseSoftware.SearchForms;
 using Security;
 using System;
 using System.Collections.Generic;
@@ -9,7 +7,9 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
+using LicenseSoftware.Viewport.SearchForms;
 
 namespace LicenseSoftware.Viewport
 {
@@ -353,14 +353,14 @@ namespace LicenseSoftware.Viewport
                 {
                     _vSoftware.Filter = "";
                     comboBoxSoftwareID.SelectedValue = softVersionRow["ID Software"];
-                    comboBoxSoftVersionID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdVersion);
+                    comboBoxSoftVersionID.SelectedValue = ViewportHelper.ValueOrDbNull(license.IdVersion);
                 }
             }
 
-            comboBoxDocTypeID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdDocType);
-            comboBoxLicTypeID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdLicType);
-            comboBoxSupplierID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdSupplier);
-            comboBoxDepartmentID.SelectedValue = ViewportHelper.ValueOrDBNull(license.IdDepartment);
+            comboBoxDocTypeID.SelectedValue = ViewportHelper.ValueOrDbNull(license.IdDocType);
+            comboBoxLicTypeID.SelectedValue = ViewportHelper.ValueOrDbNull(license.IdLicType);
+            comboBoxSupplierID.SelectedValue = ViewportHelper.ValueOrDbNull(license.IdSupplier);
+            comboBoxDepartmentID.SelectedValue = ViewportHelper.ValueOrDbNull(license.IdDepartment);
             textBoxDocNumber.Text = license.DocNumber;
             textBoxDescription.Text = license.Description;
             dateTimePickerBuyLicenseDate.Value = ViewportHelper.ValueOrDefault(license.BuyLicenseDate);
@@ -416,17 +416,17 @@ namespace LicenseSoftware.Viewport
         private static void FillRowFromLicense(SoftLicense softLicense, DataRowView row)
         {
             row.BeginEdit();
-            row["ID License"] = ViewportHelper.ValueOrDBNull(softLicense.IdLicense);
-            row["ID Version"] = ViewportHelper.ValueOrDBNull(softLicense.IdVersion);
-            row["ID LicType"] = ViewportHelper.ValueOrDBNull(softLicense.IdLicType);
-            row["ID DocType"] = ViewportHelper.ValueOrDBNull(softLicense.IdDocType);
-            row["ID Supplier"] = ViewportHelper.ValueOrDBNull(softLicense.IdSupplier);
-            row["ID Department"] = ViewportHelper.ValueOrDBNull(softLicense.IdDepartment);
-            row["DocNumber"] = ViewportHelper.ValueOrDBNull(softLicense.DocNumber);
-            row["Description"] = ViewportHelper.ValueOrDBNull(softLicense.Description);
-            row["BuyLicenseDate"] = ViewportHelper.ValueOrDBNull(softLicense.BuyLicenseDate);
-            row["ExpireLicenseDate"] = ViewportHelper.ValueOrDBNull(softLicense.ExpireLicenseDate);
-            row["InstallationsCount"] = ViewportHelper.ValueOrDBNull(softLicense.InstallationsCount);
+            row["ID License"] = ViewportHelper.ValueOrDbNull(softLicense.IdLicense);
+            row["ID Version"] = ViewportHelper.ValueOrDbNull(softLicense.IdVersion);
+            row["ID LicType"] = ViewportHelper.ValueOrDbNull(softLicense.IdLicType);
+            row["ID DocType"] = ViewportHelper.ValueOrDbNull(softLicense.IdDocType);
+            row["ID Supplier"] = ViewportHelper.ValueOrDbNull(softLicense.IdSupplier);
+            row["ID Department"] = ViewportHelper.ValueOrDbNull(softLicense.IdDepartment);
+            row["DocNumber"] = ViewportHelper.ValueOrDbNull(softLicense.DocNumber);
+            row["Description"] = ViewportHelper.ValueOrDbNull(softLicense.Description);
+            row["BuyLicenseDate"] = ViewportHelper.ValueOrDbNull(softLicense.BuyLicenseDate);
+            row["ExpireLicenseDate"] = ViewportHelper.ValueOrDbNull(softLicense.ExpireLicenseDate);
+            row["InstallationsCount"] = ViewportHelper.ValueOrDbNull(softLicense.InstallationsCount);
             row.EndEdit();
         }
 
@@ -681,12 +681,8 @@ namespace LicenseSoftware.Viewport
                 MessageBox.Show(exc.Message, @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
-            var filter = StaticFilter;
-            if (!string.IsNullOrEmpty(StaticFilter) && !string.IsNullOrEmpty(DynamicFilter))
-                filter += " AND ";
-            filter += DynamicFilter;
             dataGridView.RowCount = 0;
-            _vLicenses.Filter = filter;
+            RebuildFilter();
             dataGridView.RowCount = _vLicenses.Count;
         }
 
@@ -1723,9 +1719,9 @@ namespace LicenseSoftware.Viewport
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(7, 28);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(143, 15);
+            this.label4.Size = new System.Drawing.Size(60, 15);
             this.label4.TabIndex = 77;
-            this.label4.Text = "Департамент-заказчик";
+            this.label4.Text = "Заказчик";
             // 
             // checkBoxInstallCountEnable
             // 

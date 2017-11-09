@@ -33,7 +33,7 @@ namespace LicenseSoftware.Viewport
                     return new SoftVersionsViewport(menuCallback);
             }
             throw new ViewportException(
-                String.Format(CultureInfo.InvariantCulture, "В фабрику ViewportFactory передан неизвестный тип {0}", viewportType.ToString()));
+                String.Format(CultureInfo.InvariantCulture, "В фабрику ViewportFactory передан неизвестный тип {0}", viewportType));
         }
     }
 }

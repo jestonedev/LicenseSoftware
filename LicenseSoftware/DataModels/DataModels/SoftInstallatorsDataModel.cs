@@ -1,34 +1,31 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftInstallatorsDataModel : DataModel
     {
-        private static SoftInstallatorsDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM SoftInstallators WHERE Deleted = 0";
-        private static string deleteQuery = "UPDATE SoftInstallators SET Deleted = 1 WHERE [ID Installator] = @IDInstallator";
-        private static string insertQuery = @"INSERT INTO SoftInstallators
+        private static SoftInstallatorsDataModel _dataModel;
+        private static string _selectQuery = "SELECT * FROM SoftInstallators WHERE Deleted = 0";
+        private static string _deleteQuery = "UPDATE SoftInstallators SET Deleted = 1 WHERE [ID Installator] = @IDInstallator";
+        private static string _insertQuery = @"INSERT INTO SoftInstallators
                             (FullName, Profession, Inactive)
                             VALUES (@FullName, @Profession, @Inactive); SELECT CONVERT(int, SCOPE_IDENTITY());";
-        private static string updateQuery = @"UPDATE SoftInstallators SET FullName = @FullName, Profession = @Profession, Inactive = @Inactive
+        private static string _updateQuery = @"UPDATE SoftInstallators SET FullName = @FullName, Profession = @Profession, Inactive = @Inactive
                                               WHERE [ID Installator] = @IDInstallator";
-        private static string tableName = "SoftInstallators";
+        private static string _tableName = "SoftInstallators";
 
         private SoftInstallatorsDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, _selectQuery, _tableName)
         { 
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID Installator"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID Installator"] };
             Table.Columns["Inactive"].DefaultValue = false;
         }
 
@@ -38,18 +35,16 @@ namespace DataModels.DataModels
         }
 
         public static SoftInstallatorsDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (dataModel == null)
-                dataModel = new SoftInstallatorsDataModel(progressBar, incrementor);
-            return dataModel;
+        {
+            return _dataModel ?? (_dataModel = new SoftInstallatorsDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = deleteQuery;
+                command.CommandText = _deleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", id));
                 try
                 {
@@ -67,20 +62,20 @@ namespace DataModels.DataModels
 
         public static int Update(SoftInstallator softInstallator)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = updateQuery;
+                command.CommandText = _updateQuery;
                 if (softInstallator == null)
                 {
                     MessageBox.Show("В метод Update не передана ссылка на объект установщика", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("FullName", softInstallator.FullName));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Profession", softInstallator.Profession));
-                command.Parameters.Add(DBConnection.CreateParameter<bool?>("Inactive", softInstallator.Inactive));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDInstallator", softInstallator.IdInstallator));
+                command.Parameters.Add(DBConnection.CreateParameter("FullName", softInstallator.FullName));
+                command.Parameters.Add(DBConnection.CreateParameter("Profession", softInstallator.Profession));
+                command.Parameters.Add(DBConnection.CreateParameter("Inactive", softInstallator.Inactive));
+                command.Parameters.Add(DBConnection.CreateParameter("IDInstallator", softInstallator.IdInstallator));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
@@ -97,19 +92,19 @@ namespace DataModels.DataModels
 
         public static int Insert(SoftInstallator softInstallator)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = insertQuery;
+                command.CommandText = _insertQuery;
                 if (softInstallator == null)
                 {
                     MessageBox.Show("В метод Insert не передана ссылка на объект установщика", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("FullName", softInstallator.FullName));
-                command.Parameters.Add(DBConnection.CreateParameter<string>("Profession", softInstallator.Profession));
-                command.Parameters.Add(DBConnection.CreateParameter<bool?>("Inactive", softInstallator.Inactive));
+                command.Parameters.Add(DBConnection.CreateParameter("FullName", softInstallator.FullName));
+                command.Parameters.Add(DBConnection.CreateParameter("Profession", softInstallator.Profession));
+                command.Parameters.Add(DBConnection.CreateParameter("Inactive", softInstallator.Inactive));
                 try
                 {
                     return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);

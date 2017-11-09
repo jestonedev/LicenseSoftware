@@ -4,13 +4,12 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class DepartmentsDataModel : DataModel
     {
-        private static DepartmentsDataModel dataModel;
+        private static DepartmentsDataModel _dataModel;
         private const string SelectQuery = "SELECT * FROM Departments ORDER BY [ID Parent Department], Department";
         private const string AccessQuery = @"SELECT ISNULL(d.[ID Department],0) AS [ID Department], d1.[ID Parent Department]
                                                 FROM
@@ -20,10 +19,10 @@ namespace DataModels.DataModels
                                                   INNER JOIN dbo.Departments d1 ON d1.[ID Department] = d.[ID Department]
                                                 WHERE
                                                   UserName = suser_sname()";
-        private static string tableName = "Departments";
+        private static string _tableName = "Departments";
 
         private DepartmentsDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, SelectQuery, tableName)
+            : base(progressBar, incrementor, SelectQuery, _tableName)
         {   
         }
 
@@ -56,11 +55,11 @@ namespace DataModels.DataModels
                 accessDepartments = connection.SqlSelectTable("accessDepartments", command);
             }
 
-            IEnumerable<int> allowDepartmentsIDs = new List<int>();
-            IEnumerable<int> parentDepartmentsIDs = new List<int>();
+            var allowDepartmentsIDs = new List<int>();
+            var parentDepartmentsIDs = new List<int>();
             foreach (DataRow accessDepartment in accessDepartments.Rows)
             {
-                allowDepartmentsIDs = allowDepartmentsIDs.Union(new List<int>() { (int)accessDepartment["ID Department"] });
+                allowDepartmentsIDs = allowDepartmentsIDs.Union(new List<int> { (int)accessDepartment["ID Department"] }).ToList();
                 if (accessDepartment["ID Parent Department"] != DBNull.Value)
                 {
                     var organizationRoot = false;
@@ -70,7 +69,7 @@ namespace DataModels.DataModels
                         currentDepartment = departments.Rows.Find(currentDepartment["ID Parent Department"]);
                         if (currentDepartment != null)
                         {
-                            parentDepartmentsIDs = parentDepartmentsIDs.Union(new List<int>() { (int)currentDepartment["ID Department"] });
+                            parentDepartmentsIDs = parentDepartmentsIDs.Union(new List<int>() { (int)currentDepartment["ID Department"] }).ToList();
                             if (currentDepartment["ID Parent Department"] == DBNull.Value)
                                 organizationRoot = true;
                         }
@@ -78,7 +77,7 @@ namespace DataModels.DataModels
                             organizationRoot = true;
                     }
                 }
-                allowDepartmentsIDs = allowDepartmentsIDs.Union(DataModelHelper.GetDepartmentSubunits((int)accessDepartment["ID Department"]));
+                allowDepartmentsIDs = allowDepartmentsIDs.Union(DataModelHelper.GetDepartmentSubunits((int)accessDepartment["ID Department"])).ToList();
             }
             foreach (DataRow row in departments.Rows)
                 if (allowDepartmentsIDs.Contains((int)row["ID Department"]))
@@ -121,7 +120,7 @@ namespace DataModels.DataModels
             resultDepartments.Columns.Add("Department").DataType = typeof(string);
             resultDepartments.Columns.Add("AllowSelect").DataType = typeof(bool);
             resultDepartments.Columns.Add("Level").DataType = typeof(int);
-            resultDepartments.PrimaryKey = new DataColumn[] { resultDepartments.Columns["ID Department"] };
+            resultDepartments.PrimaryKey = new[] { resultDepartments.Columns["ID Department"] };
             resultDepartments.Locale = CultureInfo.InvariantCulture;
             foreach (DataRow department in departments.Rows)
             {
@@ -162,10 +161,8 @@ namespace DataModels.DataModels
         }
 
         public static DepartmentsDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (dataModel == null)
-                dataModel = new DepartmentsDataModel(progressBar, incrementor);
-            return dataModel;
+        {
+            return _dataModel ?? (_dataModel = new DepartmentsDataModel(progressBar, incrementor));
         }
     }
 }

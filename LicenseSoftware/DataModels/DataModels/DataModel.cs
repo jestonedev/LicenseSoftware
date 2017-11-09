@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using Settings;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public abstract class DataModel
     {
-        private DataTable table = null;
-        private DataModelLoadState dmLoadState = DataModelLoadState.BeforeLoad;
-        private DataModelLoadSyncType dmLoadType = DataModelLoadSyncType.Syncronize; // По умолчанию загрузка синхронная
+        private DataTable _table;
+        private DataModelLoadState _dmLoadState = DataModelLoadState.BeforeLoad;
+        private DataModelLoadSyncType _dmLoadType = DataModelLoadSyncType.Syncronize; // По умолчанию загрузка синхронная
 
-        public DataModelLoadState DMLoadState { get { return dmLoadState; } set { dmLoadState = value; } }
-        public DataModelLoadSyncType DMLoadType { get { return dmLoadType; } set { dmLoadType = value; } }
-        protected DataTable Table { get { return table; } set { table = value; } }
+        public DataModelLoadState DmLoadState { get { return _dmLoadState; } set { _dmLoadState = value; } }
+        public DataModelLoadSyncType DmLoadType { get { return _dmLoadType; } set { _dmLoadType = value; } }
+        protected DataTable Table { get { return _table; } set { _table = value; } }
 
-        private static object lock_obj = new object();
+        private static readonly object LockObj = new object();
         // Не больше MaxDBConnectionCount потоков одновременно делают запросы к БД
-        private static Semaphore db_access_semaphore = new Semaphore(LicenseSoftwareSettings.MaxDbConnectionCount,
+        private static readonly Semaphore DbAccessSemaphore = new Semaphore(LicenseSoftwareSettings.MaxDbConnectionCount,
             LicenseSoftwareSettings.MaxDbConnectionCount);
 
         protected DataModel()
@@ -31,27 +29,27 @@ namespace DataModels.DataModels
 
         protected DataModel(ToolStripProgressBar progressBar, int incrementor, string selectQuery, string tableName)
         {
-            SynchronizationContext context = SynchronizationContext.Current;
-            DMLoadType = DataModelLoadSyncType.Asyncronize;
+            var context = SynchronizationContext.Current;
+            DmLoadType = DataModelLoadSyncType.Asyncronize;
             ThreadPool.QueueUserWorkItem((progress) =>
             {
                 try
                 {
-                    DMLoadState = DataModelLoadState.Loading;
-                    using (DBConnection connection = new DBConnection())
-                    using (DbCommand command = DBConnection.CreateCommand())
+                    DmLoadState = DataModelLoadState.Loading;
+                    using (var connection = new DBConnection())
+                    using (var command = DBConnection.CreateCommand())
                     {
                         command.CommandText = selectQuery;
-                        db_access_semaphore.WaitOne();
-                        Interlocked.Exchange<DataTable>(ref table, connection.SqlSelectTable(tableName, (DbCommand)command));
+                        DbAccessSemaphore.WaitOne();
+                        Interlocked.Exchange(ref _table, connection.SqlSelectTable(tableName, command));
                     }
-                    db_access_semaphore.Release();
+                    DbAccessSemaphore.Release();
                     ConfigureTable();
-                    lock (lock_obj)
+                    lock (LockObj)
                     {
                         DataSetManager.AddTable(Table);
                     }
-                    DMLoadState = DataModelLoadState.SuccessLoad;
+                    DmLoadState = DataModelLoadState.SuccessLoad;
                     if (progress != null)
                     {
                         context.Post(_ => {
@@ -68,12 +66,12 @@ namespace DataModels.DataModels
                 }
                 catch (SqlException e)
                 {
-                    lock (lock_obj)
+                    lock (LockObj)
                     {
                         MessageBox.Show(String.Format(CultureInfo.InvariantCulture, 
                             "Произошла ошибка при загрузке данных из базы данных. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        DMLoadState = DataModelLoadState.ErrorLoad;
+                        DmLoadState = DataModelLoadState.ErrorLoad;
                         Application.Exit();
                     }
                 }
@@ -81,7 +79,7 @@ namespace DataModels.DataModels
                 {
                     MessageBox.Show(e.Message, "Ошибка", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    DMLoadState = DataModelLoadState.ErrorLoad;
+                    DmLoadState = DataModelLoadState.ErrorLoad;
                 }
             }, progressBar); 
         }
@@ -92,13 +90,13 @@ namespace DataModels.DataModels
 
         public virtual DataTable Select()
         {
-            if (DMLoadType == DataModelLoadSyncType.Syncronize)
+            if (DmLoadType == DataModelLoadSyncType.Syncronize)
                 return Table;
-            while (DMLoadState != DataModelLoadState.SuccessLoad)
+            while (DmLoadState != DataModelLoadState.SuccessLoad)
             {
-                if (DMLoadState == DataModelLoadState.ErrorLoad)
+                if (DmLoadState == DataModelLoadState.ErrorLoad)
                 {
-                    lock (lock_obj)
+                    lock (LockObj)
                     {
                         MessageBox.Show("Произошла ошибка при загрузке данных из базы данных. Дальнейшая работа приложения невозможна", "Ошибка",
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);

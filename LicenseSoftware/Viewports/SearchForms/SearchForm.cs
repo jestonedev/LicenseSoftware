@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace LicenseSoftware.SearchForms
+namespace LicenseSoftware.Viewport.SearchForms
 {
     public class SearchForm: Form
     {

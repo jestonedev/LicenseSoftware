@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftLicDocTypesDataModel : DataModel
     {
-        private static SoftLicDocTypesDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM SoftLicDocTypes WHERE Deleted = 0";
-        private static string deleteQuery = "UPDATE SoftLicDocTypes SET Deleted = 1 WHERE [ID DocType] = @IDDocType";
-        private static string insertQuery = @"INSERT INTO SoftLicDocTypes (DocType) VALUES (@DocType); SELECT CONVERT(int, SCOPE_IDENTITY());";
-        private static string updateQuery = @"UPDATE SoftLicDocTypes SET DocType = @DocType WHERE [ID DocType] = @IDDocType";
-        private static string tableName = "SoftLicDocTypes";
+        private static SoftLicDocTypesDataModel _dataModel;
+        private static string _selectQuery = "SELECT * FROM SoftLicDocTypes WHERE Deleted = 0";
+        private static string _deleteQuery = "UPDATE SoftLicDocTypes SET Deleted = 1 WHERE [ID DocType] = @IDDocType";
+        private static string _insertQuery = @"INSERT INTO SoftLicDocTypes (DocType) VALUES (@DocType); SELECT CONVERT(int, SCOPE_IDENTITY());";
+        private static string _updateQuery = @"UPDATE SoftLicDocTypes SET DocType = @DocType WHERE [ID DocType] = @IDDocType";
+        private static string _tableName = "SoftLicDocTypes";
 
         private SoftLicDocTypesDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, _selectQuery, _tableName)
         {   
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID DocType"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID DocType"] };
         }
 
         public static SoftLicDocTypesDataModel GetInstance()
@@ -34,18 +31,16 @@ namespace DataModels.DataModels
         }
 
         public static SoftLicDocTypesDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (dataModel == null)
-                dataModel = new SoftLicDocTypesDataModel(progressBar, incrementor);
-            return dataModel;
+        {
+            return _dataModel ?? (_dataModel = new SoftLicDocTypesDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = deleteQuery;
+                command.CommandText = _deleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDDocType", id));
                 try
                 {
@@ -63,18 +58,18 @@ namespace DataModels.DataModels
 
         public static int Update(SoftLicDocType softLicDocType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = updateQuery;
+                command.CommandText = _updateQuery;
                 if (softLicDocType == null)
                 {
                     MessageBox.Show("В метод Update не передана ссылка на объект документа-основания", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("DocType", softLicDocType.DocType));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDDocType", softLicDocType.IdDocType));
+                command.Parameters.Add(DBConnection.CreateParameter("DocType", softLicDocType.DocType));
+                command.Parameters.Add(DBConnection.CreateParameter("IDDocType", softLicDocType.IdDocType));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
@@ -91,17 +86,17 @@ namespace DataModels.DataModels
 
         public static int Insert(SoftLicDocType softLicDocType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = insertQuery;
+                command.CommandText = _insertQuery;
                 if (softLicDocType == null)
                 {
                     MessageBox.Show("В метод Insert не передана ссылка на объект документа-основания", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("DocType", softLicDocType.DocType));
+                command.Parameters.Add(DBConnection.CreateParameter("DocType", softLicDocType.DocType));
                 try
                 {
                     return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);

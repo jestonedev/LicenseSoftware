@@ -7,8 +7,8 @@ using LicenseSoftware.Entities;
 using Security;
 using System.Globalization;
 using System.Linq;
-using DataModels.DataModels;
-using LicenseSoftware.CalcDataModels;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -16,22 +16,22 @@ namespace LicenseSoftware.Viewport
     {
         #region Components
         private DataGridView dataGridView;
+        private DataGridViewTextBoxColumn idVersion;
+        private DataGridViewTextBoxColumn idSoftware;
+        private DataGridViewTextBoxColumn Version;
         #endregion Components
 
         #region Models
 
-        private SoftVersionsDataModel softVersions;
-        private DataTable snapshotSoftVersions = new DataTable("snapshotSoftVersions");
+        private SoftVersionsDataModel _softVersions;
+        private readonly DataTable _snapshotSoftVersions = new DataTable("snapshotSoftVersions");
         #endregion Models
 
         #region Views
 
-        private BindingSource v_softVersions;
-        private BindingSource v_snapshotSoftVersions;
+        private BindingSource _vSoftVersions;
+        private BindingSource _vSnapshotSoftVersions;
         #endregion Views
-        private DataGridViewTextBoxColumn idVersion;
-        private DataGridViewTextBoxColumn idSoftware;
-        private DataGridViewTextBoxColumn Version;
 
 
 
@@ -47,7 +47,7 @@ namespace LicenseSoftware.Viewport
             : base(menuCallback)
         {
             InitializeComponent();
-            snapshotSoftVersions.Locale = CultureInfo.InvariantCulture;
+            _snapshotSoftVersions.Locale = CultureInfo.InvariantCulture;
         }
 
         public SoftVersionsViewport(Viewport softLicKeysViewport, IMenuCallback menuCallback)
@@ -141,9 +141,9 @@ namespace LicenseSoftware.Viewport
         private List<SoftVersion> SoftVersionsFromView()
         {
             var list = new List<SoftVersion>();
-            for (var i = 0; i < v_softVersions.Count; i++)
+            for (var i = 0; i < _vSoftVersions.Count; i++)
             {
-                var row = (DataRowView)v_softVersions[i];
+                var row = (DataRowView)_vSoftVersions[i];
                 var sv = new SoftVersion
                 {
                     IdVersion = ViewportHelper.ValueOrNull<int>(row, "ID Version"),
@@ -157,47 +157,47 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_snapshotSoftVersions.Count;
+            return _vSnapshotSoftVersions.Count;
         }
 
         public override void MoveFirst()
         {
-            v_snapshotSoftVersions.MoveFirst();
+            _vSnapshotSoftVersions.MoveFirst();
         }
 
         public override void MoveLast()
         {
-            v_snapshotSoftVersions.MoveLast();
+            _vSnapshotSoftVersions.MoveLast();
         }
 
         public override void MoveNext()
         {
-            v_snapshotSoftVersions.MoveNext();
+            _vSnapshotSoftVersions.MoveNext();
         }
 
         public override void MovePrev()
         {
-            v_snapshotSoftVersions.MovePrevious();
+            _vSnapshotSoftVersions.MovePrevious();
         }
 
         public override bool CanMoveFirst()
         {
-            return v_snapshotSoftVersions.Position > 0;
+            return _vSnapshotSoftVersions.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_snapshotSoftVersions.Position > 0;
+            return _vSnapshotSoftVersions.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_snapshotSoftVersions.Position > -1) && (v_snapshotSoftVersions.Position < (v_snapshotSoftVersions.Count - 1));
+            return (_vSnapshotSoftVersions.Position > -1) && (_vSnapshotSoftVersions.Position < (_vSnapshotSoftVersions.Count - 1));
         }
 
         public override bool CanMoveLast()
         {
-            return (v_snapshotSoftVersions.Position > -1) && (v_snapshotSoftVersions.Position < (v_snapshotSoftVersions.Count - 1));
+            return (_vSnapshotSoftVersions.Position > -1) && (_vSnapshotSoftVersions.Position < (_vSnapshotSoftVersions.Count - 1));
         }
 
         public override bool CanLoadData()
@@ -209,19 +209,19 @@ namespace LicenseSoftware.Viewport
         {
             dataGridView.AutoGenerateColumns = false;
             DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softVersions = SoftVersionsDataModel.GetInstance();
+            _softVersions = SoftVersionsDataModel.GetInstance();
             // Дожидаемся дозагрузки данных, если это необходимо
-            softVersions.Select();
+            _softVersions.Select();
 
-            v_softVersions = new BindingSource
+            _vSoftVersions = new BindingSource
             {
                 DataMember = "SoftVersions",
                 Filter = StaticFilter
             };
             if (!string.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
-                v_softVersions.Filter += " AND ";
-            v_softVersions.Filter += DynamicFilter;
-            v_softVersions.DataSource = DataSetManager.DataSet;
+                _vSoftVersions.Filter += " AND ";
+            _vSoftVersions.Filter += DynamicFilter;
+            _vSoftVersions.DataSource = DataSetManager.DataSet;
 
             if (ParentRow != null && ParentType == ParentTypeEnum.Software)
                 Text = string.Format(CultureInfo.InvariantCulture, "Версии ПО №{0}", ParentRow["ID Software"]);
@@ -229,15 +229,15 @@ namespace LicenseSoftware.Viewport
                 throw new ViewportException("Неизвестный тип родительского объекта");
 
             //Инициируем колонки snapshot-модели
-            for (var i = 0; i < softVersions.Select().Columns.Count; i++)
-                snapshotSoftVersions.Columns.Add(new DataColumn(softVersions.Select().Columns[i].ColumnName, softVersions.Select().Columns[i].DataType));
+            for (var i = 0; i < _softVersions.Select().Columns.Count; i++)
+                _snapshotSoftVersions.Columns.Add(new DataColumn(_softVersions.Select().Columns[i].ColumnName, _softVersions.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (var i = 0; i < v_softVersions.Count; i++)
-                snapshotSoftVersions.Rows.Add(DataRowViewToArray(((DataRowView)v_softVersions[i])));
-            v_snapshotSoftVersions = new BindingSource {DataSource = snapshotSoftVersions};
-            v_snapshotSoftVersions.CurrentItemChanged += VSnapshotVersionsCurrentItemChanged;
+            for (var i = 0; i < _vSoftVersions.Count; i++)
+                _snapshotSoftVersions.Rows.Add(DataRowViewToArray(((DataRowView)_vSoftVersions[i])));
+            _vSnapshotSoftVersions = new BindingSource {DataSource = _snapshotSoftVersions};
+            _vSnapshotSoftVersions.CurrentItemChanged += VSnapshotVersionsCurrentItemChanged;
 
-            dataGridView.DataSource = v_snapshotSoftVersions;
+            dataGridView.DataSource = _vSnapshotSoftVersions;
             idVersion.DataPropertyName = "ID Version";
             idSoftware.DataPropertyName = "ID Software";
             Version.DataPropertyName = "Version";
@@ -246,9 +246,9 @@ namespace LicenseSoftware.Viewport
             //События изменения данных для проверки соответствия реальным данным в модели
             dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softVersions.Select().RowChanged += SoftLicKeysViewport_RowChanged;
-            softVersions.Select().RowDeleting += SoftLicKeysViewport_RowDeleting;
-            softVersions.Select().RowDeleted += SoftLicKeysViewport_RowDeleted;
+            _softVersions.Select().RowChanged += SoftLicKeysViewport_RowChanged;
+            _softVersions.Select().RowDeleting += SoftLicKeysViewport_RowDeleting;
+            _softVersions.Select().RowDeleted += SoftLicKeysViewport_RowDeleted;
         }
 
         public override bool CanInsertRecord()
@@ -261,7 +261,7 @@ namespace LicenseSoftware.Viewport
         {
             if ((ParentRow == null) || (ParentType != ParentTypeEnum.Software))
                 return;
-            var row = (DataRowView)v_snapshotSoftVersions.AddNew();
+            var row = (DataRowView)_vSnapshotSoftVersions.AddNew();
             if (row == null) return;
             row["ID Software"] = ParentRow["ID Software"];
             row.EndEdit();
@@ -269,13 +269,13 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanDeleteRecord()
         {
-            return (v_snapshotSoftVersions.Position != -1) &&
+            return (_vSnapshotSoftVersions.Position != -1) &&
                 AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
         {
-            ((DataRowView)v_snapshotSoftVersions[v_snapshotSoftVersions.Position]).Row.Delete();
+            ((DataRowView)_vSnapshotSoftVersions[_vSnapshotSoftVersions.Position]).Row.Delete();
         }
 
         public override bool CanCancelRecord()
@@ -285,9 +285,9 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            snapshotSoftVersions.Clear();
-            for (var i = 0; i < v_softVersions.Count; i++)
-                snapshotSoftVersions.Rows.Add(DataRowViewToArray(((DataRowView)v_softVersions[i])));
+            _snapshotSoftVersions.Clear();
+            for (var i = 0; i < _vSoftVersions.Count; i++)
+                _snapshotSoftVersions.Rows.Add(DataRowViewToArray(((DataRowView)_vSoftVersions[i])));
             MenuCallback.EditingStateUpdate();
         }
 
@@ -309,7 +309,7 @@ namespace LicenseSoftware.Viewport
             }
             for (var i = 0; i < list.Count; i++)
             {
-                var row = softVersions.Select().Rows.Find(list[i].IdVersion);
+                var row = _softVersions.Select().Rows.Find(list[i].IdVersion);
                 if (row == null)
                 {
                     var idLicKey = SoftVersionsDataModel.Insert(list[i]);
@@ -318,8 +318,8 @@ namespace LicenseSoftware.Viewport
                         _syncViews = true;
                         return;
                     }
-                    ((DataRowView)v_snapshotSoftVersions[i])["ID Version"] = idLicKey;
-                    softVersions.Select().Rows.Add(DataRowViewToArray((DataRowView)v_snapshotSoftVersions[i]));
+                    ((DataRowView)_vSnapshotSoftVersions[i])["ID Version"] = idLicKey;
+                    _softVersions.Select().Rows.Add(DataRowViewToArray((DataRowView)_vSnapshotSoftVersions[i]));
                 }
                 else
                 {
@@ -350,7 +350,7 @@ namespace LicenseSoftware.Viewport
                     _syncViews = true;
                     return;
                 }
-                softVersions.Select().Rows.Find(list[i].IdVersion).Delete();
+                _softVersions.Select().Rows.Find(list[i].IdVersion).Delete();
             }
             _syncViews = true;
             MenuCallback.EditingStateUpdate();
@@ -388,24 +388,24 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softVersions.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
-            softVersions.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
-            softVersions.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
+            _softVersions.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
+            _softVersions.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
+            _softVersions.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
             base.OnClosing(e);
         }
 
         public override void ForceClose()
         {
-            softVersions.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
-            softVersions.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
-            softVersions.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
+            _softVersions.Select().RowChanged -= SoftLicKeysViewport_RowChanged;
+            _softVersions.Select().RowDeleting -= SoftLicKeysViewport_RowDeleting;
+            _softVersions.Select().RowDeleted -= SoftLicKeysViewport_RowDeleted;
             Close();
         }
 
 
         public override bool HasAssocLicenses()
         {
-            return (v_snapshotSoftVersions.Position > -1) &&
+            return (_vSnapshotSoftVersions.Position > -1) &&
                 AccessControl.HasPrivelege(Priveleges.LicensesRead);
         }
 
@@ -428,15 +428,15 @@ namespace LicenseSoftware.Viewport
                         return;
                 }
             }
-            if (v_snapshotSoftVersions.Position == -1)
+            if (_vSnapshotSoftVersions.Position == -1)
             {
                 MessageBox.Show(@"Не выбрана версия ПО для отображения списка лицензий", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
             ShowAssocViewport(MenuCallback, ViewportType.LicensesViewport,
-                "[ID Version] = " + Convert.ToInt32(((DataRowView)v_snapshotSoftVersions[v_snapshotSoftVersions.Position])["ID Version"], CultureInfo.InvariantCulture),
-                ((DataRowView)v_snapshotSoftVersions[v_snapshotSoftVersions.Position]).Row,
+                "[ID Version] = " + Convert.ToInt32(((DataRowView)_vSnapshotSoftVersions[_vSnapshotSoftVersions.Position])["ID Version"], CultureInfo.InvariantCulture),
+                ((DataRowView)_vSnapshotSoftVersions[_vSnapshotSoftVersions.Position]).Row,
                 ParentTypeEnum.SoftVersion);
         }
 
@@ -478,24 +478,24 @@ namespace LicenseSoftware.Viewport
             if (!_syncViews)
                 return;
             if (e.Action != DataRowAction.Delete) return;
-            var rowIndex = v_snapshotSoftVersions.Find("ID Version", e.Row["ID Version"]);
+            var rowIndex = _vSnapshotSoftVersions.Find("ID Version", e.Row["ID Version"]);
             if (rowIndex != -1)
-                ((DataRowView)v_snapshotSoftVersions[rowIndex]).Delete();
+                ((DataRowView)_vSnapshotSoftVersions[rowIndex]).Delete();
         }
 
         private void SoftLicKeysViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             if (!_syncViews)
                 return;
-            var rowIndex = v_snapshotSoftVersions.Find("ID Version", e.Row["ID Version"]);
-            if (rowIndex == -1 && v_softVersions.Find("ID Version", e.Row["ID Version"]) != -1)
+            var rowIndex = _vSnapshotSoftVersions.Find("ID Version", e.Row["ID Version"]);
+            if (rowIndex == -1 && _vSoftVersions.Find("ID Version", e.Row["ID Version"]) != -1)
             {
-                snapshotSoftVersions.Rows.Add(e.Row["ID Version"], e.Row["ID Software"], e.Row["Version"]);
+                _snapshotSoftVersions.Rows.Add(e.Row["ID Version"], e.Row["ID Software"], e.Row["Version"]);
             }
             else
                 if (rowIndex != -1)
                 {
-                    var row = ((DataRowView)v_snapshotSoftVersions[rowIndex]);
+                    var row = ((DataRowView)_vSnapshotSoftVersions[rowIndex]);
                     row["ID Software"] = e.Row["ID Software"];
                     row["Version"] = e.Row["Version"];
                 }

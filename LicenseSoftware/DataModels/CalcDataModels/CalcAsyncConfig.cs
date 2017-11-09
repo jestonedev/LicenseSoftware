@@ -1,6 +1,6 @@
 ﻿using LicenseSoftware.Entities;
 
-namespace LicenseSoftware.CalcDataModels
+namespace LicenseSoftware.DataModels.CalcDataModels
 {
     public class CalcAsyncConfig
     {
@@ -9,8 +9,8 @@ namespace LicenseSoftware.CalcDataModels
 
         public CalcAsyncConfig(EntityType entity, int? idObject)
         {
-            this.Entity = entity;
-            this.IdObject = idObject;
+            Entity = entity;
+            IdObject = idObject;
         }
     }
 }

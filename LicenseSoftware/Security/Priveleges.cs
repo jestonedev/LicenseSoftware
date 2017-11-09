@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Security
 {
@@ -18,6 +15,6 @@ namespace Security
         DirectoriesRead = 16,
         DirectoriesWrite = 32,
         DirectoriesReadWrite = 48,
-        AllPriveleges = Priveleges.LicensesReadWrite | Priveleges.InstallationsReadWrite | Priveleges.DirectoriesReadWrite
+        AllPriveleges = LicensesReadWrite | InstallationsReadWrite | DirectoriesReadWrite
     }
 }

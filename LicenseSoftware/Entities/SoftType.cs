@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LicenseSoftware.Entities
+﻿namespace LicenseSoftware.Entities
 {
     public sealed class SoftType
     {
@@ -17,19 +12,17 @@ namespace LicenseSoftware.Entities
 
         public bool Equals(SoftType other)
         {
-            return this.Equals((object)other);
+            return Equals((object)other);
         }
 
         public static bool operator ==(SoftType first, SoftType second)
         {
             if ((object)first == null && (object)second == null)
                 return true;
-            else
-                if ((object)first == null || (object)second == null)
-                    return false;
-                else
-                    return first.IdSoftType == second.IdSoftType &&
-                        first.SoftTypeName == second.SoftTypeName;
+            if ((object)first == null || (object)second == null)
+                return false;
+            return first.IdSoftType == second.IdSoftType &&
+                   first.SoftTypeName == second.SoftTypeName;
         }
 
         public static bool operator !=(SoftType first, SoftType second)

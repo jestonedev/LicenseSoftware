@@ -2,10 +2,9 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftLicensesDataModel : DataModel
     {

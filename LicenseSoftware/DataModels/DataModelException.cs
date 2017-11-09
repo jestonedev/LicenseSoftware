@@ -17,7 +17,6 @@ namespace LicenseSoftware.DataModels
         }
 
         public DataModelException()
-            : base()
         {
         }
 

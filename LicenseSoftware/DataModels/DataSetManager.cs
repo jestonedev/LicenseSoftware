@@ -1,21 +1,21 @@
 ﻿using System.Data;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.DataModels
 {
     public static class DataSetManager
     {
-        private static DataSet dataSet = new DataSet();
+        private static DataSet _dataSet = new DataSet();
 
-        public static DataSet DataSet { get { return dataSet; }}
+        public static DataSet DataSet { get { return _dataSet; }}
 
         public static void AddModel(DataModel model)
         {
             if (model == null)
                 throw new DataModelException("DataSetManager: Не передана ссылка на модель данных");
-            DataTable table = model.Select();
-            if (!dataSet.Tables.Contains(table.TableName))
-                dataSet.Tables.Add(table);
+            var table = model.Select();
+            if (!_dataSet.Tables.Contains(table.TableName))
+                _dataSet.Tables.Add(table);
             RebuildRelations();
         }
 
@@ -23,8 +23,8 @@ namespace LicenseSoftware.DataModels
         {
             if (table == null)
                 throw new DataModelException("DataSetManager: Не передана ссылка на таблицу");
-            if (!dataSet.Tables.Contains(table.TableName))
-                dataSet.Tables.Add(table);
+            if (!_dataSet.Tables.Contains(table.TableName))
+                _dataSet.Tables.Add(table);
             RebuildRelations();
         }
 
@@ -54,16 +54,16 @@ namespace LicenseSoftware.DataModels
         {
             lock (LockObj)
             {
-                if (!dataSet.Tables.Contains(masterTableName))
+                if (!_dataSet.Tables.Contains(masterTableName))
                     return;
-                if (!dataSet.Tables.Contains(slaveTableName))
+                if (!_dataSet.Tables.Contains(slaveTableName))
                     return;
-                if (!dataSet.Relations.Contains(masterTableName + "_" + slaveTableName))
+                if (!_dataSet.Relations.Contains(masterTableName + "_" + slaveTableName))
                 {
                     var relation = new DataRelation(masterTableName + "_" + slaveTableName,
-                        dataSet.Tables[masterTableName].Columns[masterColumnName],
-                        dataSet.Tables[slaveTableName].Columns[slaveColumnName], createConstraints);
-                    dataSet.Relations.Add(relation);
+                        _dataSet.Tables[masterTableName].Columns[masterColumnName],
+                        _dataSet.Tables[slaveTableName].Columns[slaveColumnName], createConstraints);
+                    _dataSet.Relations.Add(relation);
                 }   
             }
         }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -19,17 +19,19 @@ namespace LicenseSoftware.Viewport
         #endregion Components
 
         #region Models
-        SoftSuppliersDataModel softSuppliers = null;
-        DataTable snapshotSoftSuppliers = new DataTable("snapshotSoftSuppliers");
+
+        private SoftSuppliersDataModel _softSuppliers;
+        private readonly DataTable _snapshotSoftSuppliers = new DataTable("snapshotSoftSuppliers");
         #endregion Models
 
         #region Views
-        BindingSource v_softSuppliers = null;
-        BindingSource v_snapshotSoftSuppliers = null;
+
+        private BindingSource _vSoftSuppliers;
+        private BindingSource _vSnapshotSoftSuppliers;
         #endregion Models
 
         //Флаг разрешения синхронизации snapshot и original моделей
-        bool sync_views = true;
+        private bool _syncViews = true;
 
         private SoftSuppliersViewport()
             : this(null)
@@ -40,30 +42,29 @@ namespace LicenseSoftware.Viewport
             : base(menuCallback)
         {
             InitializeComponent();
-            snapshotSoftSuppliers.Locale = CultureInfo.InvariantCulture;
+            _snapshotSoftSuppliers.Locale = CultureInfo.InvariantCulture;
         }
 
         public SoftSuppliersViewport(SoftSuppliersViewport softSuppliersViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = softSuppliersViewport.DynamicFilter;
-            this.StaticFilter = softSuppliersViewport.StaticFilter;
-            this.ParentRow = softSuppliersViewport.ParentRow;
-            this.ParentType = softSuppliersViewport.ParentType;
+            DynamicFilter = softSuppliersViewport.DynamicFilter;
+            StaticFilter = softSuppliersViewport.StaticFilter;
+            ParentRow = softSuppliersViewport.ParentRow;
+            ParentType = softSuppliersViewport.ParentType;
         }
 
         private bool SnapshotHasChanges()
         {
-            List<SoftSupplier> list_from_view = SoftSuppliersFromView();
-            List<SoftSupplier> list_from_viewport = SoftSuppliersFromViewport();
-            if (list_from_view.Count != list_from_viewport.Count)
+            var listFromView = SoftSuppliersFromView();
+            var listFromViewport = SoftSuppliersFromViewport();
+            if (listFromView.Count != listFromViewport.Count)
                 return true;
-            bool founded = false;
-            for (int i = 0; i < list_from_view.Count; i++)
+            for (var i = 0; i < listFromView.Count; i++)
             {
-                founded = false;
-                for (int j = 0; j < list_from_viewport.Count; j++)
-                    if (list_from_view[i] == list_from_viewport[j])
+                var founded = false;
+                for (var j = 0; j < listFromViewport.Count; j++)
+                    if (listFromView[i] == listFromViewport[j])
                         founded = true;
                 if (!founded)
                     return true;
@@ -73,7 +74,7 @@ namespace LicenseSoftware.Viewport
 
         private static object[] DataRowViewToArray(DataRowView dataRowView)
         {
-            return new object[] { 
+            return new[] { 
                 dataRowView["ID Supplier"], 
                 dataRowView["Supplier"]
             };
@@ -81,18 +82,18 @@ namespace LicenseSoftware.Viewport
 
         private static bool ValidateViewportData(List<SoftSupplier> list)
         {
-            foreach (SoftSupplier softSupplier in list)
+            foreach (var softSupplier in list)
             {
                 if (softSupplier.SoftSupplierName == null)
                 {
-                    MessageBox.Show("Наименование поставщика ПО не может быть пустым",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show(@"Наименование поставщика ПО не может быть пустым",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
                 if (softSupplier.SoftSupplierName != null && softSupplier.SoftSupplierName.Length > 400)
                 {
-                    MessageBox.Show("Длина наименования поставщика ПО не может превышать 400 символов",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show(@"Длина наименования поставщика ПО не может превышать 400 символов",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
             }
@@ -101,38 +102,42 @@ namespace LicenseSoftware.Viewport
 
         private static SoftSupplier RowToSoftSupplier(DataRow row)
         {
-            SoftSupplier softSupplier = new SoftSupplier();
-            softSupplier.IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "ID Supplier");
-            softSupplier.SoftSupplierName = ViewportHelper.ValueOrNull(row, "Supplier");
+            var softSupplier = new SoftSupplier
+            {
+                IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "ID Supplier"),
+                SoftSupplierName = ViewportHelper.ValueOrNull(row, "Supplier")
+            };
             return softSupplier;
         }
 
         private List<SoftSupplier> SoftSuppliersFromViewport()
         {
-            List<SoftSupplier> list = new List<SoftSupplier>();
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            var list = new List<SoftSupplier>();
+            for (var i = 0; i < dataGridView.Rows.Count; i++)
             {
-                if (!dataGridView.Rows[i].IsNewRow)
+                if (dataGridView.Rows[i].IsNewRow) continue;
+                var row = dataGridView.Rows[i];
+                var st = new SoftSupplier
                 {
-                    SoftSupplier st = new SoftSupplier();
-                    DataGridViewRow row = dataGridView.Rows[i];
-                    st.IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "idSoftSupplier");
-                    st.SoftSupplierName = ViewportHelper.ValueOrNull(row, "softSupplier");
-                    list.Add(st);
-                }
+                    IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "idSoftSupplier"),
+                    SoftSupplierName = ViewportHelper.ValueOrNull(row, "softSupplier")
+                };
+                list.Add(st);
             }
             return list;
         }
 
         private List<SoftSupplier> SoftSuppliersFromView()
         {
-            List<SoftSupplier> list = new List<SoftSupplier>();
-            for (int i = 0; i < v_softSuppliers.Count; i++)
+            var list = new List<SoftSupplier>();
+            for (var i = 0; i < _vSoftSuppliers.Count; i++)
             {
-                SoftSupplier st = new SoftSupplier();
-                DataRowView row = ((DataRowView)v_softSuppliers[i]);
-                st.IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "ID Supplier");
-                st.SoftSupplierName = ViewportHelper.ValueOrNull(row, "Supplier");
+                var row = (DataRowView)_vSoftSuppliers[i];
+                var st = new SoftSupplier
+                {
+                    IdSoftSupplier = ViewportHelper.ValueOrNull<int>(row, "ID Supplier"),
+                    SoftSupplierName = ViewportHelper.ValueOrNull(row, "Supplier")
+                };
                 list.Add(st);
             }
             return list;
@@ -140,7 +145,7 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_snapshotSoftSuppliers.Count;
+            return _vSnapshotSoftSuppliers.Count;
         }
 
         public override bool CanLoadData()
@@ -151,28 +156,29 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softSuppliers = SoftSuppliersDataModel.GetInstance();
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            _softSuppliers = SoftSuppliersDataModel.GetInstance();
 
             //Ожидаем дозагрузки данных, если это необходимо
-            softSuppliers.Select();
+            _softSuppliers.Select();
 
-            v_softSuppliers = new BindingSource();
-            v_softSuppliers.DataMember = "SoftSuppliers";
-            v_softSuppliers.DataSource = DataSetManager.DataSet;
+            _vSoftSuppliers = new BindingSource
+            {
+                DataMember = "SoftSuppliers",
+                DataSource = DataSetManager.DataSet
+            };
 
             //Инициируем колонки snapshot-модели
-            for (int i = 0; i < softSuppliers.Select().Columns.Count; i++)
-                snapshotSoftSuppliers.Columns.Add(new DataColumn(
-                    softSuppliers.Select().Columns[i].ColumnName, softSuppliers.Select().Columns[i].DataType));
+            for (var i = 0; i < _softSuppliers.Select().Columns.Count; i++)
+                _snapshotSoftSuppliers.Columns.Add(new DataColumn(
+                    _softSuppliers.Select().Columns[i].ColumnName, _softSuppliers.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (int i = 0; i < v_softSuppliers.Count; i++)
-                snapshotSoftSuppliers.Rows.Add(DataRowViewToArray(((DataRowView)v_softSuppliers[i])));
-            v_snapshotSoftSuppliers = new BindingSource();
-            v_snapshotSoftSuppliers.DataSource = snapshotSoftSuppliers;
-            v_snapshotSoftSuppliers.CurrentItemChanged += v_snapshotSuppliers_CurrentItemChanged;
+            for (var i = 0; i < _vSoftSuppliers.Count; i++)
+                _snapshotSoftSuppliers.Rows.Add(DataRowViewToArray((DataRowView)_vSoftSuppliers[i]));
+            _vSnapshotSoftSuppliers = new BindingSource {DataSource = _snapshotSoftSuppliers};
+            _vSnapshotSoftSuppliers.CurrentItemChanged += v_snapshotSuppliers_CurrentItemChanged;
 
-            dataGridView.DataSource = v_snapshotSoftSuppliers;
+            dataGridView.DataSource = _vSnapshotSoftSuppliers;
             idSoftSupplier.DataPropertyName = "ID Supplier";
             softSupplier.DataPropertyName = "Supplier";
 
@@ -182,49 +188,49 @@ namespace LicenseSoftware.Viewport
             //События изменения данных для проверки соответствия реальным данным в модели
             dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softSuppliers.Select().RowChanged += SoftSuppliersViewport_RowChanged;
-            softSuppliers.Select().RowDeleting += SoftSuppliersViewport_RowDeleting;
-            softSuppliers.Select().RowDeleted += SoftSuppliersViewport_RowDeleted;
+            _softSuppliers.Select().RowChanged += SoftSuppliersViewport_RowChanged;
+            _softSuppliers.Select().RowDeleting += SoftSuppliersViewport_RowDeleting;
+            _softSuppliers.Select().RowDeleted += SoftSuppliersViewport_RowDeleted;
         }
 
         public override void MoveFirst()
         {
-            v_snapshotSoftSuppliers.MoveFirst();
+            _vSnapshotSoftSuppliers.MoveFirst();
         }
 
         public override void MoveLast()
         {
-            v_snapshotSoftSuppliers.MoveLast();
+            _vSnapshotSoftSuppliers.MoveLast();
         }
 
         public override void MoveNext()
         {
-            v_snapshotSoftSuppliers.MoveNext();
+            _vSnapshotSoftSuppliers.MoveNext();
         }
 
         public override void MovePrev()
         {
-            v_snapshotSoftSuppliers.MovePrevious();
+            _vSnapshotSoftSuppliers.MovePrevious();
         }
 
         public override bool CanMoveFirst()
         {
-            return v_snapshotSoftSuppliers.Position > 0;
+            return _vSnapshotSoftSuppliers.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_snapshotSoftSuppliers.Position > 0;
+            return _vSnapshotSoftSuppliers.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_snapshotSoftSuppliers.Position > -1) && (v_snapshotSoftSuppliers.Position < (v_snapshotSoftSuppliers.Count - 1));
+            return (_vSnapshotSoftSuppliers.Position > -1) && (_vSnapshotSoftSuppliers.Position < _vSnapshotSoftSuppliers.Count - 1);
         }
 
         public override bool CanMoveLast()
         {
-            return (v_snapshotSoftSuppliers.Position > -1) && (v_snapshotSoftSuppliers.Position < (v_snapshotSoftSuppliers.Count - 1));
+            return (_vSnapshotSoftSuppliers.Position > -1) && (_vSnapshotSoftSuppliers.Position < _vSnapshotSoftSuppliers.Count - 1);
         }
 
         public override bool CanInsertRecord()
@@ -234,15 +240,15 @@ namespace LicenseSoftware.Viewport
 
         public override void InsertRecord()
         {
-            DataRowView row = (DataRowView)v_snapshotSoftSuppliers.AddNew();
-            row.EndEdit();
+            var row = (DataRowView)_vSnapshotSoftSuppliers.AddNew();
+            if (row != null) row.EndEdit();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             if (SnapshotHasChanges())
             {
-                DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
+                var result = MessageBox.Show(@"Сохранить изменения в базу данных?", @"Внимание",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Yes)
                     SaveRecord();
@@ -255,20 +261,20 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softSuppliers.Select().RowChanged -= SoftSuppliersViewport_RowChanged;
-            softSuppliers.Select().RowDeleting -= SoftSuppliersViewport_RowDeleting;
-            softSuppliers.Select().RowDeleted -= SoftSuppliersViewport_RowDeleted;
+            _softSuppliers.Select().RowChanged -= SoftSuppliersViewport_RowChanged;
+            _softSuppliers.Select().RowDeleting -= SoftSuppliersViewport_RowDeleting;
+            _softSuppliers.Select().RowDeleted -= SoftSuppliersViewport_RowDeleted;
             base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()
         {
-            return (v_snapshotSoftSuppliers.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
+            return (_vSnapshotSoftSuppliers.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
         {
-            ((DataRowView)v_snapshotSoftSuppliers[v_snapshotSoftSuppliers.Position]).Row.Delete();
+            ((DataRowView)_vSnapshotSoftSuppliers[_vSnapshotSoftSuppliers.Position]).Row.Delete();
         }
 
         public override bool CanCancelRecord()
@@ -278,9 +284,9 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            snapshotSoftSuppliers.Clear();
-            for (int i = 0; i < v_softSuppliers.Count; i++)
-                snapshotSoftSuppliers.Rows.Add(DataRowViewToArray(((DataRowView)v_softSuppliers[i])));
+            _snapshotSoftSuppliers.Clear();
+            for (var i = 0; i < _vSoftSuppliers.Count; i++)
+                _snapshotSoftSuppliers.Rows.Add(DataRowViewToArray((DataRowView)_vSoftSuppliers[i]));
             MenuCallback.EditingStateUpdate();
         }
 
@@ -292,26 +298,26 @@ namespace LicenseSoftware.Viewport
         public override void SaveRecord()
         {
             dataGridView.EndEdit();
-            sync_views = false;
-            List<SoftSupplier> list = SoftSuppliersFromViewport();
+            _syncViews = false;
+            var list = SoftSuppliersFromViewport();
             if (!ValidateViewportData(list))
             {
-                sync_views = true;
+                _syncViews = true;
                 return;
             }
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                DataRow row = softSuppliers.Select().Rows.Find(((SoftSupplier)list[i]).IdSoftSupplier);
+                var row = _softSuppliers.Select().Rows.Find(list[i].IdSoftSupplier);
                 if (row == null)
                 {
-                    int idSoftSupplier = SoftSuppliersDataModel.Insert(list[i]);
+                    var idSoftSupplier = SoftSuppliersDataModel.Insert(list[i]);
                     if (idSoftSupplier == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    ((DataRowView)v_snapshotSoftSuppliers[i])["ID Supplier"] = idSoftSupplier;
-                    softSuppliers.Select().Rows.Add(DataRowViewToArray((DataRowView)v_snapshotSoftSuppliers[i]));
+                    ((DataRowView)_vSnapshotSoftSuppliers[i])["ID Supplier"] = idSoftSupplier;
+                    _softSuppliers.Select().Rows.Add(DataRowViewToArray((DataRowView)_vSnapshotSoftSuppliers[i]));
                 }
                 else
                 {
@@ -320,32 +326,32 @@ namespace LicenseSoftware.Viewport
                         continue;
                     if (SoftSuppliersDataModel.Update(list[i]) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     row["Supplier"] = list[i].SoftSupplierName == null ? DBNull.Value : (object)list[i].SoftSupplierName;
                 }
             }
             list = SoftSuppliersFromView();
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                int row_index = -1;
-                for (int j = 0; j < dataGridView.Rows.Count; j++)
+                var rowIndex = -1;
+                for (var j = 0; j < dataGridView.Rows.Count; j++)
                     if ((dataGridView.Rows[j].Cells["idSoftSupplier"].Value != null) &&
-                        !String.IsNullOrEmpty(dataGridView.Rows[j].Cells["idSoftSupplier"].Value.ToString()) &&
+                        !string.IsNullOrEmpty(dataGridView.Rows[j].Cells["idSoftSupplier"].Value.ToString()) &&
                         ((int)dataGridView.Rows[j].Cells["idSoftSupplier"].Value == list[i].IdSoftSupplier))
-                        row_index = j;
-                if (row_index == -1)
+                        rowIndex = j;
+                if (rowIndex == -1)
                 {
                     if (SoftSuppliersDataModel.Delete(list[i].IdSoftSupplier.Value) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    softSuppliers.Select().Rows.Find(((SoftSupplier)list[i]).IdSoftSupplier).Delete();
+                    _softSuppliers.Select().Rows.Find(list[i].IdSoftSupplier).Delete();
                 }
             }
-            sync_views = true;
+            _syncViews = true;
             MenuCallback.EditingStateUpdate();
         }
 
@@ -356,61 +362,52 @@ namespace LicenseSoftware.Viewport
 
         public override Viewport Duplicate()
         {
-            SoftSuppliersViewport viewport = new SoftSuppliersViewport(this, MenuCallback);
+            var viewport = new SoftSuppliersViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
             return viewport;
         }
 
-        void SoftSuppliersViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
+        private void SoftSuppliersViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            if (Selected)
-            {
-                MenuCallback.EditingStateUpdate();
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.EditingStateUpdate();
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
         }
 
-        void SoftSuppliersViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
+        private void SoftSuppliersViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            if (e.Action == DataRowAction.Delete)
-            {
-                int row_index = v_snapshotSoftSuppliers.Find("ID Supplier", e.Row["ID Supplier"]);
-                if (row_index != -1)
-                    ((DataRowView)v_snapshotSoftSuppliers[row_index]).Delete();
-            }
+            if (e.Action != DataRowAction.Delete) return;
+            var rowIndex = _vSnapshotSoftSuppliers.Find("ID Supplier", e.Row["ID Supplier"]);
+            if (rowIndex != -1)
+                ((DataRowView)_vSnapshotSoftSuppliers[rowIndex]).Delete();
         }
 
-        void SoftSuppliersViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void SoftSuppliersViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            int row_index = v_snapshotSoftSuppliers.Find("ID Supplier", e.Row["ID Supplier"]);
-            if (row_index == -1 && v_softSuppliers.Find("ID Supplier", e.Row["ID Supplier"]) != -1)
+            var rowIndex = _vSnapshotSoftSuppliers.Find("ID Supplier", e.Row["ID Supplier"]);
+            if (rowIndex == -1 && _vSoftSuppliers.Find("ID Supplier", e.Row["ID Supplier"]) != -1)
             {
-                snapshotSoftSuppliers.Rows.Add(new object[] { 
-                        e.Row["ID Supplier"], 
-                        e.Row["Supplier"]
-                    });
+                _snapshotSoftSuppliers.Rows.Add(e.Row["ID Supplier"], e.Row["Supplier"]);
             }
             else
-                if (row_index != -1)
+                if (rowIndex != -1)
                 {
-                    DataRowView row = ((DataRowView)v_snapshotSoftSuppliers[row_index]);
+                    var row = (DataRowView)_vSnapshotSoftSuppliers[rowIndex];
                     row["Supplier"] = e.Row["Supplier"];
                 }
-            if (Selected)
-            {
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-                MenuCallback.EditingStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
+            MenuCallback.EditingStateUpdate();
         }
 
-        void v_snapshotSuppliers_CurrentItemChanged(object sender, EventArgs e)
+        private void v_snapshotSuppliers_CurrentItemChanged(object sender, EventArgs e)
         {
             if (Selected)
             {
@@ -419,16 +416,16 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             switch (cell.OwningColumn.Name)
             {
                 case "softSupplier":
                     if (cell.Value.ToString().Trim().Length > 400)
                         cell.ErrorText = "Длина наименования поставщика ПО не может превышать 400 символов";
                     else
-                        if (String.IsNullOrEmpty(cell.Value.ToString().Trim()))
+                        if (string.IsNullOrEmpty(cell.Value.ToString().Trim()))
                             cell.ErrorText = "Наименование поставщика ПО не может быть пустым";
                         else
                             cell.ErrorText = "";
@@ -436,77 +433,75 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             MenuCallback.EditingStateUpdate();
         }
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftSuppliersViewport));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idSoftSupplier = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.softSupplier = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftSuppliersViewport));
+            dataGridView = new DataGridView();
+            idSoftSupplier = new DataGridViewTextBoxColumn();
+            softSupplier = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, (byte)204);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idSoftSupplier,
-            this.softSupplier});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(654, 345);
-            this.dataGridView.TabIndex = 8;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(idSoftSupplier, softSupplier);
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            dataGridView.Location = new System.Drawing.Point(3, 3);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new System.Drawing.Size(654, 345);
+            dataGridView.TabIndex = 8;
             // 
             // idSoftSupplier
             // 
-            this.idSoftSupplier.Frozen = true;
-            this.idSoftSupplier.HeaderText = "Идентификатор";
-            this.idSoftSupplier.Name = "idSoftSupplier";
-            this.idSoftSupplier.ReadOnly = true;
-            this.idSoftSupplier.Visible = false;
+            idSoftSupplier.Frozen = true;
+            idSoftSupplier.HeaderText = "Идентификатор";
+            idSoftSupplier.Name = "idSoftSupplier";
+            idSoftSupplier.ReadOnly = true;
+            idSoftSupplier.Visible = false;
             // 
             // softSupplier
             // 
-            this.softSupplier.HeaderText = "Наименование";
-            this.softSupplier.MinimumWidth = 100;
-            this.softSupplier.Name = "softSupplier";
+            softSupplier.HeaderText = "Наименование";
+            softSupplier.MinimumWidth = 100;
+            softSupplier.Name = "softSupplier";
             // 
             // SoftSuppliersViewport
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(660, 351);
-            this.Controls.Add(this.dataGridView);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SoftSuppliersViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Поставщики ПО";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(660, 351);
+            Controls.Add(dataGridView);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, (byte)204);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "SoftSuppliersViewport";
+            Padding = new Padding(3);
+            Text = "Поставщики ПО";
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ResumeLayout(false);
 
         }
     }

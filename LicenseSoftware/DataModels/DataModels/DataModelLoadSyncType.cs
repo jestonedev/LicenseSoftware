@@ -1,4 +1,4 @@
-﻿namespace DataModels.DataModels
+﻿namespace LicenseSoftware.DataModels.DataModels
 {
     public enum DataModelLoadSyncType
     {

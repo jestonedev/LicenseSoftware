@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using LicenseSoftware.DataModels;
-using LicenseSoftware.CalcDataModels;
-using System.Globalization;
-using DataModels.DataModels;
-using LicenseSoftware.Viewport;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
 
-namespace LicenseSoftware.SearchForms
+namespace LicenseSoftware.Viewport.SearchForms
 {
     internal partial class SearchLicensesForm : SearchForm
     {
@@ -24,7 +23,7 @@ namespace LicenseSoftware.SearchForms
         {
 
             var filter = "";
-            IEnumerable<int> includedSoftwareIds = null;
+            List<int> includedSoftwareIds = null;
             if (checkBoxLicTypeEnable.Checked && (comboBoxLicType.SelectedValue != null))
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
@@ -53,7 +52,7 @@ namespace LicenseSoftware.SearchForms
                                                 FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
                               where departmentsRow.Field<bool>("AllowSelect")
                               select departmentsRow.Field<int>("ID Department");
-                var departments = selectedDepartments.Intersect(accessibleDepartments);
+                var departments = selectedDepartments.Intersect(accessibleDepartments).ToList();
                 if (!departments.Any())
                     throw new ViewportException("Вы не состоите ни в одном из департаментов.");
                 filter += "[ID Department] IN (";
@@ -65,9 +64,9 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                var accessibleDepartments = from departmentsRow in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
+                var accessibleDepartments = (from departmentsRow in DataModelHelper.FilterRows(DepartmentsDataModel.GetInstance().SelectVisibleDepartments())
                                             where departmentsRow.Field<bool>("AllowSelect")
-                                            select departmentsRow.Field<int>("ID Department");
+                                            select departmentsRow.Field<int>("ID Department")).ToList();
                 if (!accessibleDepartments.Any())
                     throw new ViewportException("Вы не состоите ни в одном из департаментов.");
                 filter += "[ID Department] IN (";
@@ -108,12 +107,12 @@ namespace LicenseSoftware.SearchForms
             if (checkBoxSoftwareMakerEnable.Checked && (comboBoxSoftwareMaker.SelectedValue != null))
             {
                 var ids = DataModelHelper.GetSoftwareIDsBySoftMaker((int)comboBoxSoftwareMaker.SelectedValue);
-                includedSoftwareIds = DataModelHelper.Intersect(includedSoftwareIds, ids);
+                includedSoftwareIds = DataModelHelper.Intersect(null, ids).ToList();
             }
             if (checkBoxSoftwareTypeEnable.Checked && (comboBoxSoftwareType.SelectedValue != null))
             {
                 var ids = DataModelHelper.GetSoftwareIDsBySoftType((int)comboBoxSoftwareType.SelectedValue);
-                includedSoftwareIds = DataModelHelper.Intersect(includedSoftwareIds, ids);
+                includedSoftwareIds = DataModelHelper.Intersect(includedSoftwareIds, ids).ToList();
             }
             if (checkBoxLicKeyEnable.Checked && (comboBoxLicKey.SelectedValue != null))
             {
@@ -149,15 +148,13 @@ namespace LicenseSoftware.SearchForms
                     filter = filter.TrimEnd(',') + ")";
                 }
             }
-            if (includedSoftwareIds != null && includedSoftwareIds.Any())
-            {
-                if (!string.IsNullOrEmpty(filter.Trim()))
-                    filter += " AND ";
-                filter += "[ID Version] IN (0";
-                foreach (var id in includedSoftwareIds)
-                    filter += id.ToString(CultureInfo.InvariantCulture) + ",";
-                filter = filter.TrimEnd(',') + ")";
-            }
+            if (includedSoftwareIds == null || !includedSoftwareIds.Any()) return filter;     
+            if (!string.IsNullOrEmpty(filter.Trim()))
+                filter += " AND ";
+            filter += "[ID Version] IN (0";
+            foreach (var id in includedSoftwareIds)
+                filter += id.ToString(CultureInfo.InvariantCulture) + ",";
+            filter = filter.TrimEnd(',') + ")";
             return filter;
         }
 

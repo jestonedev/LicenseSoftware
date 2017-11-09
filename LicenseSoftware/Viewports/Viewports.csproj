@@ -97,25 +97,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="SearchInstallationsForm.cs">
+    <Compile Include="SearchForms\SearchInstallationsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchInstallationsForm.Designer.cs">
+    <Compile Include="SearchForms\SearchInstallationsForm.Designer.cs">
       <DependentUpon>SearchInstallationsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchLicensesForm.cs">
+    <Compile Include="SearchForms\SearchLicensesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchLicensesForm.Designer.cs">
+    <Compile Include="SearchForms\SearchLicensesForm.Designer.cs">
       <DependentUpon>SearchLicensesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchSoftwareForm.cs">
+    <Compile Include="SearchForms\SearchSoftwareForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchSoftwareForm.Designer.cs">
+    <Compile Include="SearchForms\SearchSoftwareForm.Designer.cs">
       <DependentUpon>SearchSoftwareForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchForm.cs">
+    <Compile Include="SearchForms\SearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SoftLicDocTypesViewport.cs">
@@ -187,13 +187,13 @@
     <EmbeddedResource Include="InstallationsViewport.resx">
       <DependentUpon>InstallationsViewport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchInstallationsForm.resx">
+    <EmbeddedResource Include="SearchForms\SearchInstallationsForm.resx">
       <DependentUpon>SearchInstallationsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchLicensesForm.resx">
+    <EmbeddedResource Include="SearchForms\SearchLicensesForm.resx">
       <DependentUpon>SearchLicensesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchSoftwareForm.resx">
+    <EmbeddedResource Include="SearchForms\SearchSoftwareForm.resx">
       <DependentUpon>SearchSoftwareForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.resx">

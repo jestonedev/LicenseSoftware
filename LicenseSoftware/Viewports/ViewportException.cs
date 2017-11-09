@@ -17,7 +17,6 @@ namespace LicenseSoftware.Viewport
         }
 
         public ViewportException()
-            : base()
         {
         }
 

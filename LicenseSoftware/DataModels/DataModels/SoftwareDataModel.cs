@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftwareDataModel : DataModel
     {
@@ -36,16 +34,14 @@ namespace DataModels.DataModels
         }
 
         public static SoftwareDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (_dataModel == null)
-                _dataModel = new SoftwareDataModel(progressBar, incrementor);
-            return _dataModel;
+        {
+            return _dataModel ?? (_dataModel = new SoftwareDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
                 command.CommandText = DeleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftware", id));
@@ -65,8 +61,8 @@ namespace DataModels.DataModels
 
         public static int Update(Software software)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
                 command.CommandText = UpdateQuery;
                 if (software == null)
@@ -95,8 +91,8 @@ namespace DataModels.DataModels
 
         public static int Insert(Software software)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
                 command.CommandText = InsertQuery;
                 if (software == null)

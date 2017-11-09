@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 using LicenseSoftware.Entities;
 
 namespace LicenseSoftware.DataModels
@@ -11,10 +11,10 @@ namespace LicenseSoftware.DataModels
     {
         public static IEnumerable<DataRow> FilterRows(DataTable table)
         {
-            return from table_row in table.AsEnumerable()
-                   where (table_row.RowState != DataRowState.Deleted) &&
-                         (table_row.RowState != DataRowState.Detached)
-                   select table_row;
+            return from tableRow in table.AsEnumerable()
+                   where (tableRow.RowState != DataRowState.Deleted) &&
+                         (tableRow.RowState != DataRowState.Detached)
+                   select tableRow;
         }
 
         public static IEnumerable<DataRow> FilterRows(DataTable table, EntityType entity, int? idObject)
@@ -37,17 +37,17 @@ namespace LicenseSoftware.DataModels
         public static IEnumerable<int> GetDepartmentSubunits(int department)
         {
             var departments = DepartmentsDataModel.GetInstance();
-            IEnumerable<int> departmentIDs = new List<int>();
+            var departmentIDs = new List<int>();
             foreach (DataRow row in departments.Select().Rows)
                 if (row.RowState != DataRowState.Deleted &&
                     row.RowState != DataRowState.Detached && 
                     row["ID Parent Department"] != DBNull.Value && (int)row["ID Parent Department"] == department)
-                    ((List<int>)departmentIDs).Add((int)row["ID Department"]);
+                    departmentIDs.Add((int)row["ID Department"]);
             var subUnits = new List<IEnumerable<int>>();
             foreach (var departmentId in departmentIDs)
                 subUnits.Add(GetDepartmentSubunits(departmentId));
             foreach (var subUnit in subUnits)
-                departmentIDs = departmentIDs.Union(subUnit);
+                departmentIDs = departmentIDs.Union(subUnit).ToList();
             return departmentIDs;
         }
 

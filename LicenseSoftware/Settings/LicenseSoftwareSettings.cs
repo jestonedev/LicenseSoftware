@@ -14,7 +14,7 @@ namespace Settings
             get {
                 try
                 {
-                    var inputBuffer = Convert.FromBase64String(Settings.Properties.Settings.Default.ConnectionString);
+                    var inputBuffer = Convert.FromBase64String(Properties.Settings.Default.ConnectionString);
                     var decryptor = Aes.CreateDecryptor(Convert.FromBase64String(Key), Convert.FromBase64String(Iv));
                     var outputBuffer = decryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
                     return Encoding.UTF8.GetString(outputBuffer);

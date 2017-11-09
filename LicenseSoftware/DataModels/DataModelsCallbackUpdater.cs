@@ -1,25 +1,24 @@
-﻿using LicenseSoftware.CalcDataModels;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
 using Settings;
 
 namespace LicenseSoftware.DataModels
 {
     public sealed class DataModelsCallbackUpdater
     {
-        private static DataModelsCallbackUpdater instance;
-        private static string query = @"SELECT [ID Record], [Table], [ID Key], [Field Name], [Field New Value], [Operation Type] 
+        private static DataModelsCallbackUpdater _instance;
+        private static string _query = @"SELECT [ID Record], [Table], [ID Key], [Field Name], [Field New Value], [Operation Type] 
                                         FROM Log WHERE [ID Record] > @IDRecord AND ([Operation Type] = 'UPDATE' OR ([Operation Type] IN ('DELETE','INSERT') AND ([User Name] <> @UserName)) OR [Table] IN ('Departments','Devices'))";
-        private static string initQuery = @"SELECT ISNULL(MAX([ID Record]), 0) AS [ID Record], suser_sname() AS [User Name] FROM Log";
-        private int idRecord = -1;
-        private string userName = "";
-        private DataRow updRow = null;
+        private static string _initQuery = @"SELECT ISNULL(MAX([ID Record]), 0) AS [ID Record], suser_sname() AS [User Name] FROM Log";
+        private int _idRecord = -1;
+        private string _userName = "";
+        private DataRow _updRow;
 
         private DataModelsCallbackUpdater()
         {
@@ -27,25 +26,25 @@ namespace LicenseSoftware.DataModels
 
         public void Initialize()
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = initQuery;
+                command.CommandText = _initQuery;
                 try
                 {
-                    DataTable table = connection.SqlSelectTable("table", command);
+                    var table = connection.SqlSelectTable("table", command);
                     if (table.Rows.Count == 0)
                     {
                         MessageBox.Show("Не удалось инициализировать DataModelCallbackUpdater", "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
                             MessageBoxDefaultButton.Button1);
                         Application.Exit();
                     }
-                    idRecord = Convert.ToInt32(table.Rows[0]["ID Record"].ToString(), CultureInfo.InvariantCulture);
-                    userName = table.Rows[0]["User Name"].ToString();
+                    _idRecord = Convert.ToInt32(table.Rows[0]["ID Record"].ToString(), CultureInfo.InvariantCulture);
+                    _userName = table.Rows[0]["User Name"].ToString();
                 }
                 catch (SqlException e)
                 {
-                    MessageBox.Show(String.Format(CultureInfo.InvariantCulture,
+                    MessageBox.Show(string.Format(CultureInfo.InvariantCulture,
                             "Произошла ошибка при загрузке данных из базы данных. Подробная ошибка: {0}", e.Message), "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     Application.Exit();
@@ -55,11 +54,11 @@ namespace LicenseSoftware.DataModels
 
         public void Run()
         {
-            SynchronizationContext context = SynchronizationContext.Current;
+            var context = SynchronizationContext.Current;
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                DataTable tableCacheLvl1 = new DataTable("tableCacheLvl1");
-                DataTable tableCacheLvl2 = new DataTable("tableCacheLvl2");
+                var tableCacheLvl1 = new DataTable("tableCacheLvl1");
+                var tableCacheLvl2 = new DataTable("tableCacheLvl2");
                 tableCacheLvl1.Locale = CultureInfo.InvariantCulture;
                 tableCacheLvl2.Locale = CultureInfo.InvariantCulture;
                 InitializeColumns(tableCacheLvl1);
@@ -70,7 +69,7 @@ namespace LicenseSoftware.DataModels
                     tableCacheLvl2.Clear();
                     context.Send(__ =>
                     {
-                        DataTable workTable = tableCacheLvl1;
+                        var workTable = tableCacheLvl1;
                         foreach (DataRow row in workTable.Rows)
                         {
                             if (!UpdateModelFromRow(row))
@@ -82,27 +81,27 @@ namespace LicenseSoftware.DataModels
                     foreach (DataRow row in tableCacheLvl2.Rows)
                         tableCacheLvl1.Rows.Add(RowToCacheObject(row));
                     //Обновляем модель из базы
-                    using (DBConnection connection = new DBConnection())
-                    using (DbCommand command = DBConnection.CreateCommand())
+                    using (var connection = new DBConnection())
+                    using (var command = DBConnection.CreateCommand())
                     {
-                        command.CommandText = query;
-                        command.Parameters.Add(DBConnection.CreateParameter<int>("IDRecord", idRecord));
-                        command.Parameters.Add(DBConnection.CreateParameter<string>("UserName", userName));
+                        command.CommandText = _query;
+                        command.Parameters.Add(DBConnection.CreateParameter("IDRecord", _idRecord));
+                        command.Parameters.Add(DBConnection.CreateParameter("UserName", _userName));
                         try
                         {
-                            DataTable tableDB = connection.SqlSelectTable("tableDB", command);
-                            tableDB.Locale = CultureInfo.InvariantCulture;
+                            var tableDb = connection.SqlSelectTable("tableDB", command);
+                            tableDb.Locale = CultureInfo.InvariantCulture;
                             context.Send(__ =>
                             {
-                                DataTable workTable = tableDB;
+                                var workTable = tableDb;
                                 foreach (DataRow row in workTable.Rows)
                                 {
                                     if (!UpdateModelFromRow(row))
                                         tableCacheLvl1.Rows.Add(RowToCacheObject(row));
                                 }
                             }, null);
-                            if (tableDB.Rows.Count > 0)
-                                idRecord = Convert.ToInt32(tableDB.Rows[tableDB.Rows.Count - 1]["ID Record"].ToString(), CultureInfo.InvariantCulture);
+                            if (tableDb.Rows.Count > 0)
+                                _idRecord = Convert.ToInt32(tableDb.Rows[tableDb.Rows.Count - 1]["ID Record"].ToString(), CultureInfo.InvariantCulture);
                         }
                         catch (SqlException)
                         {
@@ -117,64 +116,64 @@ namespace LicenseSoftware.DataModels
 
         private bool UpdateModelFromRow(DataRow row)
         {
-            string table = row["Table"].ToString();
-            int id_key = Convert.ToInt32(row["ID Key"].ToString(), CultureInfo.InvariantCulture);
-            string field_name = row["Field Name"].ToString();
-            string field_value = row["Field New Value"].ToString();
-            string operation_type = row["Operation Type"].ToString();
+            var table = row["Table"].ToString();
+            var idKey = Convert.ToInt32(row["ID Key"].ToString(), CultureInfo.InvariantCulture);
+            var fieldName = row["Field Name"].ToString();
+            var fieldValue = row["Field New Value"].ToString();
+            var operationType = row["Operation Type"].ToString();
             //Если таблица не загружена, то у пользователя просто нет необходимых прав. Игнорируем ее и возвращаем true
             if (!DataSetManager.DataSet.Tables.Contains(table))
                 return true;
-            DataTable updTable = DataSetManager.DataSet.Tables[table];
+            var updTable = DataSetManager.DataSet.Tables[table];
             //Ищем строку для обновления
-            if (!((updRow != null)
-                && (updRow.RowState != DataRowState.Deleted)
-                && (updRow.RowState != DataRowState.Detached)
-                && (updRow.Table.TableName == table) 
-                && (updRow.Table.PrimaryKey.Length > 0)
-                && (Convert.ToInt32(updRow[updRow.Table.PrimaryKey[0].ColumnName], CultureInfo.InvariantCulture) == id_key)))
+            if (!((_updRow != null)
+                && (_updRow.RowState != DataRowState.Deleted)
+                && (_updRow.RowState != DataRowState.Detached)
+                && (_updRow.Table.TableName == table) 
+                && (_updRow.Table.PrimaryKey.Length > 0)
+                && (Convert.ToInt32(_updRow[_updRow.Table.PrimaryKey[0].ColumnName], CultureInfo.InvariantCulture) == idKey)))
             {
                 //Если строка не закэширована, или закэширована не та строка, то надо найти и закэшировать строку по имени таблицы и id_key
-                updRow = updTable.Rows.Find(id_key);
+                _updRow = updTable.Rows.Find(idKey);
             }
             //Если строка в представлении пользователя существует, но помечена как удаленная, то игнорировать ее
-            if (updRow != null && (updRow.RowState == DataRowState.Deleted || updRow.RowState == DataRowState.Detached))
+            if (_updRow != null && (_updRow.RowState == DataRowState.Deleted || _updRow.RowState == DataRowState.Detached))
                 return true;
-            switch (operation_type)
+            switch (operationType)
             {
                 case "INSERT":
                     //Если модель находится в режиме IsNewRecord, то вернуть false
                     if (EditingNewRecordModel(table))
                         return false;
                     //Если строки нет, то создаем новую
-                    if (updRow == null)
+                    if (_updRow == null)
                     {
-                        updRow = updTable.NewRow();
-                        updRow[updRow.Table.PrimaryKey[0].ColumnName] = id_key;
-                        updRow.EndEdit();
-                        updTable.Rows.Add(updRow);
+                        _updRow = updTable.NewRow();
+                        _updRow[_updRow.Table.PrimaryKey[0].ColumnName] = idKey;
+                        _updRow.EndEdit();
+                        updTable.Rows.Add(_updRow);
                     }
-                    SetValue(updRow, field_name, field_value, operation_type);
+                    SetValue(_updRow, fieldName, fieldValue);
                     return true;
                 case "UPDATE":
                     //Если строки нет, то игнорируем и возвращаем false, чтобы сохранить в кэш строку
-                    if (updRow == null)
+                    if (_updRow == null)
                         return false;
-                    SetValue(updRow, field_name, field_value, operation_type);
+                    SetValue(_updRow, fieldName, fieldValue);
                     return true;
                 case "DELETE":
                     //Если строка не найдена, значит она уже удалена, возвращаем true
-                    if (updRow == null)
+                    if (_updRow == null)
                         return true;
-                    updTable.Rows.Remove(updRow);
-                    CalcDataModelsUpdate(table, field_name, operation_type);
+                    updTable.Rows.Remove(_updRow);
+                    CalcDataModelsUpdate(table);
                     return true;
                 default:
                     return true;
             }
         }
 
-        private static void CalcDataModelsUpdate(string table, string field_name, string operation_type)
+        private static void CalcDataModelsUpdate(string table)
         {
             switch (table)
             {
@@ -193,31 +192,27 @@ namespace LicenseSoftware.DataModels
             }
         }
 
-        private static void SetValue(DataRow row, string field_name, string field_value, string operation_type)
+        private static void SetValue(DataRow row, string fieldName, string fieldValue)
         {
             // Если поле не найдено, то возможно оно новое в базе и надо его проигнорировать
-            if (!row.Table.Columns.Contains(field_name))
+            if (!row.Table.Columns.Contains(fieldName))
                 return;
-            if (String.IsNullOrEmpty(field_value))
+            if (string.IsNullOrEmpty(fieldValue))
             {
-                if (!row[field_name].Equals(DBNull.Value))
-                {
-                    row[field_name] = DBNull.Value;
-                    CalcDataModelsUpdate(row.Table.TableName, field_name, operation_type);
-                }
+                if (row[fieldName].Equals(DBNull.Value)) return;
+                row[fieldName] = DBNull.Value;
+                CalcDataModelsUpdate(row.Table.TableName);
             }
             else
             {
-                object value = DBNull.Value;
-                if (row.Table.Columns[field_name].DataType == typeof(Boolean))
-                    value = field_value == "1" ? true : false;
+                object value;
+                if (row.Table.Columns[fieldName].DataType == typeof(bool))
+                    value = fieldValue == "1";
                 else
-                    value = Convert.ChangeType(field_value, row.Table.Columns[field_name].DataType, CultureInfo.InvariantCulture);
-                if (!row[field_name].Equals(value))
-                {
-                    row[field_name] = value;
-                    CalcDataModelsUpdate(row.Table.TableName, field_name, operation_type);
-                }
+                    value = Convert.ChangeType(fieldValue, row.Table.Columns[fieldName].DataType, CultureInfo.InvariantCulture);
+                if (row[fieldName].Equals(value)) return;
+                row[fieldName] = value;
+                CalcDataModelsUpdate(row.Table.TableName);
             }
         }
 
@@ -247,7 +242,7 @@ namespace LicenseSoftware.DataModels
 
         private static object[] RowToCacheObject(DataRow row)
         {
-            return new object[] {
+            return new[] {
                 row["Table"],
                 row["ID Key"],
                 row["Field Name"],
@@ -258,9 +253,7 @@ namespace LicenseSoftware.DataModels
 
         public static DataModelsCallbackUpdater GetInstance()
         {
-            if (instance == null)
-                instance = new DataModelsCallbackUpdater();
-            return instance;
+            return _instance ?? (_instance = new DataModelsCallbackUpdater());
         }
     }
 }

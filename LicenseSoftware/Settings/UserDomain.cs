@@ -55,11 +55,11 @@ namespace Settings
                         searcher.SearchScope = SearchScope.Subtree;
                         searcher.PropertiesToLoad.Add("samAccountName");
                         searcher.PropertiesToLoad.Add("displayName");
-                        if (String.IsNullOrEmpty(login))
+                        if (string.IsNullOrEmpty(login))
                             throw new ArgumentNullException("login","Не задано имя пользователя");
                         var loginParts = login.Split('\\');
                         searcher.Filter = string.Format(CultureInfo.InvariantCulture, 
-                            "(&(objectClass=user)(samAccountName={0}))", loginParts[loginParts.Count() - 1]);
+                            "(&(objectClass=user)(samAccountName={0}))", loginParts[loginParts.Length - 1]);
                         try
                         {
                             var results = searcher.FindAll();

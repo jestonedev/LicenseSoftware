@@ -2,14 +2,13 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftVersionsDataModel : DataModel
     {
-        private static SoftVersionsDataModel dataModel;
+        private static SoftVersionsDataModel _dataModel;
         private const string SelectQuery = "SELECT * FROM SoftVersions WHERE Deleted = 0";
         private const string DeleteQuery = "UPDATE SoftVersions SET Deleted = 1 WHERE [ID Version] = @IDVersion";
         private const string InsertQuery = @"INSERT INTO SoftVersions
@@ -38,7 +37,7 @@ namespace DataModels.DataModels
 
         public static SoftVersionsDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
         {
-            return dataModel ?? (dataModel = new SoftVersionsDataModel(progressBar, incrementor));
+            return _dataModel ?? (_dataModel = new SoftVersionsDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)

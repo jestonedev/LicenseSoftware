@@ -2,10 +2,9 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftLicTypesDataModel : DataModel
     {
@@ -32,10 +31,8 @@ namespace DataModels.DataModels
         }
 
         public static SoftLicTypesDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (_dataModel == null)
-                _dataModel = new SoftLicTypesDataModel(progressBar, incrementor);
-            return _dataModel;
+        {
+            return _dataModel ?? (_dataModel = new SoftLicTypesDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)

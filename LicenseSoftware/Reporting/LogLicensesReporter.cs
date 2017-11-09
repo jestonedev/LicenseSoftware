@@ -1,10 +1,7 @@
 ﻿using Registry.Reporting;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Settings;
 
 namespace LicenseSoftware.Reporting
@@ -14,10 +11,12 @@ namespace LicenseSoftware.Reporting
         public override void Run()
         {
             ReportTitle = "Лог лицензий на ПО";
-            Dictionary<string, string> arguments = new Dictionary<string, string>();
-            arguments.Add("config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "log_licenses.xml"));
-            arguments.Add("connectionString", LicenseSoftwareSettings.ConnectionString);
-            using (DateRangeForm drForm = new DateRangeForm())
+            var arguments = new Dictionary<string, string>
+            {
+                {"config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "log_licenses.xml")},
+                {"connectionString", LicenseSoftwareSettings.ConnectionString}
+            };
+            using (var drForm = new DateRangeForm())
             {
                 if (drForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
@@ -26,7 +25,7 @@ namespace LicenseSoftware.Reporting
                     base.Run(arguments);
                 }
                 else
-                    base.Cancel();
+                    Cancel();
             }
         }
     }

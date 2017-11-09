@@ -1,12 +1,11 @@
-﻿using LicenseSoftware.DataModels;
-using LicenseSoftware.Entities;
-using System;
+﻿using System;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
+using LicenseSoftware.Entities;
 
-namespace LicenseSoftware.CalcDataModels
+namespace LicenseSoftware.DataModels.CalcDataModels
 {
     public sealed class CalcDataModelLicKeyConcat: CalcDataModel
     {
@@ -32,7 +31,7 @@ namespace LicenseSoftware.CalcDataModels
 
         protected override void Calculate(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            DMLoadState = DataModelLoadState.Loading;
+            DmLoadState = DataModelLoadState.Loading;
             if (e == null)
                 throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelLicensesConcat");
             var config = (CalcAsyncConfig)e.Argument;

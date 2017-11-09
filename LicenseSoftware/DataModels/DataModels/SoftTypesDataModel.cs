@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
-using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class SoftTypesDataModel : DataModel
     {
-        private static SoftTypesDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM SoftTypes WHERE Deleted = 0";
-        private static string deleteQuery = "UPDATE SoftTypes SET Deleted = 1 WHERE [ID SoftType] = @IDSoftType";
-        private static string insertQuery = @"INSERT INTO SoftTypes (SoftType) VALUES (@SoftType); SELECT CONVERT(int, SCOPE_IDENTITY());";
-        private static string updateQuery = @"UPDATE SoftTypes SET SoftType = @SoftType WHERE [ID SoftType] = @IDSoftType";
-        private static string tableName = "SoftTypes";
+        private static SoftTypesDataModel _dataModel;
+        private static string _selectQuery = "SELECT * FROM SoftTypes WHERE Deleted = 0";
+        private static string _deleteQuery = "UPDATE SoftTypes SET Deleted = 1 WHERE [ID SoftType] = @IDSoftType";
+        private static string _insertQuery = @"INSERT INTO SoftTypes (SoftType) VALUES (@SoftType); SELECT CONVERT(int, SCOPE_IDENTITY());";
+        private static string _updateQuery = @"UPDATE SoftTypes SET SoftType = @SoftType WHERE [ID SoftType] = @IDSoftType";
+        private static string _tableName = "SoftTypes";
 
         private SoftTypesDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, _selectQuery, _tableName)
         {   
         }
 
         protected override void ConfigureTable()
         {
-            Table.PrimaryKey = new DataColumn[] { Table.Columns["ID SoftType"] };
+            Table.PrimaryKey = new[] { Table.Columns["ID SoftType"] };
         }
 
         public static SoftTypesDataModel GetInstance()
@@ -34,18 +31,16 @@ namespace DataModels.DataModels
         }
 
         public static SoftTypesDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (dataModel == null)
-                dataModel = new SoftTypesDataModel(progressBar, incrementor);
-            return dataModel;
+        {
+            return _dataModel ?? (_dataModel = new SoftTypesDataModel(progressBar, incrementor));
         }
 
         public static int Delete(int id)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = deleteQuery;
+                command.CommandText = _deleteQuery;
                 command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", id));
                 try
                 {
@@ -63,18 +58,18 @@ namespace DataModels.DataModels
 
         public static int Update(SoftType softType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = updateQuery;
+                command.CommandText = _updateQuery;
                 if (softType == null)
                 {
                     MessageBox.Show("В метод Update не передана ссылка на объект вида ПО", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("SoftType", softType.SoftTypeName));
-                command.Parameters.Add(DBConnection.CreateParameter<int?>("IDSoftType", softType.IdSoftType));
+                command.Parameters.Add(DBConnection.CreateParameter("SoftType", softType.SoftTypeName));
+                command.Parameters.Add(DBConnection.CreateParameter("IDSoftType", softType.IdSoftType));
                 try
                 {
                     return connection.SqlExecuteNonQuery(command);
@@ -91,17 +86,17 @@ namespace DataModels.DataModels
 
         public static int Insert(SoftType softType)
         {
-            using (DBConnection connection = new DBConnection())
-            using (DbCommand command = DBConnection.CreateCommand())
+            using (var connection = new DBConnection())
+            using (var command = DBConnection.CreateCommand())
             {
-                command.CommandText = insertQuery;
+                command.CommandText = _insertQuery;
                 if (softType == null)
                 {
                     MessageBox.Show("В метод Insert не передана ссылка на объект вида ПО", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return -1;
                 }
-                command.Parameters.Add(DBConnection.CreateParameter<string>("SoftType", softType.SoftTypeName));
+                command.Parameters.Add(DBConnection.CreateParameter("SoftType", softType.SoftTypeName));
                 try
                 {
                     return Convert.ToInt32(connection.SqlExecuteScalar(command), CultureInfo.InvariantCulture);

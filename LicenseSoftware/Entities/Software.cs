@@ -14,20 +14,19 @@
 
         public bool Equals(Software other)
         {
-            return this.Equals((object)other);
+            return Equals((object)other);
         }
 
         public static bool operator==(Software first, Software second)
         {
             if ((object)first == null && (object)second == null)
                 return true;
-            else if ((object) first == null || (object) second == null)
+            if ((object) first == null || (object) second == null)
                 return false;
-            else
-                return first.IdSoftware == second.IdSoftware &&
-                       first.IdSoftType == second.IdSoftType &&
-                       first.IdSoftMaker == second.IdSoftMaker &&
-                       first.SoftwareName == second.SoftwareName;
+            return first.IdSoftware == second.IdSoftware &&
+                   first.IdSoftType == second.IdSoftType &&
+                   first.IdSoftMaker == second.IdSoftMaker &&
+                   first.SoftwareName == second.SoftwareName;
         }
 
         public static bool operator !=(Software first, Software second)

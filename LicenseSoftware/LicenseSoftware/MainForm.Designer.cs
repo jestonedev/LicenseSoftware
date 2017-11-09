@@ -29,6 +29,7 @@ namespace LicenseSoftware
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
             WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
@@ -44,7 +45,6 @@ namespace LicenseSoftware
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ribbon1 = new System.Windows.Forms.Ribbon();
             this.ribbonOrbMenuItemSoftware = new System.Windows.Forms.RibbonOrbMenuItem();
             this.ribbonOrbMenuItemLicenses = new System.Windows.Forms.RibbonOrbMenuItem();
@@ -79,6 +79,7 @@ namespace LicenseSoftware
             this.ribbonButtonLicenses = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonInstallations = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonLicKeys = new System.Windows.Forms.RibbonButton();
+            this.ribbonButtonSoftVersions = new System.Windows.Forms.RibbonButton();
             this.ribbonPanel2 = new System.Windows.Forms.RibbonPanel();
             this.ribbonButtonTabClose = new System.Windows.Forms.RibbonButton();
             this.ribbonButtonList1 = new System.Windows.Forms.RibbonButtonList();
@@ -100,7 +101,6 @@ namespace LicenseSoftware
             this.toolStripLabelRecordCount = new System.Windows.Forms.ToolStripLabel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.ribbonButton1 = new System.Windows.Forms.RibbonButton();
-            this.ribbonButtonSoftVersions = new System.Windows.Forms.RibbonButton();
             this.mbStatusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -483,6 +483,17 @@ namespace LicenseSoftware
             this.ribbonButtonLicKeys.ToolTipTitle = "Лицензионные ключи";
             this.ribbonButtonLicKeys.Click += new System.EventHandler(this.ribbonButtonLicKeys_Click);
             // 
+            // ribbonButtonSoftVersions
+            // 
+            this.ribbonButtonSoftVersions.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.Image")));
+            this.ribbonButtonSoftVersions.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.SmallImage")));
+            this.ribbonButtonSoftVersions.Text = "Версии ПО";
+            this.ribbonButtonSoftVersions.ToolTip = "При нажатии на данную кнопку будет открыта форма для заполнения перечня версий ПО" +
+    "";
+            this.ribbonButtonSoftVersions.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.ToolTipImage")));
+            this.ribbonButtonSoftVersions.ToolTipTitle = "Версии ПО";
+            this.ribbonButtonSoftVersions.Click += new System.EventHandler(this.ribbonButtonSoftVersions_Click);
+            // 
             // ribbonPanel2
             // 
             this.ribbonPanel2.ButtonMoreEnabled = false;
@@ -730,17 +741,6 @@ namespace LicenseSoftware
             this.ribbonButton1.ToolTip = "История изменений в лицензиях на программное обеспечение за период";
             this.ribbonButton1.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButton1.ToolTipImage")));
             this.ribbonButton1.ToolTipTitle = "Лог изменений лицензий";
-            // 
-            // ribbonButtonSoftVersions
-            // 
-            this.ribbonButtonSoftVersions.Image = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.Image")));
-            this.ribbonButtonSoftVersions.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.SmallImage")));
-            this.ribbonButtonSoftVersions.Text = "Версии ПО";
-            this.ribbonButtonSoftVersions.ToolTip = "При нажатии на данную кнопку будет открыта форма для заполнения перечня версий ПО" +
-    "";
-            this.ribbonButtonSoftVersions.ToolTipImage = ((System.Drawing.Image)(resources.GetObject("ribbonButtonSoftVersions.ToolTipImage")));
-            this.ribbonButtonSoftVersions.ToolTipTitle = "Версии ПО";
-            this.ribbonButtonSoftVersions.Click += new System.EventHandler(this.ribbonButtonSoftVersions_Click);
             // 
             // MainForm
             // 

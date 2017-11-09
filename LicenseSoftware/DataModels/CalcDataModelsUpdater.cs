@@ -1,16 +1,16 @@
-﻿using LicenseSoftware.CalcDataModels;
-using LicenseSoftware.Entities;
+﻿using LicenseSoftware.Entities;
 using System.Threading;
+using LicenseSoftware.DataModels.CalcDataModels;
 using Settings;
 
 namespace LicenseSoftware.DataModels
 {      
     internal sealed class CalcDataModelsUpdater
     {
-        private static CalcDataModelsUpdater instance;
+        private static CalcDataModelsUpdater _instance;
         public void Run()
         {
-            SynchronizationContext context = SynchronizationContext.Current;
+            var context = SynchronizationContext.Current;
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 while (true)
@@ -37,9 +37,7 @@ namespace LicenseSoftware.DataModels
 
         public static CalcDataModelsUpdater GetInstance()
         {
-            if (instance == null)
-                instance = new CalcDataModelsUpdater();
-            return instance;
+            return _instance ?? (_instance = new CalcDataModelsUpdater());
         }
     }
 }

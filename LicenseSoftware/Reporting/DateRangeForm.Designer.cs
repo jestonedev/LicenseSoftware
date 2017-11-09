@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DateRangeForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(DateRangeForm));
             this.vButtonOk = new VIBlend.WinForms.Controls.vButton();
             this.vButtonCancel = new VIBlend.WinForms.Controls.vButton();
             this.dateTimePickerTo = new System.Windows.Forms.DateTimePicker();

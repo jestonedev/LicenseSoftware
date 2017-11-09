@@ -1,15 +1,15 @@
 ﻿using System.Windows.Forms;
 
-namespace DataModels.DataModels
+namespace LicenseSoftware.DataModels.DataModels
 {
     public sealed class DevicesDataModel : DataModel
     {
-        private static DevicesDataModel dataModel = null;
-        private static string selectQuery = "SELECT * FROM Devices WHERE [ID Device Type] = 1";
-        private static string tableName = "Devices";
+        private static DevicesDataModel _dataModel;
+        private const string SelectQuery = "SELECT * FROM Devices WHERE [ID Device Type] = 1";
+        private const string TableName = "Devices";
 
         private DevicesDataModel(ToolStripProgressBar progressBar, int incrementor)
-            : base(progressBar, incrementor, selectQuery, tableName)
+            : base(progressBar, incrementor, SelectQuery, TableName)
         {
         }
 
@@ -24,10 +24,8 @@ namespace DataModels.DataModels
         }
 
         public static DevicesDataModel GetInstance(ToolStripProgressBar progressBar, int incrementor)
-        {         
-            if (dataModel == null)
-                dataModel = new DevicesDataModel(progressBar, incrementor);
-            return dataModel;
+        {
+            return _dataModel ?? (_dataModel = new DevicesDataModel(progressBar, incrementor));
         }
     }
 }

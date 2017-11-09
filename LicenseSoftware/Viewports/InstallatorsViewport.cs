@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -21,19 +21,21 @@ namespace LicenseSoftware.Viewport
         #endregion Components
 
         #region Models
-        SoftInstallatorsDataModel installators = null;
-        DataTable snapshotInstallators = new DataTable("snapshotInstallators");
+
+        private SoftInstallatorsDataModel _installators;
+        private readonly DataTable _snapshotInstallators = new DataTable("snapshotInstallators");
         #endregion Models
 
         #region Views
-        BindingSource v_installators = null;
-        BindingSource v_snapshotInstallators = null;
+
+        private BindingSource _vInstallators;
+        private BindingSource _vSnapshotInstallators;
         #endregion Views
 
 
 
         //Флаг разрешения синхронизации snapshot и original моделей
-        bool sync_views = true;
+        private bool _syncViews = true;
 
         private InstallatorsViewport()
             : this(null)
@@ -44,30 +46,29 @@ namespace LicenseSoftware.Viewport
             : base(menuCallback)
         {
             InitializeComponent();
-            snapshotInstallators.Locale = CultureInfo.InvariantCulture;
+            _snapshotInstallators.Locale = CultureInfo.InvariantCulture;
         }
 
         public InstallatorsViewport(InstallatorsViewport installatorsViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = installatorsViewport.DynamicFilter;
-            this.StaticFilter = installatorsViewport.StaticFilter;
-            this.ParentRow = installatorsViewport.ParentRow;
-            this.ParentType = installatorsViewport.ParentType;
+            DynamicFilter = installatorsViewport.DynamicFilter;
+            StaticFilter = installatorsViewport.StaticFilter;
+            ParentRow = installatorsViewport.ParentRow;
+            ParentType = installatorsViewport.ParentType;
         }
 
         private bool SnapshotHasChanges()
         {
-            List<SoftInstallator> list_from_view = InstallatorsFromView();
-            List<SoftInstallator> list_from_viewport = InstallatorsFromViewport();
-            if (list_from_view.Count != list_from_viewport.Count)
+            var listFromView = InstallatorsFromView();
+            var listFromViewport = InstallatorsFromViewport();
+            if (listFromView.Count != listFromViewport.Count)
                 return true;
-            bool founded = false;
-            for (int i = 0; i < list_from_view.Count; i++)
+            for (var i = 0; i < listFromView.Count; i++)
             {
-                founded = false;
-                for (int j = 0; j < list_from_viewport.Count; j++)
-                    if (list_from_view[i] == list_from_viewport[j])
+                var founded = false;
+                for (var j = 0; j < listFromViewport.Count; j++)
+                    if (listFromView[i] == listFromViewport[j])
                         founded = true;
                 if (!founded)
                     return true;
@@ -77,7 +78,7 @@ namespace LicenseSoftware.Viewport
 
         private static object[] DataRowViewToArray(DataRowView dataRowView)
         {
-            return new object[] { 
+            return new[] { 
                 dataRowView["ID Installator"], 
                 dataRowView["FullName"],
                 dataRowView["Profession"],
@@ -87,11 +88,11 @@ namespace LicenseSoftware.Viewport
 
         private static bool ValidateViewportData(List<SoftInstallator> list)
         {
-            foreach (SoftInstallator installator in list)
+            foreach (var installator in list)
             {
                 if (installator.FullName == null)
                 {
-                    MessageBox.Show("ФИО установщика не может быть пустым", "Ошибка", 
+                    MessageBox.Show(@"ФИО установщика не может быть пустым", @"Ошибка", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
@@ -101,44 +102,48 @@ namespace LicenseSoftware.Viewport
 
         private static SoftInstallator RowToInstallator(DataRow row)
         {
-            SoftInstallator si = new SoftInstallator();
-            si.IdInstallator = ViewportHelper.ValueOrNull<int>(row, "ID Installator");
-            si.FullName = ViewportHelper.ValueOrNull(row, "FullName");
-            si.Profession = ViewportHelper.ValueOrNull(row, "Profession");
-            si.Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive");
+            var si = new SoftInstallator
+            {
+                IdInstallator = ViewportHelper.ValueOrNull<int>(row, "ID Installator"),
+                FullName = ViewportHelper.ValueOrNull(row, "FullName"),
+                Profession = ViewportHelper.ValueOrNull(row, "Profession"),
+                Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive")
+            };
             return si;
         }
 
         private List<SoftInstallator> InstallatorsFromViewport()
         {
-            List<SoftInstallator> list = new List<SoftInstallator>();
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            var list = new List<SoftInstallator>();
+            for (var i = 0; i < dataGridView.Rows.Count; i++)
             {
-                if (!dataGridView.Rows[i].IsNewRow)
+                if (dataGridView.Rows[i].IsNewRow) continue;
+                var row = dataGridView.Rows[i];
+                var si = new SoftInstallator
                 {
-                    SoftInstallator si = new SoftInstallator();
-                    DataGridViewRow row = dataGridView.Rows[i];
-                    si.IdInstallator = ViewportHelper.ValueOrNull<int>(row, "idInstallator");
-                    si.FullName = ViewportHelper.ValueOrNull(row, "FullName");
-                    si.Profession = ViewportHelper.ValueOrNull(row, "Profession");
-                    si.Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive") == true;
-                    list.Add(si);
-                }
+                    IdInstallator = ViewportHelper.ValueOrNull<int>(row, "idInstallator"),
+                    FullName = ViewportHelper.ValueOrNull(row, "FullName"),
+                    Profession = ViewportHelper.ValueOrNull(row, "Profession"),
+                    Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive") == true
+                };
+                list.Add(si);
             }
             return list;
         }
 
         private List<SoftInstallator> InstallatorsFromView()
         {
-            List<SoftInstallator> list = new List<SoftInstallator>();
-            for (int i = 0; i < v_installators.Count; i++)
+            var list = new List<SoftInstallator>();
+            for (var i = 0; i < _vInstallators.Count; i++)
             {
-                SoftInstallator si = new SoftInstallator();
-                DataRowView row = ((DataRowView)v_installators[i]);
-                si.IdInstallator = ViewportHelper.ValueOrNull<int>(row, "ID Installator");
-                si.FullName = ViewportHelper.ValueOrNull(row, "FullName");
-                si.Profession = ViewportHelper.ValueOrNull(row, "Profession");
-                si.Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive") == true;
+                var row = (DataRowView)_vInstallators[i];
+                var si = new SoftInstallator
+                {
+                    IdInstallator = ViewportHelper.ValueOrNull<int>(row, "ID Installator"),
+                    FullName = ViewportHelper.ValueOrNull(row, "FullName"),
+                    Profession = ViewportHelper.ValueOrNull(row, "Profession"),
+                    Inactive = ViewportHelper.ValueOrNull<bool>(row, "Inactive") == true
+                };
                 list.Add(si);
             }
             return list;
@@ -146,47 +151,47 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_snapshotInstallators.Count;
+            return _vSnapshotInstallators.Count;
         }
 
         public override void MoveFirst()
         {
-            v_snapshotInstallators.MoveFirst();
+            _vSnapshotInstallators.MoveFirst();
         }
 
         public override void MoveLast()
         {
-            v_snapshotInstallators.MoveLast();
+            _vSnapshotInstallators.MoveLast();
         }
 
         public override void MoveNext()
         {
-            v_snapshotInstallators.MoveNext();
+            _vSnapshotInstallators.MoveNext();
         }
 
         public override void MovePrev()
         {
-            v_snapshotInstallators.MovePrevious();
+            _vSnapshotInstallators.MovePrevious();
         }
 
         public override bool CanMoveFirst()
         {
-            return v_snapshotInstallators.Position > 0;
+            return _vSnapshotInstallators.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_snapshotInstallators.Position > 0;
+            return _vSnapshotInstallators.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_snapshotInstallators.Position > -1) && (v_snapshotInstallators.Position < (v_snapshotInstallators.Count - 1));
+            return (_vSnapshotInstallators.Position > -1) && (_vSnapshotInstallators.Position < _vSnapshotInstallators.Count - 1);
         }
 
         public override bool CanMoveLast()
         {
-            return (v_snapshotInstallators.Position > -1) && (v_snapshotInstallators.Position < (v_snapshotInstallators.Count - 1));
+            return (_vSnapshotInstallators.Position > -1) && (_vSnapshotInstallators.Position < _vSnapshotInstallators.Count - 1);
         }
 
         public override bool CanLoadData()
@@ -197,28 +202,29 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            installators = SoftInstallatorsDataModel.GetInstance();
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            _installators = SoftInstallatorsDataModel.GetInstance();
 
             //Ожидаем дозагрузки данных, если это необходимо
-            installators.Select();
+            _installators.Select();
 
-            v_installators = new BindingSource();
-            v_installators.DataMember = "SoftInstallators";
-            v_installators.DataSource = DataSetManager.DataSet;
+            _vInstallators = new BindingSource
+            {
+                DataMember = "SoftInstallators",
+                DataSource = DataSetManager.DataSet
+            };
 
             //Инициируем колонки snapshot-модели
-            for (int i = 0; i < installators.Select().Columns.Count; i++)
-                snapshotInstallators.Columns.Add(new DataColumn(
-                    installators.Select().Columns[i].ColumnName, installators.Select().Columns[i].DataType));
+            for (var i = 0; i < _installators.Select().Columns.Count; i++)
+                _snapshotInstallators.Columns.Add(new DataColumn(
+                    _installators.Select().Columns[i].ColumnName, _installators.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (int i = 0; i < v_installators.Count; i++)
-                snapshotInstallators.Rows.Add(DataRowViewToArray(((DataRowView)v_installators[i])));
-            v_snapshotInstallators = new BindingSource();
-            v_snapshotInstallators.DataSource = snapshotInstallators;
-            v_snapshotInstallators.CurrentItemChanged += v_snapshotInstallators_CurrentItemChanged;
+            for (var i = 0; i < _vInstallators.Count; i++)
+                _snapshotInstallators.Rows.Add(DataRowViewToArray((DataRowView)_vInstallators[i]));
+            _vSnapshotInstallators = new BindingSource {DataSource = _snapshotInstallators};
+            _vSnapshotInstallators.CurrentItemChanged += v_snapshotInstallators_CurrentItemChanged;
 
-            dataGridView.DataSource = v_snapshotInstallators;
+            dataGridView.DataSource = _vSnapshotInstallators;
             idInstallator.DataPropertyName = "ID Installator";
             fullName.DataPropertyName = "fullName";
             profession.DataPropertyName = "profession";
@@ -230,9 +236,9 @@ namespace LicenseSoftware.Viewport
             //События изменения данных для проверки соответствия реальным данным в модели
             dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            installators.Select().RowChanged += InstallatorsViewport_RowChanged;
-            installators.Select().RowDeleting += InstallatorsViewport_RowDeleting;
-            installators.Select().RowDeleted += InstallatorsViewport_RowDeleted;
+            _installators.Select().RowChanged += InstallatorsViewport_RowChanged;
+            _installators.Select().RowDeleting += InstallatorsViewport_RowDeleting;
+            _installators.Select().RowDeleted += InstallatorsViewport_RowDeleted;
         }
 
         public override bool CanInsertRecord()
@@ -242,18 +248,18 @@ namespace LicenseSoftware.Viewport
 
         public override void InsertRecord()
         {
-            DataRowView row = (DataRowView)v_snapshotInstallators.AddNew();
-            row.EndEdit();
+            var row = (DataRowView)_vSnapshotInstallators.AddNew();
+            if (row != null) row.EndEdit();
         }
 
         public override bool CanDeleteRecord()
         {
-            return (v_snapshotInstallators.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
+            return (_vSnapshotInstallators.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
         {
-            ((DataRowView)v_snapshotInstallators[v_snapshotInstallators.Position]).Row.Delete();
+            ((DataRowView)_vSnapshotInstallators[_vSnapshotInstallators.Position]).Row.Delete();
         }
 
         public override bool CanCancelRecord()
@@ -263,9 +269,9 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            snapshotInstallators.Clear();
-            for (int i = 0; i < v_installators.Count; i++)
-                snapshotInstallators.Rows.Add(DataRowViewToArray(((DataRowView)v_installators[i])));
+            _snapshotInstallators.Clear();
+            for (var i = 0; i < _vInstallators.Count; i++)
+                _snapshotInstallators.Rows.Add(DataRowViewToArray((DataRowView)_vInstallators[i]));
             MenuCallback.EditingStateUpdate();
         }
 
@@ -277,26 +283,26 @@ namespace LicenseSoftware.Viewport
         public override void SaveRecord()
         {
             dataGridView.EndEdit();
-            sync_views = false;
-            List<SoftInstallator> list = InstallatorsFromViewport();
+            _syncViews = false;
+            var list = InstallatorsFromViewport();
             if (!ValidateViewportData(list))
             {
-                sync_views = true;
+                _syncViews = true;
                 return;
             }
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                DataRow row = installators.Select().Rows.Find(((SoftInstallator)list[i]).IdInstallator);
+                var row = _installators.Select().Rows.Find(list[i].IdInstallator ?? 0);
                 if (row == null)
                 {
-                    int idInstallator = SoftInstallatorsDataModel.Insert(list[i]);
+                    var idInstallator = SoftInstallatorsDataModel.Insert(list[i]);
                     if (idInstallator == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    ((DataRowView)v_snapshotInstallators[i])["ID Installator"] = idInstallator;
-                    installators.Select().Rows.Add(DataRowViewToArray((DataRowView)v_snapshotInstallators[i]));
+                    ((DataRowView)_vSnapshotInstallators[i])["ID Installator"] = idInstallator;
+                    _installators.Select().Rows.Add(DataRowViewToArray((DataRowView)_vSnapshotInstallators[i]));
                 }
                 else
                 {
@@ -305,7 +311,7 @@ namespace LicenseSoftware.Viewport
                         continue;
                     if (SoftInstallatorsDataModel.Update(list[i]) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     row["FullName"] = list[i].FullName == null ? DBNull.Value : (object)list[i].FullName;
@@ -314,25 +320,23 @@ namespace LicenseSoftware.Viewport
                 }
             }
             list = InstallatorsFromView();
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                int row_index = -1;
-                for (int j = 0; j < dataGridView.Rows.Count; j++)
+                var rowIndex = -1;
+                for (var j = 0; j < dataGridView.Rows.Count; j++)
                     if ((dataGridView.Rows[j].Cells["idInstallator"].Value != null) &&
-                        !String.IsNullOrEmpty(dataGridView.Rows[j].Cells["idInstallator"].Value.ToString()) &&
+                        !string.IsNullOrEmpty(dataGridView.Rows[j].Cells["idInstallator"].Value.ToString()) &&
                         ((int)dataGridView.Rows[j].Cells["idInstallator"].Value == list[i].IdInstallator))
-                        row_index = j;
-                if (row_index == -1)
+                        rowIndex = j;
+                if (rowIndex != -1) continue;
+                if (SoftInstallatorsDataModel.Delete(list[i].IdInstallator.Value) == -1)
                 {
-                    if (SoftInstallatorsDataModel.Delete(list[i].IdInstallator.Value) == -1)
-                    {
-                        sync_views = true;
-                        return;
-                    }
-                    installators.Select().Rows.Find(((SoftInstallator)list[i]).IdInstallator).Delete();
+                    _syncViews = true;
+                    return;
                 }
+                _installators.Select().Rows.Find(list[i].IdInstallator).Delete();
             }
-            sync_views = true;
+            _syncViews = true;
             MenuCallback.EditingStateUpdate();
         }
 
@@ -343,7 +347,7 @@ namespace LicenseSoftware.Viewport
 
         public override Viewport Duplicate()
         {
-            InstallatorsViewport viewport = new InstallatorsViewport(this, MenuCallback);
+            var viewport = new InstallatorsViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
             return viewport;
@@ -353,84 +357,74 @@ namespace LicenseSoftware.Viewport
         {
             if (SnapshotHasChanges())
             {
-                DialogResult result = MessageBox.Show("Сохранить изменения об установщиках в базу данных в базу данных?", "Внимание",
+                var result = MessageBox.Show(@"Сохранить изменения об установщиках в базу данных в базу данных?", @"Внимание",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                if (result == DialogResult.Yes)
-                    SaveRecord();
-                else
-                    if (result == DialogResult.No)
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        SaveRecord();
+                        break;
+                    case DialogResult.No:
                         CancelRecord();
-                    else
-                    {
+                        break;
+                    default:
                         e.Cancel = true;
                         return;
-                    }
+                }
             }
-            installators.Select().RowChanged -= InstallatorsViewport_RowChanged;
-            installators.Select().RowDeleting -= InstallatorsViewport_RowDeleting;
-            installators.Select().RowDeleted -= InstallatorsViewport_RowDeleted;
+            _installators.Select().RowChanged -= InstallatorsViewport_RowChanged;
+            _installators.Select().RowDeleting -= InstallatorsViewport_RowDeleting;
+            _installators.Select().RowDeleted -= InstallatorsViewport_RowDeleted;
             base.OnClosing(e);
         }
 
-        void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             switch (cell.OwningColumn.Name)
             {
                 case "fullName":
-                    if (String.IsNullOrEmpty(cell.Value.ToString().Trim()))
-                        cell.ErrorText = "ФИО установщика не может быть пустым";
-                    else
-                        cell.ErrorText = "";
+                    cell.ErrorText = string.IsNullOrEmpty(cell.Value.ToString().Trim()) ? "ФИО установщика не может быть пустым" : "";
                     break;
             }
         }
 
-        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             MenuCallback.EditingStateUpdate();
         }
 
         private void InstallatorsViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            if (Selected)
-            {
-                MenuCallback.EditingStateUpdate();
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.EditingStateUpdate();
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
         }
 
-        void InstallatorsViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
+        private void InstallatorsViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            if (e.Action == DataRowAction.Delete)
-            {
-                int row_index = v_snapshotInstallators.Find("ID Installator", e.Row["ID Installator"]);
-                if (row_index != -1)
-                    ((DataRowView)v_snapshotInstallators[row_index]).Delete();
-            }
+            if (e.Action != DataRowAction.Delete) return;
+            var rowIndex = _vSnapshotInstallators.Find("ID Installator", e.Row["ID Installator"]);
+            if (rowIndex != -1)
+                ((DataRowView)_vSnapshotInstallators[rowIndex]).Delete();
         }
 
-        void InstallatorsViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void InstallatorsViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            int row_index = v_snapshotInstallators.Find("ID Installator", e.Row["ID Installator"]);
-            if (row_index == -1 && v_installators.Find("ID Installator", e.Row["ID Installator"]) != -1)
+            var rowIndex = _vSnapshotInstallators.Find("ID Installator", e.Row["ID Installator"]);
+            if (rowIndex == -1 && _vInstallators.Find("ID Installator", e.Row["ID Installator"]) != -1)
             {
-                snapshotInstallators.Rows.Add(new object[] { 
-                        e.Row["ID Installator"], 
-                        e.Row["FullName"],   
-                        e.Row["Profession"],                 
-                        e.Row["Inactive"]
-                    });
+                _snapshotInstallators.Rows.Add(e.Row["ID Installator"], e.Row["FullName"], e.Row["Profession"], e.Row["Inactive"]);
             }
             else
-                if (row_index != -1)
+                if (rowIndex != -1)
                 {
-                    DataRowView row = ((DataRowView)v_snapshotInstallators[row_index]);
+                    var row = (DataRowView)_vSnapshotInstallators[rowIndex];
                     row["FullName"] = e.Row["FullName"];
                     row["Profession"] = e.Row["Profession"];
                     row["Inactive"] = e.Row["Inactive"];
@@ -443,7 +437,7 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void v_snapshotInstallators_CurrentItemChanged(object sender, EventArgs e)
+        private void v_snapshotInstallators_CurrentItemChanged(object sender, EventArgs e)
         {
             if (Selected)
             {
@@ -454,90 +448,90 @@ namespace LicenseSoftware.Viewport
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallatorsViewport));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idInstallator = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profession = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.inactive = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallatorsViewport));
+            dataGridView = new DataGridView();
+            idInstallator = new DataGridViewTextBoxColumn();
+            fullName = new DataGridViewTextBoxColumn();
+            profession = new DataGridViewTextBoxColumn();
+            inactive = new DataGridViewCheckBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idInstallator,
-            this.fullName,
-            this.profession,
-            this.inactive});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(648, 281);
-            this.dataGridView.TabIndex = 8;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(new DataGridViewColumn[] {
+            idInstallator,
+            fullName,
+            profession,
+            inactive});
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            dataGridView.Location = new System.Drawing.Point(3, 3);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new System.Drawing.Size(648, 281);
+            dataGridView.TabIndex = 8;
             // 
             // idInstallator
             // 
-            this.idInstallator.Frozen = true;
-            this.idInstallator.HeaderText = "Идентификатор";
-            this.idInstallator.Name = "idInstallator";
-            this.idInstallator.ReadOnly = true;
-            this.idInstallator.Visible = false;
+            idInstallator.Frozen = true;
+            idInstallator.HeaderText = "Идентификатор";
+            idInstallator.Name = "idInstallator";
+            idInstallator.ReadOnly = true;
+            idInstallator.Visible = false;
             // 
             // fullName
             // 
-            this.fullName.HeaderText = "ФИО установщика";
-            this.fullName.MaxInputLength = 128;
-            this.fullName.MinimumWidth = 150;
-            this.fullName.Name = "fullName";
+            fullName.HeaderText = "ФИО установщика";
+            fullName.MaxInputLength = 128;
+            fullName.MinimumWidth = 150;
+            fullName.Name = "fullName";
             // 
             // profession
             // 
-            this.profession.HeaderText = "Должность";
-            this.profession.MaxInputLength = 128;
-            this.profession.MinimumWidth = 150;
-            this.profession.Name = "profession";
+            profession.HeaderText = "Должность";
+            profession.MaxInputLength = 128;
+            profession.MinimumWidth = 150;
+            profession.Name = "profession";
             // 
             // inactive
             // 
-            this.inactive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.inactive.HeaderText = "Неактивный";
-            this.inactive.Name = "inactive";
-            this.inactive.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.inactive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            inactive.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            inactive.HeaderText = "Неактивный";
+            inactive.Name = "inactive";
+            inactive.Resizable = DataGridViewTriState.True;
+            inactive.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // InstallatorsViewport
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(654, 287);
-            this.Controls.Add(this.dataGridView);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "InstallatorsViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Исполнители";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(654, 287);
+            Controls.Add(dataGridView);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "InstallatorsViewport";
+            Padding = new Padding(3);
+            Text = "Исполнители";
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ResumeLayout(false);
 
         }
     }

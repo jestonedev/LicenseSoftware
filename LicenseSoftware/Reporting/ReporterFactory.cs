@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace LicenseSoftware.Reporting
 {
@@ -26,7 +22,7 @@ namespace LicenseSoftware.Reporting
                     return new PcReporter();
             }
             throw new ReporterException(
-                String.Format(CultureInfo.InvariantCulture, "В фабрику ReporterFactory передан неизвестный тип {0}", reporterType.ToString()));
+                string.Format(CultureInfo.InvariantCulture, "В фабрику ReporterFactory передан неизвестный тип {0}", reporterType));
         }
     }
 }

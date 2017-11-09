@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.IO;
 using LicenseSoftware.Viewport;
 using LicenseSoftware.DataModels;
@@ -16,26 +11,28 @@ using WeifenLuo.WinFormsUI.Docking;
 using LicenseSoftware.Reporting;
 using Security;
 using System.Text.RegularExpressions;
-using System.Threading;
-using DataModels.DataModels;
-using LicenseSoftware.SearchForms;
+using LicenseSoftware.DataModels.DataModels;
 using Settings;
 
 namespace LicenseSoftware
 {
     public partial class MainForm : Form, IMenuCallback
     {
-        private ReportLogForm reportLogForm = new ReportLogForm();
-        private int reportCounter = 0;
+        private readonly ReportLogForm _reportLogForm = new ReportLogForm();
+        private int _reportCounter;
         private readonly string _computerNameCommandLineArg;
 
         private void ChangeViewportsSelectProprty()
         {
-            for (int i = dockPanel.Documents.Count() - 1; i >= 0; i--)
-                (dockPanel.Documents.ElementAt(i) as IMenuController).Selected = false;
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            for (var i = dockPanel.Documents.Count() - 1; i >= 0; i--)
+            {
+                var document = dockPanel.Documents.ElementAt(i) as IMenuController;
+                if (document != null)
+                    document.Selected = false;
+            }
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            (dockPanel.ActiveDocument as IMenuController).Selected = true;
+            ((IMenuController) dockPanel.ActiveDocument).Selected = true;
         }
 
         private void ChangeMainMenuState()
@@ -48,13 +45,14 @@ namespace LicenseSoftware
 
         public void StatusBarStateUpdate()
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                toolStripLabelRecordCount.Text = "Всего записей: " + (dockPanel.ActiveDocument as IMenuController).GetRecordCount();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                toolStripLabelRecordCount.Text = @"Всего записей: " + document.GetRecordCount();
             else
                 toolStripLabelRecordCount.Text = "";
         }
 
-        public MainForm(string[] args)
+        public MainForm(IEnumerable<string> args)
         {
             InitializeComponent();
             var arguments = args.Select(r => r.Split(new[] { '=' }, 2));
@@ -96,16 +94,19 @@ namespace LicenseSoftware
 
         private void ribbonButtonTabsClose_Click(object sender, EventArgs e)
         {
-            for (int i = dockPanel.Documents.Count() - 1; i >= 0; i--)
-                if (dockPanel.Documents.ElementAt(i) as IMenuController != null)
-                    (dockPanel.Documents.ElementAt(i) as IMenuController).Close();
+            for (var i = dockPanel.Documents.Count() - 1; i >= 0; i--)
+            {
+                var document = dockPanel.Documents.ElementAt(i) as IMenuController;
+                if (document != null)
+                    document.Close();
+            }
         }
 
         private void ribbonButtonTabCopy_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            Viewport.Viewport viewport = (dockPanel.ActiveDocument as IMenuController).Duplicate();
+            var viewport = ((IMenuController) dockPanel.ActiveDocument).Duplicate();
             viewport.Show(dockPanel, DockState.Document);
         }
 
@@ -118,44 +119,44 @@ namespace LicenseSoftware
 
         private void ribbonButtonFirst_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            (dockPanel.ActiveDocument as IMenuController).MoveFirst();
+            ((IMenuController) dockPanel.ActiveDocument).MoveFirst();
             NavigationStateUpdate();
         }
 
         private void ribbonButtonLast_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            (dockPanel.ActiveDocument as IMenuController).MoveLast();
+            ((IMenuController) dockPanel.ActiveDocument).MoveLast();
             NavigationStateUpdate();
         }
 
         private void ribbonButtonPrev_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            (dockPanel.ActiveDocument as IMenuController).MovePrev();
+            ((IMenuController) dockPanel.ActiveDocument).MovePrev();
             NavigationStateUpdate();
         }
 
         private void ribbonButtonNext_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
-            (dockPanel.ActiveDocument as IMenuController).MoveNext();
+            ((IMenuController) dockPanel.ActiveDocument).MoveNext();
             NavigationStateUpdate();
         }
 
         private void ribbonButtonSearch_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument == null) || (dockPanel.ActiveDocument as IMenuController == null))
+            if (!(dockPanel.ActiveDocument is IMenuController))
                 return;
             if (ribbonButtonSearch.Checked)
-                (dockPanel.ActiveDocument as IMenuController).ClearSearch();
+                ((IMenuController) dockPanel.ActiveDocument).ClearSearch();
             else
-                (dockPanel.ActiveDocument as IMenuController).SearchRecord();
+                ((IMenuController) dockPanel.ActiveDocument).SearchRecord();
             NavigationStateUpdate();
             EditingStateUpdate();
             RelationsStateUpdate();
@@ -173,43 +174,41 @@ namespace LicenseSoftware
                 viewport.Show(dockPanel, DockState.Document);
         }
 
-        private void ribbonButtonOpen_Click(object sender, EventArgs e)
+        private void ribbonButtonOpen_Click()
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).OpenDetails();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.OpenDetails();
         }
 
         public void TabsStateUpdate()
         {
-            ribbonButtonTabCopy.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanDuplicate();
-            ribbonButtonTabClose.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null);
-            ribbonButtonTabsClose.Enabled = (dockPanel.Documents.Count() > 0);  
+            var document = dockPanel.ActiveDocument as IMenuController;
+            ribbonButtonTabCopy.Enabled = document != null && document.CanDuplicate();
+            ribbonButtonTabClose.Enabled = document != null;
+            ribbonButtonTabsClose.Enabled = dockPanel.Documents.Any();  
         }
 
         public void NavigationStateUpdate()
         {
-            ribbonButtonFirst.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanMoveFirst();
-            ribbonButtonPrev.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanMovePrev();
-            ribbonButtonNext.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanMoveNext();
-            ribbonButtonLast.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanMoveLast();
-            ribbonButtonSearch.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanSearchRecord();
-            ribbonButtonSearch.Checked = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).SearchedRecords();
-            ribbonButtonOpen.Enabled = (dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanOpenDetails();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            ribbonButtonFirst.Enabled = document != null && document.CanMoveFirst();
+            ribbonButtonPrev.Enabled = document != null && document.CanMovePrev();
+            ribbonButtonNext.Enabled = document != null && document.CanMoveNext();
+            ribbonButtonLast.Enabled = document != null && document.CanMoveLast();
+            ribbonButtonSearch.Enabled = document != null && document.CanSearchRecord();
+            ribbonButtonSearch.Checked = document != null && document.SearchedRecords();
+            ribbonButtonOpen.Enabled = document != null && document.CanOpenDetails();
         }
 
         public void EditingStateUpdate()
         {
-            ribbonButtonDeleteRecord.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanDeleteRecord();
-            ribbonButtonInsertRecord.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanInsertRecord();
-            ribbonButtonCopyRecord.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanCopyRecord();
-            ribbonButtonCancel.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanCancelRecord();
-            ribbonButtonSave.Enabled = (dockPanel.ActiveDocument != null) && 
-                (dockPanel.ActiveDocument as IMenuController != null) && (dockPanel.ActiveDocument as IMenuController).CanSaveRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            ribbonButtonDeleteRecord.Enabled = document != null && document.CanDeleteRecord();
+            ribbonButtonInsertRecord.Enabled = document != null && document.CanInsertRecord();
+            ribbonButtonCopyRecord.Enabled = document != null && document.CanCopyRecord();
+            ribbonButtonCancel.Enabled = document != null && document.CanCancelRecord();
+            ribbonButtonSave.Enabled = document != null && document.CanSaveRecord();
         }
 
         public void RelationsStateUpdate()
@@ -242,16 +241,18 @@ namespace LicenseSoftware
 
         private void ribbonButtonSave_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).SaveRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.SaveRecord();
             NavigationStateUpdate();
             RelationsStateUpdate();
         }
 
         private void ribbonButtonDeleteRecord_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).DeleteRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.DeleteRecord();
             NavigationStateUpdate();
             EditingStateUpdate();
             RelationsStateUpdate();
@@ -260,8 +261,9 @@ namespace LicenseSoftware
 
         private void ribbonButtonInsertRecord_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).InsertRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.InsertRecord();
             EditingStateUpdate();
             NavigationStateUpdate();
             RelationsStateUpdate();
@@ -270,8 +272,9 @@ namespace LicenseSoftware
 
         private void ribbonButtonCancel_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).CancelRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.CancelRecord();
             NavigationStateUpdate();
             RelationsStateUpdate();
             StatusBarStateUpdate();
@@ -279,8 +282,9 @@ namespace LicenseSoftware
 
         private void ribbonButtonCopyRecord_Click(object sender, EventArgs e)
         {
-            if ((dockPanel.ActiveDocument != null) && (dockPanel.ActiveDocument as IMenuController != null))
-                (dockPanel.ActiveDocument as IMenuController).CopyRecord();
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+                document.CopyRecord();
             EditingStateUpdate();
             NavigationStateUpdate();
             RelationsStateUpdate();
@@ -294,18 +298,25 @@ namespace LicenseSoftware
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            for (int i = dockPanel.Documents.Count() - 1; i >= 0; i--)
-                if (dockPanel.Documents.ElementAt(i) as IMenuController != null)
-                    (dockPanel.Documents.ElementAt(i) as IMenuController).Close();
+            for (var i = dockPanel.Documents.Count() - 1; i >= 0; i--)
+                if (dockPanel.Documents.ElementAt(i) is IMenuController)
+                {
+                    var document = dockPanel.Documents.ElementAt(i) as IMenuController;
+                    if (document != null)
+                        document.Close();
+                }
             if (dockPanel.Documents.Count() != 0)
                 e.Cancel = true;
         }
 
         public void ForceCloseDetachedViewports()
         {
-            for (int i = dockPanel.Documents.Count() - 1; i >= 0; i--)
-                if ((dockPanel.Documents.ElementAt(i) as IMenuController != null) && (dockPanel.Documents.ElementAt(i) as IMenuController).ViewportDetached())
-                    (dockPanel.Documents.ElementAt(i) as IMenuController).ForceClose();
+            for (var i = dockPanel.Documents.Count() - 1; i >= 0; i--)
+            {
+                var document = dockPanel.Documents.ElementAt(i) as IMenuController;
+                if (document != null && document.ViewportDetached())
+                    document.ForceClose();
+            }
         }
 
         private void ribbonButtonAssocLicenses_Click(object sender, EventArgs e)
@@ -439,35 +450,35 @@ namespace LicenseSoftware
 
         private void RunReport(ReporterType reporterType)
         {
-            Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
+            var reporter = ReporterFactory.CreateReporter(reporterType);
             reporter.ReportOutputStreamResponse += reporter_ReportOutputStreamResponse;
             reporter.ReportComplete += reporter_ReportComplete;
             reporter.ReportCanceled += reporter_ReportCanceled;
-            reportCounter++;
+            _reportCounter++;
             reporter.Run();
         }
 
         void reporter_ReportCanceled(object sender, EventArgs e)
         {
-            reportCounter--;
-            if (reportCounter == 0)
-                reportLogForm.Hide();
+            _reportCounter--;
+            if (_reportCounter == 0)
+                _reportLogForm.Hide();
         }
 
         void reporter_ReportComplete(object sender, EventArgs e)
         {
-            reportLogForm.Log("[" + ((Reporter)sender).ReportTitle + "]: Формирвоание отчета закончено");
-            reportCounter--;
-            if (reportCounter == 0)
-                reportLogForm.Hide();
+            _reportLogForm.Log("[" + ((Reporter)sender).ReportTitle + "]: Формирвоание отчета закончено");
+            _reportCounter--;
+            if (_reportCounter == 0)
+                _reportLogForm.Hide();
         }
 
         void reporter_ReportOutputStreamResponse(object sender, ReportOutputStreamEventArgs e)
         {
-            if (reportLogForm.Visible == false)
-                reportLogForm.Show(dockPanel, DockState.DockBottomAutoHide);
+            if (_reportLogForm.Visible == false)
+                _reportLogForm.Show(dockPanel, DockState.DockBottomAutoHide);
             if (!String.IsNullOrEmpty(e.Text.Trim()) && (!Regex.IsMatch(e.Text.Trim(), "styles.xml")))
-                reportLogForm.Log("["+((Reporter)sender).ReportTitle+"]: "+e.Text.Trim());
+                _reportLogForm.Log("["+((Reporter)sender).ReportTitle+"]: "+e.Text.Trim());
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -493,7 +504,7 @@ namespace LicenseSoftware
             if (keyData == (Keys.Control | Keys.O))
             {
                 if (ribbonButtonOpen.Enabled)
-                    ribbonButtonOpen_Click(this, new EventArgs());
+                    ribbonButtonOpen_Click();
                 return true;
             }
             if (keyData == (Keys.Control | Keys.Alt | Keys.Home))
@@ -583,49 +594,57 @@ namespace LicenseSoftware
         private void ribbonButtonRepDepart_Click(object sender, EventArgs e)
         {
             var document = dockPanel.ActiveDocument as IMenuController;
-            if (document != null && document.GetType() == typeof(LicensesViewport))
+            if (document is LicensesViewport)
             {
-                List<string> arguments = new List<string>();
-                arguments = DepRepArguments();
+                var arguments = DepRepArguments();
                 RunDepReport(ReporterType.DepartmentReporter, arguments);
             }
             else
-                MessageBox.Show("Для вывода отчета необходима активная вкладка \"Лицензии\"", @"Ошибка",
+                MessageBox.Show(@"Для вывода отчета необходима активная вкладка ""Лицензии""", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
         private List<string> DepRepArguments()
         {
-            var arguments = (dockPanel.ActiveDocument as IMenuController).GetIdLicenses();
-            return arguments;
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+            {
+                var arguments = document.GetIdLicenses();
+                return arguments;
+            }
+            return new List<string>();
         }
 
-        private void RunDepReport(Reporting.ReporterType reporterType, List<string> args)
+        private void RunDepReport(ReporterType reporterType, List<string> args)
         {
-            Reporter reporter = Reporting.ReporterFactory.CreateReporter(reporterType);
+            var reporter = ReporterFactory.CreateReporter(reporterType);
             reporter.ReportOutputStreamResponse += reporter_ReportOutputStreamResponse;
             reporter.ReportComplete += reporter_ReportComplete;
             reporter.ReportCanceled += reporter_ReportCanceled;
-            reportCounter++;
+            _reportCounter++;
             reporter.Run(args);
         }
 
         private void ribbonButtonRepPC_Click(object sender, EventArgs e)
         {
             var document = dockPanel.ActiveDocument as IMenuController;
-            if (document != null && document.GetType() == typeof(InstallationsViewport))
+            if (document is InstallationsViewport)
             {
-                List<string> arguments = new List<string>();
-                arguments = PcRepArguments();
+                var arguments = PcRepArguments();
                 RunDepReport(ReporterType.PcReporter, arguments);
             }
             else
-                MessageBox.Show("Для вывода отчета необходима активная вкладка \"Установки\"", @"Ошибка",
+                MessageBox.Show(@"Для вывода отчета необходима активная вкладка ""Установки""", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
         }
         private List<string> PcRepArguments()
         {
-            var arguments = (dockPanel.ActiveDocument as IMenuController).GetIdInstallations();
-            return arguments;
+            var document = dockPanel.ActiveDocument as IMenuController;
+            if (document != null)
+            {
+                var arguments = document.GetIdInstallations();
+                return arguments;
+            }
+            return new List<string>();
         }
     }
 }

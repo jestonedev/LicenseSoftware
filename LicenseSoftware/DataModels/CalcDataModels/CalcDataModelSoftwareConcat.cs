@@ -1,16 +1,15 @@
-﻿using LicenseSoftware.DataModels;
-using LicenseSoftware.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
+using LicenseSoftware.Entities;
 
-namespace LicenseSoftware.CalcDataModels
+namespace LicenseSoftware.DataModels.CalcDataModels
 {
     public sealed class CalcDataModelSoftwareConcat: CalcDataModel
     {
-        private static CalcDataModelSoftwareConcat dataModel;
+        private static CalcDataModelSoftwareConcat _dataModel;
 
         private const string TableName = "SoftwareConcat";
 
@@ -33,7 +32,7 @@ namespace LicenseSoftware.CalcDataModels
 
         protected override void Calculate(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            DMLoadState = DataModelLoadState.Loading;
+            DmLoadState = DataModelLoadState.Loading;
             if (e == null)
                 throw new DataModelException("Не передана ссылка на объект DoWorkEventArgs в классе CalcDataModelSoftwareConcat");
             var config = (CalcAsyncConfig)e.Argument;
@@ -89,14 +88,12 @@ namespace LicenseSoftware.CalcDataModels
 
         public static CalcDataModelSoftwareConcat GetInstance()
         {
-            if (dataModel == null)
-                dataModel = new CalcDataModelSoftwareConcat();
-            return dataModel;
+            return _dataModel ?? (_dataModel = new CalcDataModelSoftwareConcat());
         }
 
         public static bool HasInstance()
         {
-            return dataModel != null;
+            return _dataModel != null;
         }
     }
 }

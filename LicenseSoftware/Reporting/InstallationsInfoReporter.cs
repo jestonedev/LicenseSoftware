@@ -1,11 +1,7 @@
-﻿using LicenseSoftware.DataModels;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 using Settings;
 
 namespace LicenseSoftware.Reporting
@@ -15,16 +11,18 @@ namespace LicenseSoftware.Reporting
         public override void Run()
         {
             ReportTitle = "Информация по установкам ПО";
-            DataTable departments = DepartmentsDataModel.GetInstance().SelectVisibleDepartments();
-            string departmentIds = "";
+            var departments = DepartmentsDataModel.GetInstance().SelectVisibleDepartments();
+            var departmentIds = "";
             foreach (DataRow department in departments.Rows)
-                if (department.Field<bool>("AllowSelect") == true)
-                    departmentIds += department.Field<int>("ID Department").ToString() + ",";
+                if (department.Field<bool>("AllowSelect"))
+                    departmentIds += department.Field<int>("ID Department") + ",";
             departmentIds = departmentIds.TrimEnd(',');
-            Dictionary<string, string> arguments = new Dictionary<string, string>();
-            arguments.Add("config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "installations_info.xml"));
-            arguments.Add("connectionString", LicenseSoftwareSettings.ConnectionString);
-            arguments.Add("departmentIds", departmentIds);
+            var arguments = new Dictionary<string, string>
+            {
+                {"config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "installations_info.xml")},
+                {"connectionString", LicenseSoftwareSettings.ConnectionString},
+                {"departmentIds", departmentIds}
+            };
             base.Run(arguments);
         }
     }

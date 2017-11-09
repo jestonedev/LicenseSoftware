@@ -1,13 +1,13 @@
-﻿using LicenseSoftware.CalcDataModels;
-using LicenseSoftware.DataModels;
+﻿using LicenseSoftware.DataModels;
 using LicenseSoftware.Entities;
-using LicenseSoftware.SearchForms;
 using Security;
 using System;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
+using LicenseSoftware.Viewport.SearchForms;
 
 namespace LicenseSoftware.Viewport
 {
@@ -16,25 +16,6 @@ namespace LicenseSoftware.Viewport
         #region Components
         private TableLayoutPanel tableLayoutPanel14;
         private DataGridView dataGridView;
-        #endregion Components
-
-        #region Models
-        SoftwareDataModel softwareDM = null;
-        SoftTypesDataModel softTypes = null;
-        SoftMakersDataModel softMakers = null;
-        #endregion Models
-
-        #region Views
-        BindingSource v_software = null;
-        BindingSource v_softTypes = null;
-        BindingSource v_softMakers = null;
-        #endregion Views
-
-        //State
-        private ViewportState viewportState = ViewportState.ReadState;
-        private GroupBox groupBox32;
-        private TableLayoutPanel tableLayoutPanel1;
-        private bool is_editable = false;
         private DataGridViewTextBoxColumn idSoftware;
         private DataGridViewTextBoxColumn software;
         private DataGridViewTextBoxColumn idSoftType;
@@ -48,9 +29,30 @@ namespace LicenseSoftware.Viewport
         private Panel panel3;
         private Label label1;
         private ComboBox comboBoxSoftMaker;
+        private GroupBox groupBox32;
+        private TableLayoutPanel tableLayoutPanel1;
+        #endregion Components
+
+        #region Models
+
+        private SoftwareDataModel _softwareDm;
+        private SoftTypesDataModel _softTypes;
+        private SoftMakersDataModel _softMakers;
+        #endregion Models
+
+        #region Views
+
+        private BindingSource _vSoftware;
+        private BindingSource _vSoftTypes;
+        private BindingSource _vSoftMakers;
+        #endregion Views
+
+        //State
+        private ViewportState _viewportState = ViewportState.ReadState;
+        private bool _isEditable;
 
 
-        private SearchForm sSearchForm = null;
+        private SearchForm _sSearchForm;
 
         private SoftwareViewport()
             : this(null)
@@ -66,62 +68,62 @@ namespace LicenseSoftware.Viewport
         public SoftwareViewport(SoftwareViewport softwareViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = softwareViewport.DynamicFilter;
-            this.StaticFilter = softwareViewport.StaticFilter;
-            this.ParentRow = softwareViewport.ParentRow;
-            this.ParentType = softwareViewport.ParentType;
+            DynamicFilter = softwareViewport.DynamicFilter;
+            StaticFilter = softwareViewport.StaticFilter;
+            ParentRow = softwareViewport.ParentRow;
+            ParentType = softwareViewport.ParentType;
         }
 
         private void SetViewportCaption()
         {
-            if (viewportState == ViewportState.NewRowState)
-                this.Text = "Новое программное обеспечения";
+            if (_viewportState == ViewportState.NewRowState)
+                Text = @"Новое программное обеспечения";
             else
-                if (v_software.Position != -1)
-                    this.Text = String.Format(CultureInfo.InvariantCulture, "Программное обеспечения №{0}", 
-                        ((DataRowView)v_software[v_software.Position])["ID Software"]);
+                if (_vSoftware.Position != -1)
+                    Text = string.Format(CultureInfo.InvariantCulture, "Программное обеспечения №{0}", 
+                        ((DataRowView)_vSoftware[_vSoftware.Position])["ID Software"]);
                 else
-                    this.Text = "Исковые работы отсутствуют";
+                    Text = @"Исковые работы отсутствуют";
         }
 
         private void DataBind()
         {
-            comboBoxSoftType.DataSource = v_softTypes;
+            comboBoxSoftType.DataSource = _vSoftTypes;
             comboBoxSoftType.ValueMember = "ID SoftType";
             comboBoxSoftType.DisplayMember = "SoftType";
             comboBoxSoftType.DataBindings.Clear();
-            comboBoxSoftType.DataBindings.Add("SelectedValue", v_software, "ID SoftType", true, DataSourceUpdateMode.Never, DBNull.Value);
+            comboBoxSoftType.DataBindings.Add("SelectedValue", _vSoftware, "ID SoftType", true, DataSourceUpdateMode.Never, DBNull.Value);
 
-            comboBoxSoftMaker.DataSource = v_softMakers;
+            comboBoxSoftMaker.DataSource = _vSoftMakers;
             comboBoxSoftMaker.ValueMember = "ID SoftMaker";
             comboBoxSoftMaker.DisplayMember = "SoftMaker";
             comboBoxSoftMaker.DataBindings.Clear();
-            comboBoxSoftMaker.DataBindings.Add("SelectedValue", v_software, "ID SoftMaker", true, DataSourceUpdateMode.Never, DBNull.Value);
+            comboBoxSoftMaker.DataBindings.Add("SelectedValue", _vSoftware, "ID SoftMaker", true, DataSourceUpdateMode.Never, DBNull.Value);
             
             textBoxSoftwareName.DataBindings.Clear();
-            textBoxSoftwareName.DataBindings.Add("Text", v_software, "Software", true, DataSourceUpdateMode.Never, "");
+            textBoxSoftwareName.DataBindings.Add("Text", _vSoftware, "Software", true, DataSourceUpdateMode.Never, "");
         }
 
         private void CheckViewportModifications()
         {
-            if (!is_editable)
+            if (!_isEditable)
                 return;
-            if ((!this.ContainsFocus) || (dataGridView.Focused))
+            if (!ContainsFocus || dataGridView.Focused)
                 return;
-            if ((v_software.Position != -1) && (SoftwareFromView() != SoftwareFromViewport()))
+            if ((_vSoftware.Position != -1) && (SoftwareFromView() != SoftwareFromViewport()))
             {
-                if (viewportState == ViewportState.ReadState)
+                if (_viewportState == ViewportState.ReadState)
                 {
-                    viewportState = ViewportState.ModifyRowState;
+                    _viewportState = ViewportState.ModifyRowState;
                     MenuCallback.EditingStateUpdate();
                     dataGridView.Enabled = false;
                 }
             }
             else
             {
-                if (viewportState == ViewportState.ModifyRowState)
+                if (_viewportState == ViewportState.ModifyRowState)
                 {
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     MenuCallback.EditingStateUpdate();
                     dataGridView.Enabled = true;
                 }
@@ -132,83 +134,84 @@ namespace LicenseSoftware.Viewport
         {
             if (!AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite))
             {
-                viewportState = ViewportState.ReadState;
+                _viewportState = ViewportState.ReadState;
                 return true;
             }
             switch (state)
             {
                 case ViewportState.ReadState:
-                    switch (viewportState)
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
                             return true;
                         case ViewportState.NewRowState:
                         case ViewportState.ModifyRowState:
-                            DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
+                            var result = MessageBox.Show(@"Сохранить изменения в базу данных?", @"Внимание",
                                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                            if (result == DialogResult.Yes)
-                                SaveRecord();
-                            else
-                                if (result == DialogResult.No)
+                            switch (result)
+                            {
+                                case DialogResult.Yes:
+                                    SaveRecord();
+                                    break;
+                                case DialogResult.No:
                                     CancelRecord();
-                                else return false;
-                            if (viewportState == ViewportState.ReadState)
-                                return true;
-                            else
-                                return false;
+                                    break;
+                                default:
+                                    return false;
+                            }
+                            return _viewportState == ViewportState.ReadState;
                     }
                     break;
                 case ViewportState.NewRowState:
-                    switch (viewportState)
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
-                            if (softwareDM.EditingNewRecord)
+                            if (_softwareDm.EditingNewRecord)
                                 return false;
-                            else
-                            {
-                                viewportState = ViewportState.NewRowState;
-                                return true;
-                            }
+                            _viewportState = ViewportState.NewRowState;
+                            return true;
                         case ViewportState.NewRowState:
                             return true;
                         case ViewportState.ModifyRowState:
-                            DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
+                            var result = MessageBox.Show(@"Сохранить изменения в базу данных?", @"Внимание",
                                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                            if (result == DialogResult.Yes)
-                                SaveRecord();
-                            else
-                                if (result == DialogResult.No)
+                            switch (result)
+                            {
+                                case DialogResult.Yes:
+                                    SaveRecord();
+                                    break;
+                                case DialogResult.No:
                                     CancelRecord();
-                                else
+                                    break;
+                                default:
                                     return false;
-                            if (viewportState == ViewportState.ReadState)
-                                return ChangeViewportStateTo(ViewportState.NewRowState);
-                            else
-                                return false;
+                            }
+                            return _viewportState == ViewportState.ReadState && ChangeViewportStateTo(ViewportState.NewRowState);
                     }
                     break;
-                case ViewportState.ModifyRowState: ;
-                    switch (viewportState)
+                case ViewportState.ModifyRowState:
+                    switch (_viewportState)
                     {
                         case ViewportState.ReadState:
-                            viewportState = ViewportState.ModifyRowState;
+                            _viewportState = ViewportState.ModifyRowState;
                             return true;
                         case ViewportState.ModifyRowState:
                             return true;
                         case ViewportState.NewRowState:
-                            DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
+                            var result = MessageBox.Show(@"Сохранить изменения в базу данных?", @"Внимание",
                                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                            if (result == DialogResult.Yes)
-                                SaveRecord();
-                            else
-                                if (result == DialogResult.No)
+                            switch (result)
+                            {
+                                case DialogResult.Yes:
+                                    SaveRecord();
+                                    break;
+                                case DialogResult.No:
                                     CancelRecord();
-                                else
+                                    break;
+                                default:
                                     return false;
-                            if (viewportState == ViewportState.ReadState)
-                                return ChangeViewportStateTo(ViewportState.ModifyRowState);
-                            else
-                                return false;
+                            }
+                            return _viewportState == ViewportState.ReadState && ChangeViewportStateTo(ViewportState.ModifyRowState);
                     }
                     break;
             }
@@ -217,52 +220,54 @@ namespace LicenseSoftware.Viewport
 
         private void LocateSoftware(int id)
         {
-            int Position = v_software.Find("ID Software", id);
-            is_editable = false;
-            if (Position > 0)
-                v_software.Position = Position;
-            is_editable = true;
+            var position = _vSoftware.Find("ID Software", id);
+            _isEditable = false;
+            if (position > 0)
+                _vSoftware.Position = position;
+            _isEditable = true;
         }
 
         private void ViewportFromSoftware(Software software)
         {
-            comboBoxSoftType.SelectedValue = ViewportHelper.ValueOrDBNull(software.IdSoftType);
-            comboBoxSoftMaker.SelectedValue = ViewportHelper.ValueOrDBNull(software.IdSoftMaker);
+            comboBoxSoftType.SelectedValue = ViewportHelper.ValueOrDbNull(software.IdSoftType);
+            comboBoxSoftMaker.SelectedValue = ViewportHelper.ValueOrDbNull(software.IdSoftMaker);
             textBoxSoftwareName.Text = software.SoftwareName;
         }
 
         private Software SoftwareFromViewport()
         {
-            Software software = new Software();
-            if (v_software.Position == -1)
-                software.IdSoftware = null;
-            else
-                software.IdSoftware = ViewportHelper.ValueOrNull<int>((DataRowView)v_software[v_software.Position], "ID Software");
-            software.IdSoftType = ViewportHelper.ValueOrNull<int>(comboBoxSoftType);
-            software.IdSoftMaker = ViewportHelper.ValueOrNull<int>(comboBoxSoftMaker);
-            software.SoftwareName = ViewportHelper.ValueOrNull(textBoxSoftwareName);
+            var software = new Software
+            {
+                IdSoftware = _vSoftware.Position == -1
+                    ? null
+                    : ViewportHelper.ValueOrNull<int>((DataRowView) _vSoftware[_vSoftware.Position], "ID Software"),
+                IdSoftType = ViewportHelper.ValueOrNull<int>(comboBoxSoftType),
+                IdSoftMaker = ViewportHelper.ValueOrNull<int>(comboBoxSoftMaker),
+                SoftwareName = ViewportHelper.ValueOrNull(textBoxSoftwareName)
+            };
             return software;
         }
 
         private Software SoftwareFromView()
         {
-            Software software = new Software();
-            DataRowView row = (DataRowView)v_software[v_software.Position];
-            software.IdSoftware = ViewportHelper.ValueOrNull<int>(row, "ID Software");
-            software.IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType");
-            software.IdSoftMaker = ViewportHelper.ValueOrNull<int>(row, "ID SoftMaker");
-            software.SoftwareName = ViewportHelper.ValueOrNull(row, "Software");
+            var row = (DataRowView)_vSoftware[_vSoftware.Position];
+            var software = new Software
+            {
+                IdSoftware = ViewportHelper.ValueOrNull<int>(row, "ID Software"),
+                IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType"),
+                IdSoftMaker = ViewportHelper.ValueOrNull<int>(row, "ID SoftMaker"),
+                SoftwareName = ViewportHelper.ValueOrNull(row, "Software")
+            };
             return software;
         }
 
         private static void FillRowFromSoftware(Software software, DataRowView row)
         {
             row.BeginEdit();
-            row.BeginEdit();
-            row["ID Software"] = ViewportHelper.ValueOrDBNull(software.IdSoftware);
-            row["ID SoftType"] = ViewportHelper.ValueOrDBNull(software.IdSoftType);
-            row["ID SoftMaker"] = ViewportHelper.ValueOrDBNull(software.IdSoftMaker);
-            row["Software"] = ViewportHelper.ValueOrDBNull(software.SoftwareName);
+            row["ID Software"] = ViewportHelper.ValueOrDbNull(software.IdSoftware);
+            row["ID SoftType"] = ViewportHelper.ValueOrDbNull(software.IdSoftType);
+            row["ID SoftMaker"] = ViewportHelper.ValueOrDbNull(software.IdSoftMaker);
+            row["Software"] = ViewportHelper.ValueOrDbNull(software.SoftwareName);
             row.EndEdit();
         }
 
@@ -270,21 +275,21 @@ namespace LicenseSoftware.Viewport
         {
             if (software.IdSoftType == null)
             {
-                MessageBox.Show("Необходимо выбрать вид программного обеспечения", "Ошибка",
+                MessageBox.Show(@"Необходимо выбрать вид программного обеспечения", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSoftType.Focus();
                 return false;
             }
             if (software.IdSoftMaker == null)
             {
-                MessageBox.Show("Необходимо выбрать разработчика программного обеспечения", "Ошибка",
+                MessageBox.Show(@"Необходимо выбрать разработчика программного обеспечения", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSoftMaker.Focus();
                 return false;
             }
             if (software.SoftwareName == null)
             {
-                MessageBox.Show("Наименование программного обеспечения не может быть пустым", "Ошибка",
+                MessageBox.Show(@"Наименование программного обеспечения не может быть пустым", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 textBoxSoftwareName.Focus();
                 return false;
@@ -294,63 +299,63 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_software.Count;
+            return _vSoftware.Count;
         }
 
         public override void MoveFirst()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_software.MoveFirst();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftware.MoveFirst();
+            _isEditable = true;
         }
 
         public override void MoveLast()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_software.MoveLast();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftware.MoveLast();
+            _isEditable = true;
         }
 
         public override void MoveNext()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_software.MoveNext();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftware.MoveNext();
+            _isEditable = true;
         }
 
         public override void MovePrev()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            is_editable = false;
-            v_software.MovePrevious();
-            is_editable = true;
+            _isEditable = false;
+            _vSoftware.MovePrevious();
+            _isEditable = true;
         }
 
         public override bool CanMoveFirst()
         {
-            return v_software.Position > 0;
+            return _vSoftware.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_software.Position > 0;
+            return _vSoftware.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_software.Position > -1) && (v_software.Position < (v_software.Count - 1));
+            return (_vSoftware.Position > -1) && (_vSoftware.Position < _vSoftware.Count - 1);
         }
 
         public override bool CanMoveLast()
         {
-            return (v_software.Position > -1) && (v_software.Position < (v_software.Count - 1));
+            return (_vSoftware.Position > -1) && (_vSoftware.Position < _vSoftware.Count - 1);
         }
 
         public override bool CanLoadData()
@@ -361,44 +366,48 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softwareDM = SoftwareDataModel.GetInstance();
-            softTypes = SoftTypesDataModel.GetInstance();
-            softMakers = SoftMakersDataModel.GetInstance();
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            _softwareDm = SoftwareDataModel.GetInstance();
+            _softTypes = SoftTypesDataModel.GetInstance();
+            _softMakers = SoftMakersDataModel.GetInstance();
 
             // Ожидаем дозагрузки, если это необходимо
-            softwareDM.Select();
-            softTypes.Select();
-            softMakers.Select();
+            _softwareDm.Select();
+            _softTypes.Select();
+            _softMakers.Select();
 
-            DataSet ds = DataSetManager.DataSet;
+            var ds = DataSetManager.DataSet;
 
-            v_softTypes = new BindingSource();
-            v_softTypes.DataMember = "SoftTypes";
-            v_softTypes.DataSource = ds;
+            _vSoftTypes = new BindingSource
+            {
+                DataMember = "SoftTypes",
+                DataSource = ds
+            };
 
-            v_softMakers = new BindingSource();
-            v_softMakers.DataMember = "SoftMakers";
-            v_softMakers.DataSource = ds;
+            _vSoftMakers = new BindingSource
+            {
+                DataMember = "SoftMakers",
+                DataSource = ds
+            };
 
-            v_software = new BindingSource();
-            v_software.CurrentItemChanged += new EventHandler(v_software_CurrentItemChanged);
-            v_software.DataMember = "Software";
-            v_software.DataSource = ds;
-            v_software.Filter = StaticFilter;
-            if (!String.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
-                v_software.Filter += " AND ";
-            v_software.Filter += DynamicFilter;
+            _vSoftware = new BindingSource();
+            _vSoftware.CurrentItemChanged += v_software_CurrentItemChanged;
+            _vSoftware.DataMember = "Software";
+            _vSoftware.DataSource = ds;
+            _vSoftware.Filter = StaticFilter;
+            if (!string.IsNullOrEmpty(StaticFilter) && !string.IsNullOrEmpty(DynamicFilter))
+                _vSoftware.Filter += " AND ";
+            _vSoftware.Filter += DynamicFilter;
 
             DataBind();
 
-            softwareDM.Select().RowChanged += SoftwareViewport_RowChanged;
-            softwareDM.Select().RowDeleted += SoftwareViewport_RowDeleted;
+            _softwareDm.Select().RowChanged += SoftwareViewport_RowChanged;
+            _softwareDm.Select().RowDeleted += SoftwareViewport_RowDeleted;
 
-            dataGridView.RowCount = v_software.Count;
+            dataGridView.RowCount = _vSoftware.Count;
             SetViewportCaption();
             ViewportHelper.SetDoubleBuffered(dataGridView);
-            is_editable = true;
+            _isEditable = true;
         }
 
         public override bool CanSearchRecord()
@@ -408,32 +417,29 @@ namespace LicenseSoftware.Viewport
 
         public override bool SearchedRecords()
         {
-            if (!String.IsNullOrEmpty(DynamicFilter))
-                return true;
-            else
-                return false;
+            return !string.IsNullOrEmpty(DynamicFilter);
         }
 
         public override void SearchRecord()
         {
-            if (sSearchForm == null)
-                sSearchForm = new SearchSoftwareForm();
-            if (sSearchForm.ShowDialog() != DialogResult.OK)
+            if (_sSearchForm == null)
+                _sSearchForm = new SearchSoftwareForm();
+            if (_sSearchForm.ShowDialog() != DialogResult.OK)
                 return;
-            DynamicFilter = sSearchForm.GetFilter();
-            string Filter = StaticFilter;
-            if (!String.IsNullOrEmpty(StaticFilter) && !String.IsNullOrEmpty(DynamicFilter))
-                Filter += " AND ";
-            Filter += DynamicFilter;
+            DynamicFilter = _sSearchForm.GetFilter();
+            var filter = StaticFilter;
+            if (!string.IsNullOrEmpty(StaticFilter) && !string.IsNullOrEmpty(DynamicFilter))
+                filter += " AND ";
+            filter += DynamicFilter;
             dataGridView.RowCount = 0;
-            v_software.Filter = Filter;
-            dataGridView.RowCount = v_software.Count;
+            _vSoftware.Filter = filter;
+            dataGridView.RowCount = _vSoftware.Count;
         }
 
         public override void ClearSearch()
         {
-            v_software.Filter = StaticFilter;
-            dataGridView.RowCount = v_software.Count;
+            _vSoftware.Filter = StaticFilter;
+            dataGridView.RowCount = _vSoftware.Count;
             DynamicFilter = "";
             MenuCallback.EditingStateUpdate();
             MenuCallback.StatusBarStateUpdate();
@@ -443,24 +449,24 @@ namespace LicenseSoftware.Viewport
 
         public override bool CanInsertRecord()
         {
-            return (!softwareDM.EditingNewRecord) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
+            return !_softwareDm.EditingNewRecord && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void InsertRecord()
         {
             if (!ChangeViewportStateTo(ViewportState.NewRowState))
                 return;
-            is_editable = false;
+            _isEditable = false;
             dataGridView.RowCount = dataGridView.RowCount + 1;
-            v_software.AddNew();
+            _vSoftware.AddNew();
             dataGridView.Enabled = false;
-            is_editable = true;
-            softwareDM.EditingNewRecord = true;
+            _isEditable = true;
+            _softwareDm.EditingNewRecord = true;
         }
 
         public override bool CanCopyRecord()
         {
-            return (v_software.Position != -1) && (!softwareDM.EditingNewRecord)
+            return (_vSoftware.Position != -1) && !_softwareDm.EditingNewRecord
                 && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
@@ -468,38 +474,38 @@ namespace LicenseSoftware.Viewport
         {
             if (!ChangeViewportStateTo(ViewportState.NewRowState))
                 return;
-            is_editable = false;
+            _isEditable = false;
             dataGridView.RowCount = dataGridView.RowCount + 1;
-            Software software = SoftwareFromView();
-            v_software.AddNew();
+            var software = SoftwareFromView();
+            _vSoftware.AddNew();
             dataGridView.Enabled = false;
-            softwareDM.EditingNewRecord = true;
+            _softwareDm.EditingNewRecord = true;
             ViewportFromSoftware(software);
-            is_editable = true;
+            _isEditable = true;
         }
 
         public override void DeleteRecord()
         {
-            if (MessageBox.Show("Вы действительно хотите удалить эту запись?", "Внимание", 
+            if (MessageBox.Show(@"Вы действительно хотите удалить эту запись?", @"Внимание", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
             {
-                if (SoftwareDataModel.Delete((int)((DataRowView)v_software.Current)["ID Software"]) == -1)
+                if (SoftwareDataModel.Delete((int)((DataRowView)_vSoftware.Current)["ID Software"]) == -1)
                     return;
-                is_editable = false;
-                ((DataRowView)v_software[v_software.Position]).Delete();
-                is_editable = true;
-                viewportState = ViewportState.ReadState;
+                _isEditable = false;
+                ((DataRowView)_vSoftware[_vSoftware.Position]).Delete();
+                _isEditable = true;
+                _viewportState = ViewportState.ReadState;
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.ForceCloseDetachedViewports();
                 if (CalcDataModelSoftwareConcat.HasInstance())
-                    CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Software, (int)((DataRowView)v_software.Current)["ID Software"], true);
+                    CalcDataModelSoftwareConcat.GetInstance().Refresh(EntityType.Software, (int)((DataRowView)_vSoftware.Current)["ID Software"], true);
             }
         }
 
         public override bool CanDeleteRecord()
         {
-            return (v_software.Position > -1)
-                && (viewportState != ViewportState.NewRowState)
+            return (_vSoftware.Position > -1)
+                && (_viewportState != ViewportState.NewRowState)
                 && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
@@ -510,70 +516,70 @@ namespace LicenseSoftware.Viewport
 
         public override Viewport Duplicate()
         {
-            SoftwareViewport viewport = new SoftwareViewport(this, MenuCallback);
+            var viewport = new SoftwareViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
-            if (v_software.Count > 0)
-                viewport.LocateSoftware((((DataRowView)v_software[v_software.Position])["ID Software"] as Int32?) ?? -1);
+            if (_vSoftware.Count > 0)
+                viewport.LocateSoftware(((DataRowView)_vSoftware[_vSoftware.Position])["ID Software"] as int? ?? -1);
             return viewport;
         }
 
         public override bool CanCancelRecord()
         {
-            return (viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState);
+            return (_viewportState == ViewportState.NewRowState) || (_viewportState == ViewportState.ModifyRowState);
         }
 
         public override bool CanSaveRecord()
         {
-            return ((viewportState == ViewportState.NewRowState) || (viewportState == ViewportState.ModifyRowState))
+            return ((_viewportState == ViewportState.NewRowState) || (_viewportState == ViewportState.ModifyRowState))
                 && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void SaveRecord()
         {
-            Software software = SoftwareFromViewport();
+            var software = SoftwareFromViewport();
             if (!ValidateSoftware(software))
                 return;
-            switch (viewportState)
+            switch (_viewportState)
             {
                 case ViewportState.ReadState:
-                    MessageBox.Show("Нельзя сохранить неизмененные данные. Если вы видите это сообщение, обратитесь к системному администратору", "Ошибка",
+                    MessageBox.Show(@"Нельзя сохранить неизмененные данные. Если вы видите это сообщение, обратитесь к системному администратору", @"Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     break;
                 case ViewportState.NewRowState:
-                    int idSoftware = SoftwareDataModel.Insert(software);
+                    var idSoftware = SoftwareDataModel.Insert(software);
                     if (idSoftware == -1)
                         return;
                     DataRowView newRow;
                     software.IdSoftware = idSoftware;
-                    is_editable = false;
-                    if (v_software.Position == -1)
-                        newRow = (DataRowView)v_software.AddNew();
+                    _isEditable = false;
+                    if (_vSoftware.Position == -1)
+                        newRow = (DataRowView)_vSoftware.AddNew();
                     else
-                        newRow = ((DataRowView)v_software[v_software.Position]);
+                        newRow = (DataRowView)_vSoftware[_vSoftware.Position];
                     FillRowFromSoftware(software, newRow);
-                    softwareDM.EditingNewRecord = false;
-                    is_editable = true;
+                    _softwareDm.EditingNewRecord = false;
+                    _isEditable = true;
                     break;
                 case ViewportState.ModifyRowState:
                     if (software.IdSoftware == null)
                     {
-                        MessageBox.Show("Вы пытаетесь изменить запись о программном обеспечении без внутренного номера. " +
-                            "Если вы видите это сообщение, обратитесь к системному администратору", "Ошибка", 
+                        MessageBox.Show(@"Вы пытаетесь изменить запись о программном обеспечении без внутренного номера. " +
+                            @"Если вы видите это сообщение, обратитесь к системному администратору", "Ошибка", 
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                         return;
                     }
                     if (SoftwareDataModel.Update(software) == -1)
                         return;
-                    DataRowView row = ((DataRowView)v_software[v_software.Position]);
-                    is_editable = false;
+                    var row = (DataRowView)_vSoftware[_vSoftware.Position];
+                    _isEditable = false;
                     FillRowFromSoftware(software, row);
                     break;
             }
             dataGridView.Enabled = true;
-            is_editable = true;
-            dataGridView.RowCount = v_software.Count;
-            viewportState = ViewportState.ReadState;
+            _isEditable = true;
+            dataGridView.RowCount = _vSoftware.Count;
+            _viewportState = ViewportState.ReadState;
             MenuCallback.EditingStateUpdate();
             SetViewportCaption();
             if (CalcDataModelSoftwareConcat.HasInstance())
@@ -582,37 +588,37 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            switch (viewportState)
+            switch (_viewportState)
             {
                 case ViewportState.ReadState: return;
                 case ViewportState.NewRowState:
-                    softwareDM.EditingNewRecord = false;
-                    if (v_software.Position != -1)
+                    _softwareDm.EditingNewRecord = false;
+                    if (_vSoftware.Position != -1)
                     {
-                        is_editable = false;
+                        _isEditable = false;
                         dataGridView.Enabled = true;
-                        ((DataRowView)v_software[v_software.Position]).Delete();
+                        ((DataRowView)_vSoftware[_vSoftware.Position]).Delete();
                         dataGridView.RowCount = dataGridView.RowCount - 1;
-                        if (v_software.Position != -1)
-                            dataGridView.Rows[v_software.Position].Selected = true;
+                        if (_vSoftware.Position != -1)
+                            dataGridView.Rows[_vSoftware.Position].Selected = true;
                     }
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     break;
                 case ViewportState.ModifyRowState:
                     dataGridView.Enabled = true;
-                    is_editable = false;
+                    _isEditable = false;
                     DataBind();
-                    viewportState = ViewportState.ReadState;
+                    _viewportState = ViewportState.ReadState;
                     break;
             }
-            is_editable = true; 
+            _isEditable = true; 
             MenuCallback.EditingStateUpdate();
             SetViewportCaption();
         }
 
         public override bool HasAssocLicenses()
         {
-            return (v_software.Position > -1) &&
+            return (_vSoftware.Position > -1) &&
                 AccessControl.HasPrivelege(Priveleges.LicensesRead);
         }
 
@@ -620,36 +626,36 @@ namespace LicenseSoftware.Viewport
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            if (v_software.Position == -1)
+            if (_vSoftware.Position == -1)
             {
                 MessageBox.Show(@"Не выбрано программное обеспечение для отображения списка лицензий", @"Ошибка", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
             ShowAssocViewport(MenuCallback, ViewportType.LicensesViewport,
-                "[ID Software] = " + Convert.ToInt32(((DataRowView)v_software[v_software.Position])["ID Software"], CultureInfo.InvariantCulture),
-                ((DataRowView)v_software[v_software.Position]).Row,
+                "[ID Software] = " + Convert.ToInt32(((DataRowView)_vSoftware[_vSoftware.Position])["ID Software"], CultureInfo.InvariantCulture),
+                ((DataRowView)_vSoftware[_vSoftware.Position]).Row,
                 ParentTypeEnum.Software);
         }
 
         public override bool HasAssocSoftVersions()
         {
-            return v_software.Position > -1;
+            return _vSoftware.Position > -1;
         }
 
         public override void ShowAssocSoftVersions()
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 return;
-            if (v_software.Position == -1)
+            if (_vSoftware.Position == -1)
             {
                 MessageBox.Show(@"Не выбрано программное обеспечение для отображения списка версий", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 return;
             }
             ShowAssocViewport(MenuCallback, ViewportType.SoftVersionsViewport,
-                "[ID Software] = " + Convert.ToInt32(((DataRowView)v_software[v_software.Position])["ID Software"], CultureInfo.InvariantCulture),
-                ((DataRowView)v_software[v_software.Position]).Row,
+                "[ID Software] = " + Convert.ToInt32(((DataRowView)_vSoftware[_vSoftware.Position])["ID Software"], CultureInfo.InvariantCulture),
+                ((DataRowView)_vSoftware[_vSoftware.Position]).Row,
                 ParentTypeEnum.Software);
         }
 
@@ -657,57 +663,55 @@ namespace LicenseSoftware.Viewport
         {
             if (!ChangeViewportStateTo(ViewportState.ReadState))
                 e.Cancel = true;
-            softwareDM.Select().RowChanged -= SoftwareViewport_RowChanged;
-            softwareDM.Select().RowDeleted -= SoftwareViewport_RowDeleted;
+            _softwareDm.Select().RowChanged -= SoftwareViewport_RowChanged;
+            _softwareDm.Select().RowDeleted -= SoftwareViewport_RowDeleted;
             base.OnClosing(e);
         }
 
         public override void ForceClose()
         {
-            if (viewportState == ViewportState.NewRowState)
-                softwareDM.EditingNewRecord = false;
-            softwareDM.Select().RowChanged -= SoftwareViewport_RowChanged;
-            softwareDM.Select().RowDeleted -= SoftwareViewport_RowDeleted;
-            base.Close();
+            if (_viewportState == ViewportState.NewRowState)
+                _softwareDm.EditingNewRecord = false;
+            _softwareDm.Select().RowChanged -= SoftwareViewport_RowChanged;
+            _softwareDm.Select().RowDeleted -= SoftwareViewport_RowDeleted;
+            Close();
         }
 
-        void SoftwareViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
+        private void SoftwareViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            if (e.Action == DataRowAction.Delete)
-            {
-                dataGridView.RowCount = v_software.Count;
-                dataGridView.Refresh();
-                MenuCallback.ForceCloseDetachedViewports();
-                if (Selected)
-                    MenuCallback.StatusBarStateUpdate();
-            }
-        }
-
-        void SoftwareViewport_RowChanged(object sender, DataRowChangeEventArgs e)
-        {
-            if (e.Action == DataRowAction.Change || e.Action == DataRowAction.ChangeCurrentAndOriginal || e.Action == DataRowAction.ChangeOriginal)
-                dataGridView.Refresh();
-            dataGridView.RowCount = v_software.Count;
+            if (e.Action != DataRowAction.Delete) return;
+            dataGridView.RowCount = _vSoftware.Count;
+            dataGridView.Refresh();
+            MenuCallback.ForceCloseDetachedViewports();
             if (Selected)
                 MenuCallback.StatusBarStateUpdate();
         }
 
-        void v_software_CurrentItemChanged(object sender, EventArgs e)
+        private void SoftwareViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            if (e.Action == DataRowAction.Change || e.Action == DataRowAction.ChangeCurrentAndOriginal || e.Action == DataRowAction.ChangeOriginal)
+                dataGridView.Refresh();
+            dataGridView.RowCount = _vSoftware.Count;
+            if (Selected)
+                MenuCallback.StatusBarStateUpdate();
+        }
+
+        private void v_software_CurrentItemChanged(object sender, EventArgs e)
         {
             SetViewportCaption();
-            if (v_software.Position == -1 || dataGridView.RowCount == 0)
+            if (_vSoftware.Position == -1 || dataGridView.RowCount == 0)
                 dataGridView.ClearSelection();
             else
-                if (v_software.Position >= dataGridView.RowCount)
+                if (_vSoftware.Position >= dataGridView.RowCount)
                 {
                     dataGridView.Rows[dataGridView.RowCount - 1].Selected = true;
                     dataGridView.CurrentCell = dataGridView.Rows[dataGridView.RowCount - 1].Cells[1];
                 }
                 else
-                    if (dataGridView.Rows[v_software.Position].Selected != true)
+                    if (dataGridView.Rows[_vSoftware.Position].Selected != true)
                     {
-                        dataGridView.Rows[v_software.Position].Selected = true;
-                        dataGridView.CurrentCell = dataGridView.Rows[v_software.Position].Cells[1];
+                        dataGridView.Rows[_vSoftware.Position].Selected = true;
+                        dataGridView.CurrentCell = dataGridView.Rows[_vSoftware.Position].Cells[1];
                     }
             if (Selected)
             {
@@ -715,13 +719,13 @@ namespace LicenseSoftware.Viewport
                 MenuCallback.EditingStateUpdate();
                 MenuCallback.RelationsStateUpdate();
             }
-            if (v_software.Position == -1)
+            if (_vSoftware.Position == -1)
                 return;
-            if (viewportState == ViewportState.NewRowState)
+            if (_viewportState == ViewportState.NewRowState)
                 return;
             dataGridView.Enabled = true;
-            viewportState = ViewportState.ReadState;
-            is_editable = true;
+            _viewportState = ViewportState.ReadState;
+            _isEditable = true;
         }
 
         private void comboBoxSoftType_SelectedValueChanged(object sender, EventArgs e)
@@ -739,34 +743,34 @@ namespace LicenseSoftware.Viewport
             CheckViewportModifications();
         }
 
-        void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;
         }
 
         private void dataGridView_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
-            if (v_software.Count <= e.RowIndex) return;
-            switch (this.dataGridView.Columns[e.ColumnIndex].Name)
+            if (_vSoftware.Count <= e.RowIndex) return;
+            switch (dataGridView.Columns[e.ColumnIndex].Name)
             {
                 case "idSoftware":
-                    e.Value = ((DataRowView)v_software[e.RowIndex])["ID Software"];
+                    e.Value = ((DataRowView)_vSoftware[e.RowIndex])["ID Software"];
                     break;
                 case "software":
-                    e.Value = ((DataRowView)v_software[e.RowIndex])["Software"];
+                    e.Value = ((DataRowView)_vSoftware[e.RowIndex])["Software"];
                     break;
                 case "version":
-                    e.Value = ((DataRowView)v_software[e.RowIndex])["Version"];
+                    e.Value = ((DataRowView)_vSoftware[e.RowIndex])["Version"];
                     break;
                 case "idSoftType":
-                    int row_index = v_softTypes.Find("ID SoftType", ((DataRowView)v_software[e.RowIndex])["ID SoftType"]);
-                    if (row_index != -1)
-                        e.Value = ((DataRowView)v_softTypes[row_index])["SoftType"];
+                    var rowIndex = _vSoftTypes.Find("ID SoftType", ((DataRowView)_vSoftware[e.RowIndex])["ID SoftType"]);
+                    if (rowIndex != -1)
+                        e.Value = ((DataRowView)_vSoftTypes[rowIndex])["SoftType"];
                     break;
                 case "idSoftMaker":
-                    row_index = v_softMakers.Find("ID SoftMaker", ((DataRowView)v_software[e.RowIndex])["ID SoftMaker"]);
-                    if (row_index != -1)
-                        e.Value = ((DataRowView)v_softMakers[row_index])["SoftMaker"];
+                    rowIndex = _vSoftMakers.Find("ID SoftMaker", ((DataRowView)_vSoftware[e.RowIndex])["ID SoftMaker"]);
+                    if (rowIndex != -1)
+                        e.Value = ((DataRowView)_vSoftMakers[rowIndex])["SoftMaker"];
                     break;
             }
         }
@@ -774,9 +778,9 @@ namespace LicenseSoftware.Viewport
         private void dataGridView_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView.SelectedRows.Count > 0)
-                v_software.Position = dataGridView.SelectedRows[0].Index;
+                _vSoftware.Position = dataGridView.SelectedRows[0].Index;
             else
-                v_software.Position = -1;
+                _vSoftware.Position = -1;
         }
 
         private void dataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -787,285 +791,284 @@ namespace LicenseSoftware.Viewport
             {
                 foreach (DataGridViewColumn column in dataGridView.Columns)
                     column.HeaderCell.SortGlyphDirection = SortOrder.None;
-                v_software.Sort = dataGridView.Columns[e.ColumnIndex].Name + " " + ((way == SortOrder.Ascending) ? "ASC" : "DESC");
+                _vSoftware.Sort = dataGridView.Columns[e.ColumnIndex].Name + " " + (way == SortOrder.Ascending ? "ASC" : "DESC");
                 dataGridView.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = way;
                 return true;
             };
-            if (dataGridView.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection == SortOrder.Ascending)
-                changeSortColumn(SortOrder.Descending);
-            else
-                changeSortColumn(SortOrder.Ascending);
+            changeSortColumn(dataGridView.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection == SortOrder.Ascending
+                ? SortOrder.Descending
+                : SortOrder.Ascending);
             dataGridView.Refresh();
         }
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftwareViewport));
-            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
-            this.groupBox32 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.comboBoxSoftType = new System.Windows.Forms.ComboBox();
-            this.label84 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxSoftMaker = new System.Windows.Forms.ComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.textBoxSoftwareName = new System.Windows.Forms.TextBox();
-            this.label86 = new System.Windows.Forms.Label();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idSoftware = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idSoftType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idSoftMaker = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tableLayoutPanel14.SuspendLayout();
-            this.groupBox32.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftwareViewport));
+            tableLayoutPanel14 = new TableLayoutPanel();
+            groupBox32 = new GroupBox();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel2 = new Panel();
+            comboBoxSoftType = new ComboBox();
+            label84 = new Label();
+            panel3 = new Panel();
+            label1 = new Label();
+            comboBoxSoftMaker = new ComboBox();
+            panel1 = new Panel();
+            textBoxSoftwareName = new TextBox();
+            label86 = new Label();
+            dataGridView = new DataGridView();
+            idSoftware = new DataGridViewTextBoxColumn();
+            software = new DataGridViewTextBoxColumn();
+            idSoftType = new DataGridViewTextBoxColumn();
+            idSoftMaker = new DataGridViewTextBoxColumn();
+            tableLayoutPanel14.SuspendLayout();
+            groupBox32.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            panel2.SuspendLayout();
+            panel3.SuspendLayout();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            SuspendLayout();
             // 
             // tableLayoutPanel14
             // 
-            this.tableLayoutPanel14.ColumnCount = 1;
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Controls.Add(this.groupBox32, 0, 0);
-            this.tableLayoutPanel14.Controls.Add(this.dataGridView, 0, 1);
-            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
-            this.tableLayoutPanel14.RowCount = 2;
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 94F));
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(1002, 724);
-            this.tableLayoutPanel14.TabIndex = 0;
+            tableLayoutPanel14.ColumnCount = 1;
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel14.Controls.Add(groupBox32, 0, 0);
+            tableLayoutPanel14.Controls.Add(dataGridView, 0, 1);
+            tableLayoutPanel14.Dock = DockStyle.Fill;
+            tableLayoutPanel14.Location = new System.Drawing.Point(3, 3);
+            tableLayoutPanel14.Name = "tableLayoutPanel14";
+            tableLayoutPanel14.RowCount = 2;
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Absolute, 94F));
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel14.Size = new System.Drawing.Size(1002, 724);
+            tableLayoutPanel14.TabIndex = 0;
             // 
             // groupBox32
             // 
-            this.groupBox32.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox32.Location = new System.Drawing.Point(3, 3);
-            this.groupBox32.Name = "groupBox32";
-            this.groupBox32.Size = new System.Drawing.Size(996, 88);
-            this.groupBox32.TabIndex = 1;
-            this.groupBox32.TabStop = false;
-            this.groupBox32.Text = "Сведения о программном обеспечении";
+            groupBox32.Controls.Add(tableLayoutPanel1);
+            groupBox32.Dock = DockStyle.Fill;
+            groupBox32.Location = new System.Drawing.Point(3, 3);
+            groupBox32.Name = "groupBox32";
+            groupBox32.Size = new System.Drawing.Size(996, 88);
+            groupBox32.TabIndex = 1;
+            groupBox32.TabStop = false;
+            groupBox32.Text = "Сведения о программном обеспечении";
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 17);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(990, 68);
-            this.tableLayoutPanel1.TabIndex = 0;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Controls.Add(panel2, 0, 1);
+            tableLayoutPanel1.Controls.Add(panel3, 0, 1);
+            tableLayoutPanel1.Controls.Add(panel1, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(3, 17);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(990, 68);
+            tableLayoutPanel1.TabIndex = 0;
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.comboBoxSoftType);
-            this.panel2.Controls.Add(this.label84);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 34);
-            this.panel2.Margin = new System.Windows.Forms.Padding(0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(495, 34);
-            this.panel2.TabIndex = 76;
+            panel2.Controls.Add(comboBoxSoftType);
+            panel2.Controls.Add(label84);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new System.Drawing.Point(0, 34);
+            panel2.Margin = new Padding(0);
+            panel2.Name = "panel2";
+            panel2.Size = new System.Drawing.Size(495, 34);
+            panel2.TabIndex = 76;
             // 
             // comboBoxSoftType
             // 
-            this.comboBoxSoftType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSoftType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSoftType.FormattingEnabled = true;
-            this.comboBoxSoftType.Location = new System.Drawing.Point(112, 5);
-            this.comboBoxSoftType.Name = "comboBoxSoftType";
-            this.comboBoxSoftType.Size = new System.Drawing.Size(380, 23);
-            this.comboBoxSoftType.TabIndex = 0;
-            this.comboBoxSoftType.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftType_SelectedValueChanged);
+            comboBoxSoftType.Anchor = (AnchorStyles)(AnchorStyles.Top | AnchorStyles.Left 
+                                                     | AnchorStyles.Right);
+            comboBoxSoftType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxSoftType.FormattingEnabled = true;
+            comboBoxSoftType.Location = new System.Drawing.Point(112, 5);
+            comboBoxSoftType.Name = "comboBoxSoftType";
+            comboBoxSoftType.Size = new System.Drawing.Size(380, 23);
+            comboBoxSoftType.TabIndex = 0;
+            comboBoxSoftType.SelectedValueChanged += comboBoxSoftType_SelectedValueChanged;
             // 
             // label84
             // 
-            this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(10, 9);
-            this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(50, 15);
-            this.label84.TabIndex = 71;
-            this.label84.Text = "Вид ПО";
+            label84.AutoSize = true;
+            label84.Location = new System.Drawing.Point(10, 9);
+            label84.Name = "label84";
+            label84.Size = new System.Drawing.Size(50, 15);
+            label84.TabIndex = 71;
+            label84.Text = "Вид ПО";
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.label1);
-            this.panel3.Controls.Add(this.comboBoxSoftMaker);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(495, 34);
-            this.panel3.Margin = new System.Windows.Forms.Padding(0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(495, 34);
-            this.panel3.TabIndex = 75;
+            panel3.Controls.Add(label1);
+            panel3.Controls.Add(comboBoxSoftMaker);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new System.Drawing.Point(495, 34);
+            panel3.Margin = new Padding(0);
+            panel3.Name = "panel3";
+            panel3.Size = new System.Drawing.Size(495, 34);
+            panel3.TabIndex = 75;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(103, 15);
-            this.label1.TabIndex = 73;
-            this.label1.Text = "Разработчик ПО";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(3, 9);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(103, 15);
+            label1.TabIndex = 73;
+            label1.Text = "Разработчик ПО";
             // 
             // comboBoxSoftMaker
             // 
-            this.comboBoxSoftMaker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSoftMaker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSoftMaker.FormattingEnabled = true;
-            this.comboBoxSoftMaker.Location = new System.Drawing.Point(109, 5);
-            this.comboBoxSoftMaker.Name = "comboBoxSoftMaker";
-            this.comboBoxSoftMaker.Size = new System.Drawing.Size(380, 23);
-            this.comboBoxSoftMaker.TabIndex = 1;
-            this.comboBoxSoftMaker.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftMaker_SelectedValueChanged);
+            comboBoxSoftMaker.Anchor = (AnchorStyles)(AnchorStyles.Top | AnchorStyles.Left 
+                                                      | AnchorStyles.Right);
+            comboBoxSoftMaker.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxSoftMaker.FormattingEnabled = true;
+            comboBoxSoftMaker.Location = new System.Drawing.Point(109, 5);
+            comboBoxSoftMaker.Name = "comboBoxSoftMaker";
+            comboBoxSoftMaker.Size = new System.Drawing.Size(380, 23);
+            comboBoxSoftMaker.TabIndex = 1;
+            comboBoxSoftMaker.SelectedValueChanged += comboBoxSoftMaker_SelectedValueChanged;
             // 
             // panel1
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
-            this.panel1.Controls.Add(this.textBoxSoftwareName);
-            this.panel1.Controls.Add(this.label86);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(990, 34);
-            this.panel1.TabIndex = 0;
+            tableLayoutPanel1.SetColumnSpan(panel1, 2);
+            panel1.Controls.Add(textBoxSoftwareName);
+            panel1.Controls.Add(label86);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new System.Drawing.Point(0, 0);
+            panel1.Margin = new Padding(0);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(990, 34);
+            panel1.TabIndex = 0;
             // 
             // textBoxSoftwareName
             // 
-            this.textBoxSoftwareName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSoftwareName.Location = new System.Drawing.Point(112, 8);
-            this.textBoxSoftwareName.MaxLength = 500;
-            this.textBoxSoftwareName.Name = "textBoxSoftwareName";
-            this.textBoxSoftwareName.Size = new System.Drawing.Size(871, 21);
-            this.textBoxSoftwareName.TabIndex = 0;
-            this.textBoxSoftwareName.TextChanged += new System.EventHandler(this.textBoxSoftwareName_TextChanged);
+            textBoxSoftwareName.Anchor = (AnchorStyles)(AnchorStyles.Top | AnchorStyles.Left 
+                                                        | AnchorStyles.Right);
+            textBoxSoftwareName.Location = new System.Drawing.Point(112, 8);
+            textBoxSoftwareName.MaxLength = 500;
+            textBoxSoftwareName.Name = "textBoxSoftwareName";
+            textBoxSoftwareName.Size = new System.Drawing.Size(871, 21);
+            textBoxSoftwareName.TabIndex = 0;
+            textBoxSoftwareName.TextChanged += textBoxSoftwareName_TextChanged;
             // 
             // label86
             // 
-            this.label86.AutoSize = true;
-            this.label86.Location = new System.Drawing.Point(10, 10);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(95, 15);
-            this.label86.TabIndex = 73;
-            this.label86.Text = "Наименование";
+            label86.AutoSize = true;
+            label86.Location = new System.Drawing.Point(10, 10);
+            label86.Name = "label86";
+            label86.Size = new System.Drawing.Size(95, 15);
+            label86.TabIndex = 73;
+            label86.Text = "Наименование";
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, (byte)204);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idSoftware,
-            this.software,
-            this.idSoftType,
-            this.idSoftMaker});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(3, 97);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.ReadOnly = true;
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(996, 624);
-            this.dataGridView.TabIndex = 0;
-            this.dataGridView.VirtualMode = true;
-            this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
-            this.dataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_ColumnHeaderMouseClick);
-            this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
-            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(new DataGridViewColumn[] {
+            idSoftware,
+            software,
+            idSoftType,
+            idSoftMaker});
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new System.Drawing.Point(3, 97);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new System.Drawing.Size(996, 624);
+            dataGridView.TabIndex = 0;
+            dataGridView.VirtualMode = true;
+            dataGridView.CellValueNeeded += dataGridView_CellValueNeeded;
+            dataGridView.ColumnHeaderMouseClick += dataGridView_ColumnHeaderMouseClick;
+            dataGridView.DataError += dataGridView_DataError;
+            dataGridView.SelectionChanged += dataGridView_SelectionChanged;
             // 
             // idSoftware
             // 
-            this.idSoftware.Frozen = true;
-            this.idSoftware.HeaderText = "Идентификатор";
-            this.idSoftware.Name = "idSoftware";
-            this.idSoftware.ReadOnly = true;
-            this.idSoftware.Visible = false;
+            idSoftware.Frozen = true;
+            idSoftware.HeaderText = "Идентификатор";
+            idSoftware.Name = "idSoftware";
+            idSoftware.ReadOnly = true;
+            idSoftware.Visible = false;
             // 
             // software
             // 
-            this.software.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.software.HeaderText = "Наименование ПО";
-            this.software.MinimumWidth = 300;
-            this.software.Name = "software";
-            this.software.ReadOnly = true;
+            software.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            software.HeaderText = "Наименование ПО";
+            software.MinimumWidth = 300;
+            software.Name = "software";
+            software.ReadOnly = true;
             // 
             // idSoftType
             // 
-            this.idSoftType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.idSoftType.HeaderText = "Вид ПО";
-            this.idSoftType.MinimumWidth = 200;
-            this.idSoftType.Name = "idSoftType";
-            this.idSoftType.ReadOnly = true;
-            this.idSoftType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idSoftType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.idSoftType.Width = 200;
+            idSoftType.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            idSoftType.HeaderText = "Вид ПО";
+            idSoftType.MinimumWidth = 200;
+            idSoftType.Name = "idSoftType";
+            idSoftType.ReadOnly = true;
+            idSoftType.Resizable = DataGridViewTriState.True;
+            idSoftType.SortMode = DataGridViewColumnSortMode.NotSortable;
+            idSoftType.Width = 200;
             // 
             // idSoftMaker
             // 
-            this.idSoftMaker.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.idSoftMaker.HeaderText = "Разработчик ПО";
-            this.idSoftMaker.MinimumWidth = 200;
-            this.idSoftMaker.Name = "idSoftMaker";
-            this.idSoftMaker.ReadOnly = true;
-            this.idSoftMaker.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.idSoftMaker.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.idSoftMaker.Width = 200;
+            idSoftMaker.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            idSoftMaker.HeaderText = "Разработчик ПО";
+            idSoftMaker.MinimumWidth = 200;
+            idSoftMaker.Name = "idSoftMaker";
+            idSoftMaker.ReadOnly = true;
+            idSoftMaker.Resizable = DataGridViewTriState.True;
+            idSoftMaker.SortMode = DataGridViewColumnSortMode.NotSortable;
+            idSoftMaker.Width = 200;
             // 
             // SoftwareViewport
             // 
-            this.AutoScroll = true;
-            this.AutoScrollMinSize = new System.Drawing.Size(800, 300);
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1008, 730);
-            this.Controls.Add(this.tableLayoutPanel14);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SoftwareViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Программное обеспечение";
-            this.tableLayoutPanel14.ResumeLayout(false);
-            this.groupBox32.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            AutoScroll = true;
+            AutoScrollMinSize = new System.Drawing.Size(800, 300);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(1008, 730);
+            Controls.Add(tableLayoutPanel14);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, (byte)204);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "SoftwareViewport";
+            Padding = new Padding(3);
+            Text = "Программное обеспечение";
+            tableLayoutPanel14.ResumeLayout(false);
+            groupBox32.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ResumeLayout(false);
 
         }
     }

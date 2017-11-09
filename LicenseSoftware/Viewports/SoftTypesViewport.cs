@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -19,17 +19,19 @@ namespace LicenseSoftware.Viewport
         #endregion Components
 
         #region Models
-        SoftTypesDataModel softTypes = null;
-        DataTable snapshotSoftTypes = new DataTable("snapshotSoftTypes");
+
+        private SoftTypesDataModel _softTypes;
+        private readonly DataTable _snapshotSoftTypes = new DataTable("snapshotSoftTypes");
         #endregion Models
 
         #region Views
-        BindingSource v_softTypes = null;
-        BindingSource v_snapshotSoftTypes = null;
+
+        private BindingSource _vSoftTypes;
+        private BindingSource _vSnapshotSoftTypes;
         #endregion Models
 
         //Флаг разрешения синхронизации snapshot и original моделей
-        bool sync_views = true;
+        private bool _syncViews = true;
 
         private SoftTypesViewport()
             : this(null)
@@ -40,30 +42,29 @@ namespace LicenseSoftware.Viewport
             : base(menuCallback)
         {
             InitializeComponent();
-            snapshotSoftTypes.Locale = CultureInfo.InvariantCulture;
+            _snapshotSoftTypes.Locale = CultureInfo.InvariantCulture;
         }
 
         public SoftTypesViewport(SoftTypesViewport softTypesViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = softTypesViewport.DynamicFilter;
-            this.StaticFilter = softTypesViewport.StaticFilter;
-            this.ParentRow = softTypesViewport.ParentRow;
-            this.ParentType = softTypesViewport.ParentType;
+            DynamicFilter = softTypesViewport.DynamicFilter;
+            StaticFilter = softTypesViewport.StaticFilter;
+            ParentRow = softTypesViewport.ParentRow;
+            ParentType = softTypesViewport.ParentType;
         }
 
         private bool SnapshotHasChanges()
         {
-            List<SoftType> list_from_view = SoftTypesFromView();
-            List<SoftType> list_from_viewport = SoftTypesFromViewport();
-            if (list_from_view.Count != list_from_viewport.Count)
+            var listFromView = SoftTypesFromView();
+            var listFromViewport = SoftTypesFromViewport();
+            if (listFromView.Count != listFromViewport.Count)
                 return true;
-            bool founded = false;
-            for (int i = 0; i < list_from_view.Count; i++)
+            for (var i = 0; i < listFromView.Count; i++)
             {
-                founded = false;
-                for (int j = 0; j < list_from_viewport.Count; j++)
-                    if (list_from_view[i] == list_from_viewport[j])
+                var founded = false;
+                for (var j = 0; j < listFromViewport.Count; j++)
+                    if (listFromView[i] == listFromViewport[j])
                         founded = true;
                 if (!founded)
                     return true;
@@ -73,7 +74,7 @@ namespace LicenseSoftware.Viewport
 
         private static object[] DataRowViewToArray(DataRowView dataRowView)
         {
-            return new object[] { 
+            return new[] { 
                 dataRowView["ID SoftType"], 
                 dataRowView["SoftType"]
             };
@@ -81,18 +82,18 @@ namespace LicenseSoftware.Viewport
 
         private static bool ValidateViewportData(List<SoftType> list)
         {
-            foreach (SoftType softType in list)
+            foreach (var softType in list)
             {
                 if (softType.SoftTypeName == null)
                 {
-                    MessageBox.Show("Наименование вида программного обеспечения не может быть пустым",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show(@"Наименование вида программного обеспечения не может быть пустым",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
                 if (softType.SoftTypeName != null && softType.SoftTypeName.Length > 400)
                 {
-                    MessageBox.Show("Длина вида программного обеспечения не может превышать 400 символов",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show(@"Длина вида программного обеспечения не может превышать 400 символов",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                     return false;
                 }
             }
@@ -101,38 +102,42 @@ namespace LicenseSoftware.Viewport
 
         private static SoftType RowToSoftType(DataRow row)
         {
-            SoftType softType = new SoftType();
-            softType.IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType");
-            softType.SoftTypeName = ViewportHelper.ValueOrNull(row, "SoftType");
+            var softType = new SoftType
+            {
+                IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType"),
+                SoftTypeName = ViewportHelper.ValueOrNull(row, "SoftType")
+            };
             return softType;
         }
 
         private List<SoftType> SoftTypesFromViewport()
         {
-            List<SoftType> list = new List<SoftType>();
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            var list = new List<SoftType>();
+            for (var i = 0; i < dataGridView.Rows.Count; i++)
             {
-                if (!dataGridView.Rows[i].IsNewRow)
+                if (dataGridView.Rows[i].IsNewRow) continue;
+                var row = dataGridView.Rows[i];
+                var st = new SoftType
                 {
-                    SoftType st = new SoftType();
-                    DataGridViewRow row = dataGridView.Rows[i];
-                    st.IdSoftType = ViewportHelper.ValueOrNull<int>(row, "idSoftType");
-                    st.SoftTypeName = ViewportHelper.ValueOrNull(row, "softType");
-                    list.Add(st);
-                }
+                    IdSoftType = ViewportHelper.ValueOrNull<int>(row, "idSoftType"),
+                    SoftTypeName = ViewportHelper.ValueOrNull(row, "softType")
+                };
+                list.Add(st);
             }
             return list;
         }
 
         private List<SoftType> SoftTypesFromView()
         {
-            List<SoftType> list = new List<SoftType>();
-            for (int i = 0; i < v_softTypes.Count; i++)
+            var list = new List<SoftType>();
+            for (var i = 0; i < _vSoftTypes.Count; i++)
             {
-                SoftType st = new SoftType();
-                DataRowView row = ((DataRowView)v_softTypes[i]);
-                st.IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType");
-                st.SoftTypeName = ViewportHelper.ValueOrNull(row, "SoftType");
+                var row = (DataRowView)_vSoftTypes[i];
+                var st = new SoftType
+                {
+                    IdSoftType = ViewportHelper.ValueOrNull<int>(row, "ID SoftType"),
+                    SoftTypeName = ViewportHelper.ValueOrNull(row, "SoftType")
+                };
                 list.Add(st);
             }
             return list;
@@ -140,7 +145,7 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_snapshotSoftTypes.Count;
+            return _vSnapshotSoftTypes.Count;
         }
 
         public override bool CanLoadData()
@@ -151,28 +156,29 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softTypes = SoftTypesDataModel.GetInstance();
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            _softTypes = SoftTypesDataModel.GetInstance();
 
             //Ожидаем дозагрузки данных, если это необходимо
-            softTypes.Select();
+            _softTypes.Select();
 
-            v_softTypes = new BindingSource();
-            v_softTypes.DataMember = "SoftTypes";
-            v_softTypes.DataSource = DataSetManager.DataSet;
+            _vSoftTypes = new BindingSource
+            {
+                DataMember = "SoftTypes",
+                DataSource = DataSetManager.DataSet
+            };
 
             //Инициируем колонки snapshot-модели
-            for (int i = 0; i < softTypes.Select().Columns.Count; i++)
-                snapshotSoftTypes.Columns.Add(new DataColumn(
-                    softTypes.Select().Columns[i].ColumnName, softTypes.Select().Columns[i].DataType));
+            for (var i = 0; i < _softTypes.Select().Columns.Count; i++)
+                _snapshotSoftTypes.Columns.Add(new DataColumn(
+                    _softTypes.Select().Columns[i].ColumnName, _softTypes.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (int i = 0; i < v_softTypes.Count; i++)
-                snapshotSoftTypes.Rows.Add(DataRowViewToArray(((DataRowView)v_softTypes[i])));
-            v_snapshotSoftTypes = new BindingSource();
-            v_snapshotSoftTypes.DataSource = snapshotSoftTypes;
-            v_snapshotSoftTypes.CurrentItemChanged += v_snapshotSoftTypes_CurrentItemChanged;
+            for (var i = 0; i < _vSoftTypes.Count; i++)
+                _snapshotSoftTypes.Rows.Add(DataRowViewToArray((DataRowView)_vSoftTypes[i]));
+            _vSnapshotSoftTypes = new BindingSource {DataSource = _snapshotSoftTypes};
+            _vSnapshotSoftTypes.CurrentItemChanged += v_snapshotSoftTypes_CurrentItemChanged;
 
-            dataGridView.DataSource = v_snapshotSoftTypes;
+            dataGridView.DataSource = _vSnapshotSoftTypes;
             idSoftType.DataPropertyName = "ID SoftType";
             softType.DataPropertyName = "SoftType";
 
@@ -182,49 +188,49 @@ namespace LicenseSoftware.Viewport
             //События изменения данных для проверки соответствия реальным данным в модели
             dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softTypes.Select().RowChanged += SoftTypesViewport_RowChanged;
-            softTypes.Select().RowDeleting += SoftTypesViewport_RowDeleting;
-            softTypes.Select().RowDeleted += SoftTypesViewport_RowDeleted;
+            _softTypes.Select().RowChanged += SoftTypesViewport_RowChanged;
+            _softTypes.Select().RowDeleting += SoftTypesViewport_RowDeleting;
+            _softTypes.Select().RowDeleted += SoftTypesViewport_RowDeleted;
         }
 
         public override void MoveFirst()
         {
-            v_snapshotSoftTypes.MoveFirst();
+            _vSnapshotSoftTypes.MoveFirst();
         }
 
         public override void MoveLast()
         {
-            v_snapshotSoftTypes.MoveLast();
+            _vSnapshotSoftTypes.MoveLast();
         }
 
         public override void MoveNext()
         {
-            v_snapshotSoftTypes.MoveNext();
+            _vSnapshotSoftTypes.MoveNext();
         }
 
         public override void MovePrev()
         {
-            v_snapshotSoftTypes.MovePrevious();
+            _vSnapshotSoftTypes.MovePrevious();
         }
 
         public override bool CanMoveFirst()
         {
-            return v_snapshotSoftTypes.Position > 0;
+            return _vSnapshotSoftTypes.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_snapshotSoftTypes.Position > 0;
+            return _vSnapshotSoftTypes.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_snapshotSoftTypes.Position > -1) && (v_snapshotSoftTypes.Position < (v_snapshotSoftTypes.Count - 1));
+            return (_vSnapshotSoftTypes.Position > -1) && (_vSnapshotSoftTypes.Position < _vSnapshotSoftTypes.Count - 1);
         }
 
         public override bool CanMoveLast()
         {
-            return (v_snapshotSoftTypes.Position > -1) && (v_snapshotSoftTypes.Position < (v_snapshotSoftTypes.Count - 1));
+            return (_vSnapshotSoftTypes.Position > -1) && (_vSnapshotSoftTypes.Position < _vSnapshotSoftTypes.Count - 1);
         }
 
         public override bool CanInsertRecord()
@@ -234,17 +240,15 @@ namespace LicenseSoftware.Viewport
 
         public override void InsertRecord()
         {
-            DataRowView row = (DataRowView)v_snapshotSoftTypes.AddNew();
+            var row = (DataRowView)_vSnapshotSoftTypes.AddNew();
             row.EndEdit();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (e == null)
-                return;
             if (SnapshotHasChanges())
             {
-                DialogResult result = MessageBox.Show("Сохранить изменения в базу данных?", "Внимание",
+                var result = MessageBox.Show(@"Сохранить изменения в базу данных?", @"Внимание",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (result == DialogResult.Yes)
                     SaveRecord();
@@ -257,20 +261,20 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softTypes.Select().RowChanged -= SoftTypesViewport_RowChanged;
-            softTypes.Select().RowDeleting -= SoftTypesViewport_RowDeleting;
-            softTypes.Select().RowDeleted -= SoftTypesViewport_RowDeleted;
+            _softTypes.Select().RowChanged -= SoftTypesViewport_RowChanged;
+            _softTypes.Select().RowDeleting -= SoftTypesViewport_RowDeleting;
+            _softTypes.Select().RowDeleted -= SoftTypesViewport_RowDeleted;
             base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()
         {
-            return (v_snapshotSoftTypes.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
+            return (_vSnapshotSoftTypes.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
         {
-            ((DataRowView)v_snapshotSoftTypes[v_snapshotSoftTypes.Position]).Row.Delete();
+            ((DataRowView)_vSnapshotSoftTypes[_vSnapshotSoftTypes.Position]).Row.Delete();
         }
 
         public override bool CanCancelRecord()
@@ -280,9 +284,9 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            snapshotSoftTypes.Clear();
-            for (int i = 0; i < v_softTypes.Count; i++)
-                snapshotSoftTypes.Rows.Add(DataRowViewToArray(((DataRowView)v_softTypes[i])));
+            _snapshotSoftTypes.Clear();
+            for (var i = 0; i < _vSoftTypes.Count; i++)
+                _snapshotSoftTypes.Rows.Add(DataRowViewToArray((DataRowView)_vSoftTypes[i]));
             MenuCallback.EditingStateUpdate();
         }
 
@@ -294,26 +298,26 @@ namespace LicenseSoftware.Viewport
         public override void SaveRecord()
         {
             dataGridView.EndEdit();
-            sync_views = false;
-            List<SoftType> list = SoftTypesFromViewport();
+            _syncViews = false;
+            var list = SoftTypesFromViewport();
             if (!ValidateViewportData(list))
             {
-                sync_views = true;
+                _syncViews = true;
                 return;
             }
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                DataRow row = softTypes.Select().Rows.Find(((SoftType)list[i]).IdSoftType);
+                var row = _softTypes.Select().Rows.Find(list[i].IdSoftType);
                 if (row == null)
                 {
-                    int idSoftType = SoftTypesDataModel.Insert(list[i]);
+                    var idSoftType = SoftTypesDataModel.Insert(list[i]);
                     if (idSoftType == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    ((DataRowView)v_snapshotSoftTypes[i])["ID SoftType"] = idSoftType;
-                    softTypes.Select().Rows.Add(DataRowViewToArray((DataRowView)v_snapshotSoftTypes[i]));
+                    ((DataRowView)_vSnapshotSoftTypes[i])["ID SoftType"] = idSoftType;
+                    _softTypes.Select().Rows.Add(DataRowViewToArray((DataRowView)_vSnapshotSoftTypes[i]));
                 }
                 else
                 {
@@ -321,32 +325,30 @@ namespace LicenseSoftware.Viewport
                         continue;
                     if (SoftTypesDataModel.Update(list[i]) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     row["SoftType"] = list[i].SoftTypeName == null ? DBNull.Value : (object)list[i].SoftTypeName;
                 }
             }
             list = SoftTypesFromView();
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                int row_index = -1;
-                for (int j = 0; j < dataGridView.Rows.Count; j++)
+                var rowIndex = -1;
+                for (var j = 0; j < dataGridView.Rows.Count; j++)
                     if ((dataGridView.Rows[j].Cells["idSoftType"].Value != null) &&
-                        !String.IsNullOrEmpty(dataGridView.Rows[j].Cells["idSoftType"].Value.ToString()) &&
+                        !string.IsNullOrEmpty(dataGridView.Rows[j].Cells["idSoftType"].Value.ToString()) &&
                         ((int)dataGridView.Rows[j].Cells["idSoftType"].Value == list[i].IdSoftType))
-                        row_index = j;
-                if (row_index == -1)
+                        rowIndex = j;
+                if (rowIndex != -1) continue;
+                if (SoftTypesDataModel.Delete(list[i].IdSoftType.Value) == -1)
                 {
-                    if (SoftTypesDataModel.Delete(list[i].IdSoftType.Value) == -1)
-                    {
-                        sync_views = true;
-                        return;
-                    }
-                    softTypes.Select().Rows.Find(((SoftType)list[i]).IdSoftType).Delete();
+                    _syncViews = true;
+                    return;
                 }
+                _softTypes.Select().Rows.Find(list[i].IdSoftType).Delete();
             }
-            sync_views = true;
+            _syncViews = true;
             MenuCallback.EditingStateUpdate();
         }
 
@@ -357,79 +359,70 @@ namespace LicenseSoftware.Viewport
 
         public override Viewport Duplicate()
         {
-            SoftTypesViewport viewport = new SoftTypesViewport(this, MenuCallback);
+            var viewport = new SoftTypesViewport(this, MenuCallback);
             if (viewport.CanLoadData())
                 viewport.LoadData();
             return viewport;
         }
 
-        void SoftTypesViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
+        private void SoftTypesViewport_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            if (Selected)
-            {
-                MenuCallback.EditingStateUpdate();
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.EditingStateUpdate();
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
         }
 
-        void SoftTypesViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
+        private void SoftTypesViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
             if (e.Action == DataRowAction.Delete)
             {
-                int row_index = v_snapshotSoftTypes.Find("ID SoftType", e.Row["ID SoftType"]);
-                if (row_index != -1)
-                    ((DataRowView)v_snapshotSoftTypes[row_index]).Delete();
+                var rowIndex = _vSnapshotSoftTypes.Find("ID SoftType", e.Row["ID SoftType"]);
+                if (rowIndex != -1)
+                    ((DataRowView)_vSnapshotSoftTypes[rowIndex]).Delete();
             }
         }
 
-        void SoftTypesViewport_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void SoftTypesViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            int row_index = v_snapshotSoftTypes.Find("ID SoftType", e.Row["ID SoftType"]);
-            if (row_index == -1 && v_softTypes.Find("ID SoftType", e.Row["ID SoftType"]) != -1)
+            var rowIndex = _vSnapshotSoftTypes.Find("ID SoftType", e.Row["ID SoftType"]);
+            if (rowIndex == -1 && _vSoftTypes.Find("ID SoftType", e.Row["ID SoftType"]) != -1)
             {
-                snapshotSoftTypes.Rows.Add(new object[] { 
-                        e.Row["ID SoftType"], 
-                        e.Row["SoftType"]
-                    });
+                _snapshotSoftTypes.Rows.Add(e.Row["ID SoftType"], e.Row["SoftType"]);
             }
             else
-                if (row_index != -1)
+                if (rowIndex != -1)
                 {
-                    DataRowView row = ((DataRowView)v_snapshotSoftTypes[row_index]);
+                    var row = (DataRowView)_vSnapshotSoftTypes[rowIndex];
                     row["SoftType"] = e.Row["SoftType"];
                 }
-            if (Selected)
-            {
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.StatusBarStateUpdate();
-                MenuCallback.EditingStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.StatusBarStateUpdate();
+            MenuCallback.EditingStateUpdate();
         }
 
-        void v_snapshotSoftTypes_CurrentItemChanged(object sender, EventArgs e)
+        private void v_snapshotSoftTypes_CurrentItemChanged(object sender, EventArgs e)
         {
-            if (Selected)
-            {
-                MenuCallback.NavigationStateUpdate();
-                MenuCallback.EditingStateUpdate();
-            }
+            if (!Selected) return;
+            MenuCallback.NavigationStateUpdate();
+            MenuCallback.EditingStateUpdate();
         }
 
-        void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewCell cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             switch (cell.OwningColumn.Name)
             {
                 case "softType":
                     if (cell.Value.ToString().Trim().Length > 400)
                         cell.ErrorText = "Длина наименования вида программного обеспечения не может превышать 400 символов";
                     else
-                        if (String.IsNullOrEmpty(cell.Value.ToString().Trim()))
+                        if (string.IsNullOrEmpty(cell.Value.ToString().Trim()))
                             cell.ErrorText = "Наименование вида программного обеспечения не может быть пустым";
                         else
                             cell.ErrorText = "";
@@ -437,77 +430,77 @@ namespace LicenseSoftware.Viewport
             }
         }
 
-        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             MenuCallback.EditingStateUpdate();
         }
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftTypesViewport));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idSoftType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.softType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftTypesViewport));
+            dataGridView = new DataGridView();
+            idSoftType = new DataGridViewTextBoxColumn();
+            softType = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idSoftType,
-            this.softType});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(654, 345);
-            this.dataGridView.TabIndex = 8;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(new DataGridViewColumn[] {
+            idSoftType,
+            softType});
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            dataGridView.Location = new System.Drawing.Point(3, 3);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new System.Drawing.Size(654, 345);
+            dataGridView.TabIndex = 8;
             // 
             // idSoftType
             // 
-            this.idSoftType.Frozen = true;
-            this.idSoftType.HeaderText = "Идентификатор";
-            this.idSoftType.Name = "idSoftType";
-            this.idSoftType.ReadOnly = true;
-            this.idSoftType.Visible = false;
+            idSoftType.Frozen = true;
+            idSoftType.HeaderText = "Идентификатор";
+            idSoftType.Name = "idSoftType";
+            idSoftType.ReadOnly = true;
+            idSoftType.Visible = false;
             // 
             // softType
             // 
-            this.softType.HeaderText = "Наименование";
-            this.softType.MinimumWidth = 100;
-            this.softType.Name = "softType";
+            softType.HeaderText = "Наименование";
+            softType.MinimumWidth = 100;
+            softType.Name = "softType";
             // 
             // SoftTypesViewport
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(660, 351);
-            this.Controls.Add(this.dataGridView);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SoftTypesViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Виды ПО";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(660, 351);
+            Controls.Add(dataGridView);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "SoftTypesViewport";
+            Padding = new Padding(3);
+            Text = "Виды ПО";
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ResumeLayout(false);
 
         }
     }

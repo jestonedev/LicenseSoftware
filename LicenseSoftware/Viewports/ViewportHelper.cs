@@ -59,9 +59,7 @@ namespace LicenseSoftware.Viewport
 
         internal static T? ValueOrNull<T>(ComboBox control) where T: struct
         {
-            if (control.SelectedValue == null)
-                return null;
-            return (T?)control.SelectedValue;
+            return (T?) control.SelectedValue;
         }
 
         internal static string ValueOrNull(ComboBox control)
@@ -124,9 +122,9 @@ namespace LicenseSoftware.Viewport
             return row.Cells[property].Value.ToString().Trim();
         }
 
-        internal static object ValueOrDBNull(object value)
+        internal static object ValueOrDbNull(object value)
         {
-            return value == null ? DBNull.Value : value;
+            return value ?? DBNull.Value;
         }
     }
 }

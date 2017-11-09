@@ -1,4 +1,4 @@
-﻿namespace LicenseSoftware.SearchForms
+﻿namespace LicenseSoftware.Viewport.SearchForms
 {
     partial class SearchSoftwareForm
     {

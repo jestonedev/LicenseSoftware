@@ -1,43 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using LicenseSoftware.DataModels;
-using LicenseSoftware.CalcDataModels;
-using System.Globalization;
-using DataModels.DataModels;
-using LicenseSoftware.Viewport;
+using LicenseSoftware.DataModels.CalcDataModels;
+using LicenseSoftware.DataModels.DataModels;
 
-namespace LicenseSoftware.SearchForms
+namespace LicenseSoftware.Viewport.SearchForms
 {
     internal partial class SearchInstallationsForm : SearchForm
     {
-        private  SoftTypesDataModel _softTypes;
-        private  SoftMakersDataModel _softMakers;
-        private  SoftSuppliersDataModel _softSuppliers;
-        private  SoftLicTypesDataModel _softLicTypes;
-        private  DepartmentsDataModel _departments;
         private  DevicesDataModel _devices;
-        private  SoftLicDocTypesDataModel _softLicDocTypes;
         private  CalcDataModelSoftwareConcat _software;
         private  CalcDataModelLicKeyConcat _softLicKeys;
-        private  SoftInstallatorsDataModel _softInstallators;
 
 
         private  BindingSource _vSoftware;
-        private  BindingSource _vSoftTypes;
-        private  BindingSource _vSoftMakers;
-        private  BindingSource _vSoftSuppliers;
-        private  BindingSource _vSoftLicTypes;
-        private  BindingSource _vDepartmentsLic;
-        private  BindingSource _vDepartmentsInstall;
+        private readonly BindingSource _vDepartmentsInstall;
         private  BindingSource _vDevices;
         private  BindingSource _vDevicesInvNum;
         private  BindingSource _vDevicesSerialNum;
-        private  BindingSource _vSoftLicDocTypes;
         private  BindingSource _vSoftLicKeys;
-        private  BindingSource _vSoftInstallators;
 
         internal override string GetFilter()
         {
@@ -47,7 +32,7 @@ namespace LicenseSoftware.SearchForms
             {
                 var ids = DataModelHelper.GetLicenseIDsByCondition(
                     row => row.Field<int>("ID Version") == (int)comboBoxSoftwareName.SelectedValue, Entities.EntityType.SoftVersion);
-                includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);    
+                includedLicensesIds = DataModelHelper.Intersect(null, ids);    
             }
             if (checkBoxSoftwareMakerEnable.Checked && (comboBoxSoftwareMaker.SelectedValue != null))
             {
@@ -97,19 +82,16 @@ namespace LicenseSoftware.SearchForms
             if (checkBoxExpireLicenseDateEnable.Checked)
             {
                 var ids = DataModelHelper.GetLicenseIDsByCondition(
-                    row => {
-                        if (row.Field<DateTime?>("ExpireLicenseDate") != null)
+                    row =>
+                    {
+                        if (row.Field<DateTime?>("ExpireLicenseDate") == null) return false;
+                        switch (comboBoxOpExpireLicenseDate.SelectedItem.ToString())
                         {
-                            switch (comboBoxOpExpireLicenseDate.SelectedItem.ToString())
-                            {
-                                case "=": return row.Field<DateTime>("ExpireLicenseDate") == dateTimePickerExpireLicenseDate.Value;
-                                case "≥": return row.Field<DateTime>("ExpireLicenseDate") >= dateTimePickerExpireLicenseDate.Value;
-                                case "≤": return row.Field<DateTime>("ExpireLicenseDate") <= dateTimePickerExpireLicenseDate.Value;
-                            }
-                            return false;
+                            case "=": return row.Field<DateTime>("ExpireLicenseDate") == dateTimePickerExpireLicenseDate.Value;
+                            case "≥": return row.Field<DateTime>("ExpireLicenseDate") >= dateTimePickerExpireLicenseDate.Value;
+                            case "≤": return row.Field<DateTime>("ExpireLicenseDate") <= dateTimePickerExpireLicenseDate.Value;
                         }
-                        else
-                            return false;
+                        return false;
                     }, Entities.EntityType.License);
                 includedLicensesIds = DataModelHelper.Intersect(includedLicensesIds, ids);
             }
@@ -118,15 +100,12 @@ namespace LicenseSoftware.SearchForms
                 var ids = DataModelHelper.GetLicenseIDsByCondition(
                     row =>
                     {
-                        if (row.Field<DateTime?>("BuyLicenseDate") != null)
+                        if (row.Field<DateTime?>("BuyLicenseDate") == null) return false;
+                        switch (comboBoxOpBuyLicenseDate.SelectedItem.ToString())
                         {
-                            switch (comboBoxOpBuyLicenseDate.SelectedItem.ToString())
-                            {
-                                case "=": return row.Field<DateTime>("BuyLicenseDate") == dateTimePickerBuyLicenseDate.Value;
-                                case "≥": return row.Field<DateTime>("BuyLicenseDate") >= dateTimePickerBuyLicenseDate.Value;
-                                case "≤": return row.Field<DateTime>("BuyLicenseDate") <= dateTimePickerBuyLicenseDate.Value;
-                            }
-                            return false;
+                            case "=": return row.Field<DateTime>("BuyLicenseDate") == dateTimePickerBuyLicenseDate.Value;
+                            case "≥": return row.Field<DateTime>("BuyLicenseDate") >= dateTimePickerBuyLicenseDate.Value;
+                            case "≤": return row.Field<DateTime>("BuyLicenseDate") <= dateTimePickerBuyLicenseDate.Value;
                         }
                         return false;
                     }, Entities.EntityType.License);
@@ -159,31 +138,31 @@ namespace LicenseSoftware.SearchForms
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += string.Format(CultureInfo.InvariantCulture, "[ID Installator] = '{0}'", comboBoxInstallator.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Installator] = '{0}'", comboBoxInstallator.SelectedValue);
             }
             if (checkBoxLicKeyEnable.Checked && (comboBoxLicKey.SelectedValue != null))
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += string.Format(CultureInfo.InvariantCulture, "[ID LicenseKey] = '{0}'", comboBoxLicKey.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID LicenseKey] = '{0}'", comboBoxLicKey.SelectedValue);
             }
             if (checkBoxComputerEnable.Checked && (comboBoxComputer.SelectedValue != null))
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxComputer.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxComputer.SelectedValue);
             }
             if (checkBoxInvNumEnable.Checked && (comboBoxInvNum.SelectedValue != null))
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxInvNum.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxInvNum.SelectedValue);
             }
             if (checkBoxSerialNumEnable.Checked && (comboBoxSerialNum.SelectedValue != null))
             {
                 if (!string.IsNullOrEmpty(filter.Trim()))
                     filter += " AND ";
-                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxSerialNum.SelectedValue.ToString());
+                filter += string.Format(CultureInfo.InvariantCulture, "[ID Computer] = '{0}'", comboBoxSerialNum.SelectedValue);
             }
             if (checkBoxDepartmentInstallEnable.Checked && (comboBoxDepartmentInstallID.SelectedValue != null))
             {
@@ -210,89 +189,89 @@ namespace LicenseSoftware.SearchForms
         public SearchInstallationsForm()
         {
             InitializeComponent();
-            _softMakers = SoftMakersDataModel.GetInstance();
-            _softTypes = SoftTypesDataModel.GetInstance();
-            _softSuppliers = SoftSuppliersDataModel.GetInstance();
-            _softLicTypes = SoftLicTypesDataModel.GetInstance();
-            _softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
-            _departments = DepartmentsDataModel.GetInstance();
-            _softInstallators = SoftInstallatorsDataModel.GetInstance();
+            var softMakers = SoftMakersDataModel.GetInstance();
+            var softTypes = SoftTypesDataModel.GetInstance();
+            var softSuppliers = SoftSuppliersDataModel.GetInstance();
+            var softLicTypes = SoftLicTypesDataModel.GetInstance();
+            var softLicDocTypes = SoftLicDocTypesDataModel.GetInstance();
+            var departments = DepartmentsDataModel.GetInstance();
+            var softInstallators = SoftInstallatorsDataModel.GetInstance();
 
             // Ожидаем дозагрузки, если это необходимо
-            _softMakers.Select();
-            _softTypes.Select();
-            _softSuppliers.Select();
-            _softLicTypes.Select();
-            _softLicDocTypes.Select();
-            _departments.Select();
-            _softInstallators.Select();
+            softMakers.Select();
+            softTypes.Select();
+            softSuppliers.Select();
+            softLicTypes.Select();
+            softLicDocTypes.Select();
+            departments.Select();
+            softInstallators.Select();
 
-            _vSoftMakers = new BindingSource
+            var vSoftMakers = new BindingSource
             {
                 DataMember = "SoftMakers",
                 DataSource = DataSetManager.DataSet
             };
 
-            _vSoftTypes = new BindingSource
+            var vSoftTypes = new BindingSource
             {
                 DataMember = "SoftTypes",
                 DataSource = DataSetManager.DataSet
             };
 
-            _vSoftSuppliers = new BindingSource
+            var vSoftSuppliers = new BindingSource
             {
                 DataMember = "SoftSuppliers",
                 DataSource = DataSetManager.DataSet
             };
 
-            _vSoftLicTypes = new BindingSource
+            var vSoftLicTypes = new BindingSource
             {
                 DataMember = "SoftLicTypes",
                 DataSource = DataSetManager.DataSet
             };
 
 
-            _vSoftLicDocTypes = new BindingSource
+            var vSoftLicDocTypes = new BindingSource
             {
                 DataMember = "SoftLicDocTypes",
                 DataSource = DataSetManager.DataSet
             };
 
-            _vDepartmentsInstall = new BindingSource {DataSource = _departments.SelectVisibleDepartments()};
+            _vDepartmentsInstall = new BindingSource {DataSource = departments.SelectVisibleDepartments()};
 
-            _vDepartmentsLic = new BindingSource {DataSource = _departments.SelectVisibleDepartments()};
+            var vDepartmentsLic = new BindingSource {DataSource = departments.SelectVisibleDepartments()};
 
-            _vSoftInstallators = new BindingSource
+            var vSoftInstallators = new BindingSource
             {
                 DataMember = "SoftInstallators",
                 DataSource = DataSetManager.DataSet
             };
 
-            comboBoxSoftwareMaker.DataSource = _vSoftMakers;
+            comboBoxSoftwareMaker.DataSource = vSoftMakers;
             comboBoxSoftwareMaker.ValueMember = "ID SoftMaker";
             comboBoxSoftwareMaker.DisplayMember = "SoftMaker";
 
-            comboBoxSupplierID.DataSource = _vSoftSuppliers;
+            comboBoxSupplierID.DataSource = vSoftSuppliers;
             comboBoxSupplierID.ValueMember = "ID Supplier";
             comboBoxSupplierID.DisplayMember = "Supplier";
 
-            comboBoxSoftwareType.DataSource = _vSoftTypes;
+            comboBoxSoftwareType.DataSource = vSoftTypes;
             comboBoxSoftwareType.ValueMember = "ID SoftType";
             comboBoxSoftwareType.DisplayMember = "SoftType";
 
-            comboBoxLicType.DataSource = _vSoftLicTypes;
+            comboBoxLicType.DataSource = vSoftLicTypes;
             comboBoxLicType.ValueMember = "ID LicType";
             comboBoxLicType.DisplayMember = "LicType";
 
-            comboBoxInstallator.DataSource = _vSoftInstallators;
+            comboBoxInstallator.DataSource = vSoftInstallators;
             comboBoxInstallator.ValueMember = "ID Installator";
             comboBoxInstallator.DisplayMember = "FullName";
 
-            comboBoxLicDocType.DataSource = _vSoftLicDocTypes;
+            comboBoxLicDocType.DataSource = vSoftLicDocTypes;
             comboBoxLicDocType.ValueMember = "ID DocType";
             comboBoxLicDocType.DisplayMember = "DocType";
 
-            comboBoxDepartmentLicID.DataSource = _vDepartmentsLic;
+            comboBoxDepartmentLicID.DataSource = vDepartmentsLic;
             comboBoxDepartmentLicID.ValueMember = "ID Department";
             comboBoxDepartmentLicID.DisplayMember = "Department";
 
@@ -304,7 +283,7 @@ namespace LicenseSoftware.SearchForms
             comboBoxOpExpireLicenseDate.SelectedIndex = 0;
             comboBoxOpInstallDate.SelectedIndex = 0;
 
-            foreach (Control control in this.Controls)
+            foreach (Control control in Controls)
                 control.KeyDown += (sender, e) =>
                 {
                     var comboBox = sender as ComboBox;
@@ -333,103 +312,103 @@ namespace LicenseSoftware.SearchForms
         {
             if (checkBoxSoftwareNameEnable.Checked && string.IsNullOrEmpty(comboBoxSoftwareName.Text.Trim()))
             {
-                MessageBox.Show("Выберите наименование ПО или уберите галочку поиска по наименованию ПО",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Выберите наименование ПО или уберите галочку поиска по наименованию ПО",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSoftwareName.Focus();
                 return;
             }
             if (checkBoxSoftwareTypeEnable.Checked && (comboBoxSoftwareType.SelectedValue == null))
             {
-                MessageBox.Show("Выберите вид ПО или уберите галочку поиска по виду ПО", "Ошибка",
+                MessageBox.Show(@"Выберите вид ПО или уберите галочку поиска по виду ПО", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSoftwareType.Focus();
                 return;
             }
             if (checkBoxSoftwareMakerEnable.Checked && (comboBoxSoftwareMaker.SelectedValue == null))
             {
-                MessageBox.Show("Выберите разработчика ПО или уберите галочку поиска по разработчику ПО", "Ошибка", 
+                MessageBox.Show(@"Выберите разработчика ПО или уберите галочку поиска по разработчику ПО", @"Ошибка", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSoftwareMaker.Focus();
                 return;
             }
             if (checkBoxSupplierEnable.Checked && (comboBoxSupplierID.SelectedValue == null))
             {
-                MessageBox.Show("Выберите поставщика ПО или уберите галочку поиска по поставщику ПО", "Ошибка",
+                MessageBox.Show(@"Выберите поставщика ПО или уберите галочку поиска по поставщику ПО", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSupplierID.Focus();
                 return;
             }
             if (checkBoxLicTypeEnable.Checked && (comboBoxLicType.SelectedValue == null))
             {
-                MessageBox.Show("Выберите вид лицензии или уберите галочку поиска по виду лицензии", "Ошибка",
+                MessageBox.Show(@"Выберите вид лицензии или уберите галочку поиска по виду лицензии", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicType.Focus();
                 return;
             }
             if (checkBoxDepartmentLicEnable.Checked && (comboBoxDepartmentLicID.SelectedValue == null))
             {
-                MessageBox.Show("Выберите департамент-заказчик лицензии или уберите галочку поиска по департаменту-заказчику лицензии", "Ошибка",
+                MessageBox.Show(@"Выберите департамент-заказчик лицензии или уберите галочку поиска по департаменту-заказчику лицензии", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxDepartmentLicID.Focus();
                 return;
             }
             if (checkBoxDocNumberEnable.Checked && string.IsNullOrEmpty(textBoxDocNumber.Text.Trim()))
             {
-                MessageBox.Show("Введите номер документа-основания или уберите галочку поиска по номеру документа-основания", "Ошибка",
+                MessageBox.Show(@"Введите номер документа-основания или уберите галочку поиска по номеру документа-основания", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 textBoxDocNumber.Focus();
                 return;
             }
             if (checkBoxLicDocTypeEnable.Checked && (comboBoxLicDocType.SelectedValue == null))
             {
-                MessageBox.Show("Выберите вид документа-основания или уберите галочку поиска по виду документа-основания", "Ошибка",
+                MessageBox.Show(@"Выберите вид документа-основания или уберите галочку поиска по виду документа-основания", @"Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicDocType.Focus();
                 return;
             }
             if (checkBoxDepartmentInstallEnable.Checked && (comboBoxDepartmentInstallID.SelectedValue == null))
             {
-                MessageBox.Show("Выберите департамент, в котором произведена установка ПО, или уберите галочку поиска по департаменту, в котором произведена установка ПО", 
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Выберите департамент, в котором произведена установка ПО, или уберите галочку поиска по департаменту, в котором произведена установка ПО", 
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxDepartmentInstallID.Focus();
                 return;
             }
             if (checkBoxComputerEnable.Checked && (comboBoxComputer.SelectedValue == null))
             {
-                MessageBox.Show("Выберите компьютер, на который произведена установка ПО, или уберите галочку поиска по компьютеру, на который произведена установка ПО",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Выберите компьютер, на который произведена установка ПО, или уберите галочку поиска по компьютеру, на который произведена установка ПО",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxComputer.Focus();
                 return;
             }
             if (checkBoxInvNumEnable.Checked && (comboBoxInvNum.SelectedValue == null))
             {
-                MessageBox.Show("Укажите инвентарный номер компьютера или уберите галочку поиска по инвентарному номеру",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Укажите инвентарный номер компьютера или уберите галочку поиска по инвентарному номеру",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxInvNum.Focus();
                 return;
             }
             if (checkBoxSerialNumEnable.Checked && (comboBoxSerialNum.SelectedValue == null))
             {
-                MessageBox.Show("Укажите серийный номер компьютера или уберите галочку поиска по серийному номеру",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Укажите серийный номер компьютера или уберите галочку поиска по серийному номеру",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxSerialNum.Focus();
                 return;
             }
             if (checkBoxLicKeyEnable.Checked && (comboBoxLicKey.SelectedValue == null))
             {
-                MessageBox.Show("Выберите лицензионный ключ или уберите галочку поиска по лицензионному ключу",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Выберите лицензионный ключ или уберите галочку поиска по лицензионному ключу",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxLicKey.Focus();
                 return;
             }
             if (checkBoxInstallatorEnable.Checked && (comboBoxInstallator.SelectedValue == null))
             {
-                MessageBox.Show("Выберите установщика ПО или уберите галочку поиска по установщику ПО",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Выберите установщика ПО или уберите галочку поиска по установщику ПО",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 comboBoxInstallator.Focus();
                 return;
             }
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         private static string ConvertDisplayEqExprToSql(string expr)

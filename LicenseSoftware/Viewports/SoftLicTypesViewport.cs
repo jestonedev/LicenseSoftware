@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using DataModels.DataModels;
+using LicenseSoftware.DataModels.DataModels;
 
 namespace LicenseSoftware.Viewport
 {
@@ -14,26 +14,26 @@ namespace LicenseSoftware.Viewport
     {
         #region Components
         private DataGridView dataGridView;
+        private DataGridViewTextBoxColumn idSoftLicType;
+        private DataGridViewTextBoxColumn softLicType;
+        private DataGridViewCheckBoxColumn softLicKeyDuplicateAllowed;
         #endregion Components
 
         #region Models
 
-        private SoftLicTypesDataModel softLicTypes;
-        private DataTable snapshotSoftLicTypes = new DataTable("snapshotSoftLicTypes");
+        private SoftLicTypesDataModel _softLicTypes;
+        private readonly DataTable _snapshotSoftLicTypes = new DataTable("snapshotSoftLicTypes");
         #endregion Models
 
         #region Views
 
-        private BindingSource v_softLicTypes;
-        private BindingSource v_snapshotSoftLicTypes;
+        private BindingSource _vSoftLicTypes;
+        private BindingSource _vSnapshotSoftLicTypes;
         #endregion Models
-        private DataGridViewTextBoxColumn idSoftLicType;
-        private DataGridViewTextBoxColumn softLicType;
-        private DataGridViewCheckBoxColumn softLicKeyDuplicateAllowed;
 
 
         //Флаг разрешения синхронизации snapshot и original моделей
-        private bool sync_views = true;
+        private bool _syncViews = true;
 
         private SoftLicTypesViewport()
             : this(null)
@@ -44,30 +44,29 @@ namespace LicenseSoftware.Viewport
             : base(menuCallback)
         {
             InitializeComponent();
-            snapshotSoftLicTypes.Locale = CultureInfo.InvariantCulture;
+            _snapshotSoftLicTypes.Locale = CultureInfo.InvariantCulture;
         }
 
         public SoftLicTypesViewport(SoftLicTypesViewport softLicTypesViewport, IMenuCallback menuCallback)
             : this(menuCallback)
         {
-            this.DynamicFilter = softLicTypesViewport.DynamicFilter;
-            this.StaticFilter = softLicTypesViewport.StaticFilter;
-            this.ParentRow = softLicTypesViewport.ParentRow;
-            this.ParentType = softLicTypesViewport.ParentType;
+            DynamicFilter = softLicTypesViewport.DynamicFilter;
+            StaticFilter = softLicTypesViewport.StaticFilter;
+            ParentRow = softLicTypesViewport.ParentRow;
+            ParentType = softLicTypesViewport.ParentType;
         }
 
         private bool SnapshotHasChanges()
         {
-            var list_from_view = SoftLicTypesFromView();
-            var list_from_viewport = SoftLicTypesFromViewport();
-            if (list_from_view.Count != list_from_viewport.Count)
+            var listFromView = SoftLicTypesFromView();
+            var listFromViewport = SoftLicTypesFromViewport();
+            if (listFromView.Count != listFromViewport.Count)
                 return true;
-            var founded = false;
-            for (var i = 0; i < list_from_view.Count; i++)
+            for (var i = 0; i < listFromView.Count; i++)
             {
-                founded = false;
-                for (var j = 0; j < list_from_viewport.Count; j++)
-                    if (list_from_view[i] == list_from_viewport[j])
+                var founded = false;
+                for (var j = 0; j < listFromViewport.Count; j++)
+                    if (listFromView[i] == listFromViewport[j])
                         founded = true;
                 if (!founded)
                     return true;
@@ -134,10 +133,10 @@ namespace LicenseSoftware.Viewport
         private List<SoftLicType> SoftLicTypesFromView()
         {
             var list = new List<SoftLicType>();
-            for (var i = 0; i < v_softLicTypes.Count; i++)
+            for (var i = 0; i < _vSoftLicTypes.Count; i++)
             {
                 var st = new SoftLicType();
-                var row = (DataRowView)v_softLicTypes[i];
+                var row = (DataRowView)_vSoftLicTypes[i];
                 st.IdLicType = ViewportHelper.ValueOrNull<int>(row, "ID LicType");
                 st.LicType = ViewportHelper.ValueOrNull(row, "LicType");
                 st.LicKeyDuplicateAllowed = ViewportHelper.ValueOrNull<bool>(row, "LicKeyDuplicateAllowed") == true;
@@ -148,7 +147,7 @@ namespace LicenseSoftware.Viewport
 
         public override int GetRecordCount()
         {
-            return v_snapshotSoftLicTypes.Count;
+            return _vSnapshotSoftLicTypes.Count;
         }
 
         public override bool CanLoadData()
@@ -159,27 +158,29 @@ namespace LicenseSoftware.Viewport
         public override void LoadData()
         {
             dataGridView.AutoGenerateColumns = false;
-            this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            softLicTypes = SoftLicTypesDataModel.GetInstance();
+            DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
+            _softLicTypes = SoftLicTypesDataModel.GetInstance();
 
             //Ожидаем дозагрузки данных, если это необходимо
-            softLicTypes.Select();
+            _softLicTypes.Select();
 
-            v_softLicTypes = new BindingSource();
-            v_softLicTypes.DataMember = "SoftLicTypes";
-            v_softLicTypes.DataSource = DataSetManager.DataSet;
+            _vSoftLicTypes = new BindingSource
+            {
+                DataMember = "SoftLicTypes",
+                DataSource = DataSetManager.DataSet
+            };
 
             //Инициируем колонки snapshot-модели
-            for (var i = 0; i < softLicTypes.Select().Columns.Count; i++)
-                snapshotSoftLicTypes.Columns.Add(new DataColumn(
-                    softLicTypes.Select().Columns[i].ColumnName, softLicTypes.Select().Columns[i].DataType));
+            for (var i = 0; i < _softLicTypes.Select().Columns.Count; i++)
+                _snapshotSoftLicTypes.Columns.Add(new DataColumn(
+                    _softLicTypes.Select().Columns[i].ColumnName, _softLicTypes.Select().Columns[i].DataType));
             //Загружаем данные snapshot-модели из original-view
-            for (var i = 0; i < v_softLicTypes.Count; i++)
-                snapshotSoftLicTypes.Rows.Add(DataRowViewToArray((DataRowView)v_softLicTypes[i]));
-            v_snapshotSoftLicTypes = new BindingSource {DataSource = snapshotSoftLicTypes};
-            v_snapshotSoftLicTypes.CurrentItemChanged += v_snapshotSoftLicTypes_CurrentItemChanged;
+            for (var i = 0; i < _vSoftLicTypes.Count; i++)
+                _snapshotSoftLicTypes.Rows.Add(DataRowViewToArray((DataRowView)_vSoftLicTypes[i]));
+            _vSnapshotSoftLicTypes = new BindingSource {DataSource = _snapshotSoftLicTypes};
+            _vSnapshotSoftLicTypes.CurrentItemChanged += v_snapshotSoftLicTypes_CurrentItemChanged;
 
-            dataGridView.DataSource = v_snapshotSoftLicTypes;
+            dataGridView.DataSource = _vSnapshotSoftLicTypes;
             idSoftLicType.DataPropertyName = "ID LicType";
             softLicType.DataPropertyName = "LicType";
             softLicKeyDuplicateAllowed.DataPropertyName = "LicKeyDuplicateAllowed";
@@ -190,49 +191,49 @@ namespace LicenseSoftware.Viewport
             //События изменения данных для проверки соответствия реальным данным в модели
             dataGridView.CellValueChanged += dataGridView_CellValueChanged;
             //Синхронизация данных исходные->текущие
-            softLicTypes.Select().RowChanged += SoftLicTypesViewport_RowChanged;
-            softLicTypes.Select().RowDeleting += SoftLicTypesViewport_RowDeleting;
-            softLicTypes.Select().RowDeleted += SoftLicTypesViewport_RowDeleted;
+            _softLicTypes.Select().RowChanged += SoftLicTypesViewport_RowChanged;
+            _softLicTypes.Select().RowDeleting += SoftLicTypesViewport_RowDeleting;
+            _softLicTypes.Select().RowDeleted += SoftLicTypesViewport_RowDeleted;
         }
 
         public override void MoveFirst()
         {
-            v_snapshotSoftLicTypes.MoveFirst();
+            _vSnapshotSoftLicTypes.MoveFirst();
         }
 
         public override void MoveLast()
         {
-            v_snapshotSoftLicTypes.MoveLast();
+            _vSnapshotSoftLicTypes.MoveLast();
         }
 
         public override void MoveNext()
         {
-            v_snapshotSoftLicTypes.MoveNext();
+            _vSnapshotSoftLicTypes.MoveNext();
         }
 
         public override void MovePrev()
         {
-            v_snapshotSoftLicTypes.MovePrevious();
+            _vSnapshotSoftLicTypes.MovePrevious();
         }
 
         public override bool CanMoveFirst()
         {
-            return v_snapshotSoftLicTypes.Position > 0;
+            return _vSnapshotSoftLicTypes.Position > 0;
         }
 
         public override bool CanMovePrev()
         {
-            return v_snapshotSoftLicTypes.Position > 0;
+            return _vSnapshotSoftLicTypes.Position > 0;
         }
 
         public override bool CanMoveNext()
         {
-            return (v_snapshotSoftLicTypes.Position > -1) && (v_snapshotSoftLicTypes.Position < (v_snapshotSoftLicTypes.Count - 1));
+            return (_vSnapshotSoftLicTypes.Position > -1) && (_vSnapshotSoftLicTypes.Position < (_vSnapshotSoftLicTypes.Count - 1));
         }
 
         public override bool CanMoveLast()
         {
-            return (v_snapshotSoftLicTypes.Position > -1) && (v_snapshotSoftLicTypes.Position < (v_snapshotSoftLicTypes.Count - 1));
+            return (_vSnapshotSoftLicTypes.Position > -1) && (_vSnapshotSoftLicTypes.Position < (_vSnapshotSoftLicTypes.Count - 1));
         }
 
         public override bool CanInsertRecord()
@@ -242,8 +243,8 @@ namespace LicenseSoftware.Viewport
 
         public override void InsertRecord()
         {
-            var row = (DataRowView)v_snapshotSoftLicTypes.AddNew();
-            row.EndEdit();
+            var row = (DataRowView)_vSnapshotSoftLicTypes.AddNew();
+            if (row != null) row.EndEdit();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -263,20 +264,20 @@ namespace LicenseSoftware.Viewport
                         return;
                     }
             }
-            softLicTypes.Select().RowChanged -= SoftLicTypesViewport_RowChanged;
-            softLicTypes.Select().RowDeleting -= SoftLicTypesViewport_RowDeleting;
-            softLicTypes.Select().RowDeleted -= SoftLicTypesViewport_RowDeleted;
+            _softLicTypes.Select().RowChanged -= SoftLicTypesViewport_RowChanged;
+            _softLicTypes.Select().RowDeleting -= SoftLicTypesViewport_RowDeleting;
+            _softLicTypes.Select().RowDeleted -= SoftLicTypesViewport_RowDeleted;
             base.OnClosing(e);
         }
 
         public override bool CanDeleteRecord()
         {
-            return (v_snapshotSoftLicTypes.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
+            return (_vSnapshotSoftLicTypes.Position != -1) && AccessControl.HasPrivelege(Priveleges.DirectoriesReadWrite);
         }
 
         public override void DeleteRecord()
         {
-            ((DataRowView)v_snapshotSoftLicTypes[v_snapshotSoftLicTypes.Position]).Row.Delete();
+            ((DataRowView)_vSnapshotSoftLicTypes[_vSnapshotSoftLicTypes.Position]).Row.Delete();
         }
 
         public override bool CanCancelRecord()
@@ -286,9 +287,9 @@ namespace LicenseSoftware.Viewport
 
         public override void CancelRecord()
         {
-            snapshotSoftLicTypes.Clear();
-            for (var i = 0; i < v_softLicTypes.Count; i++)
-                snapshotSoftLicTypes.Rows.Add(DataRowViewToArray(((DataRowView)v_softLicTypes[i])));
+            _snapshotSoftLicTypes.Clear();
+            for (var i = 0; i < _vSoftLicTypes.Count; i++)
+                _snapshotSoftLicTypes.Rows.Add(DataRowViewToArray(((DataRowView)_vSoftLicTypes[i])));
             MenuCallback.EditingStateUpdate();
         }
 
@@ -300,26 +301,26 @@ namespace LicenseSoftware.Viewport
         public override void SaveRecord()
         {
             dataGridView.EndEdit();
-            sync_views = false;
+            _syncViews = false;
             var list = SoftLicTypesFromViewport();
             if (!ValidateViewportData(list))
             {
-                sync_views = true;
+                _syncViews = true;
                 return;
             }
             for (var i = 0; i < list.Count; i++)
             {
-                var row = softLicTypes.Select().Rows.Find(list[i].IdLicType);
+                var row = _softLicTypes.Select().Rows.Find(list[i].IdLicType);
                 if (row == null)
                 {
                     var idSoftLicType = SoftLicTypesDataModel.Insert(list[i]);
                     if (idSoftLicType == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    ((DataRowView)v_snapshotSoftLicTypes[i])["ID LicType"] = idSoftLicType;
-                    softLicTypes.Select().Rows.Add(DataRowViewToArray((DataRowView)v_snapshotSoftLicTypes[i]));
+                    ((DataRowView)_vSnapshotSoftLicTypes[i])["ID LicType"] = idSoftLicType;
+                    _softLicTypes.Select().Rows.Add(DataRowViewToArray((DataRowView)_vSnapshotSoftLicTypes[i]));
                 }
                 else
                 {
@@ -328,7 +329,7 @@ namespace LicenseSoftware.Viewport
                         continue;
                     if (SoftLicTypesDataModel.Update(list[i]) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
                     row["LicType"] = list[i].LicType == null ? DBNull.Value : (object)list[i].LicType;
@@ -348,13 +349,13 @@ namespace LicenseSoftware.Viewport
                 {
                     if (SoftLicTypesDataModel.Delete(list[i].IdLicType.Value) == -1)
                     {
-                        sync_views = true;
+                        _syncViews = true;
                         return;
                     }
-                    softLicTypes.Select().Rows.Find(list[i].IdLicType).Delete();
+                    _softLicTypes.Select().Rows.Find(list[i].IdLicType).Delete();
                 }
             }
-            sync_views = true;
+            _syncViews = true;
             MenuCallback.EditingStateUpdate();
         }
 
@@ -383,27 +384,27 @@ namespace LicenseSoftware.Viewport
 
         private void SoftLicTypesViewport_RowDeleting(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
             if (e.Action != DataRowAction.Delete) return;
-            var rowIndex = v_snapshotSoftLicTypes.Find("ID LicType", e.Row["ID LicType"]);
+            var rowIndex = _vSnapshotSoftLicTypes.Find("ID LicType", e.Row["ID LicType"]);
             if (rowIndex != -1)
-                ((DataRowView)v_snapshotSoftLicTypes[rowIndex]).Delete();
+                ((DataRowView)_vSnapshotSoftLicTypes[rowIndex]).Delete();
         }
 
         private void SoftLicTypesViewport_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (!sync_views)
+            if (!_syncViews)
                 return;
-            var row_index = v_snapshotSoftLicTypes.Find("ID LicType", e.Row["ID LicType"]);
-            if (row_index == -1 && v_softLicTypes.Find("ID LicType", e.Row["ID LicType"]) != -1)
+            var rowIndex = _vSnapshotSoftLicTypes.Find("ID LicType", e.Row["ID LicType"]);
+            if (rowIndex == -1 && _vSoftLicTypes.Find("ID LicType", e.Row["ID LicType"]) != -1)
             {
-                snapshotSoftLicTypes.Rows.Add(e.Row["ID LicType"], e.Row["LicType"], e.Row["LicKeyDuplicateAllowed"]);
+                _snapshotSoftLicTypes.Rows.Add(e.Row["ID LicType"], e.Row["LicType"], e.Row["LicKeyDuplicateAllowed"]);
             }
             else
-                if (row_index != -1)
+                if (rowIndex != -1)
                 {
-                    var row = ((DataRowView)v_snapshotSoftLicTypes[row_index]);
+                    var row = ((DataRowView)_vSnapshotSoftLicTypes[rowIndex]);
                     row["LicType"] = e.Row["LicType"];
                     row["LicKeyDuplicateAllowed"] = e.Row["LicKeyDuplicateAllowed"];
                 }
@@ -448,83 +449,83 @@ namespace LicenseSoftware.Viewport
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoftLicTypesViewport));
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idSoftLicType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.softLicType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.softLicKeyDuplicateAllowed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
+            dataGridView = new DataGridView();
+            idSoftLicType = new DataGridViewTextBoxColumn();
+            softLicType = new DataGridViewTextBoxColumn();
+            softLicKeyDuplicateAllowed = new DataGridViewCheckBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.BackgroundColor = System.Drawing.Color.White;
+            dataGridView.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idSoftLicType,
-            this.softLicType,
-            this.softLicKeyDuplicateAllowed});
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.MultiSelect = false;
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(693, 345);
-            this.dataGridView.TabIndex = 8;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Columns.AddRange(new DataGridViewColumn[] {
+            idSoftLicType,
+            softLicType,
+            softLicKeyDuplicateAllowed});
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            dataGridView.Location = new System.Drawing.Point(3, 3);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new System.Drawing.Size(693, 345);
+            dataGridView.TabIndex = 8;
             // 
             // idSoftLicType
             // 
-            this.idSoftLicType.Frozen = true;
-            this.idSoftLicType.HeaderText = "Идентификатор органа";
-            this.idSoftLicType.Name = "idSoftLicType";
-            this.idSoftLicType.ReadOnly = true;
-            this.idSoftLicType.Visible = false;
+            idSoftLicType.Frozen = true;
+            idSoftLicType.HeaderText = "Идентификатор органа";
+            idSoftLicType.Name = "idSoftLicType";
+            idSoftLicType.ReadOnly = true;
+            idSoftLicType.Visible = false;
             // 
             // softLicType
             // 
-            this.softLicType.HeaderText = "Наименование";
-            this.softLicType.MinimumWidth = 100;
-            this.softLicType.Name = "softLicType";
+            softLicType.HeaderText = "Наименование";
+            softLicType.MinimumWidth = 100;
+            softLicType.Name = "softLicType";
             // 
             // softLicKeyDuplicateAllowed
             // 
-            this.softLicKeyDuplicateAllowed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.softLicKeyDuplicateAllowed.FillWeight = 1F;
-            this.softLicKeyDuplicateAllowed.HeaderText = "Разрешить дублирование лиц. ключей";
-            this.softLicKeyDuplicateAllowed.MinimumWidth = 200;
-            this.softLicKeyDuplicateAllowed.Name = "softLicKeyDuplicateAllowed";
-            this.softLicKeyDuplicateAllowed.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.softLicKeyDuplicateAllowed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.softLicKeyDuplicateAllowed.Width = 200;
+            softLicKeyDuplicateAllowed.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            softLicKeyDuplicateAllowed.FillWeight = 1F;
+            softLicKeyDuplicateAllowed.HeaderText = "Разрешить дублирование лиц. ключей";
+            softLicKeyDuplicateAllowed.MinimumWidth = 200;
+            softLicKeyDuplicateAllowed.Name = "softLicKeyDuplicateAllowed";
+            softLicKeyDuplicateAllowed.Resizable = DataGridViewTriState.True;
+            softLicKeyDuplicateAllowed.SortMode = DataGridViewColumnSortMode.Automatic;
+            softLicKeyDuplicateAllowed.Width = 200;
             // 
             // SoftLicTypesViewport
             // 
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(699, 351);
-            this.Controls.Add(this.dataGridView);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SoftLicTypesViewport";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Виды лицензий на ПО";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(699, 351);
+            Controls.Add(dataGridView);
+            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            Name = "SoftLicTypesViewport";
+            Padding = new Padding(3);
+            Text = "Виды лицензий на ПО";
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
+            ResumeLayout(false);
 
         }
     }

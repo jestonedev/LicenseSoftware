@@ -1,11 +1,6 @@
-﻿using LicenseSoftware.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using DataModels.DataModels;
 using Settings;
 
 namespace LicenseSoftware.Reporting
@@ -15,18 +10,14 @@ namespace LicenseSoftware.Reporting
         public override void Run(List<string> args)
         {
             ReportTitle = "Отчет по департаментам";
-            DataTable departments = DepartmentsDataModel.GetInstance().SelectVisibleDepartments();
-            //DataTable licenses;
-            string licensesIds = "";
-            foreach (string str in args)
-                licensesIds += str + ",";
+            var licensesIds = args.Aggregate("", (current, str) => current + str + ",");
             licensesIds = licensesIds.TrimEnd(',');
-            Dictionary<string, string> arguments = new Dictionary<string, string>();
-            //arguments.Add("config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "installations_info.xml"));
-            arguments.Add("config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "department_report.xml"));
-            arguments.Add("connectionString", LicenseSoftwareSettings.ConnectionString);
-            //arguments.Add("departmentIds", departmentIds);
-            arguments.Add("licensesIds", licensesIds);
+            var arguments = new Dictionary<string, string>
+            {
+                {"config", Path.Combine(LicenseSoftwareSettings.ActivityManagerConfigsPath, "department_report.xml")},
+                {"connectionString", LicenseSoftwareSettings.ConnectionString},
+                {"licensesIds", licensesIds}
+            };
             base.Run(arguments);
         }
     }
