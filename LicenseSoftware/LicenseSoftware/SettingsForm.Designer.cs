@@ -113,7 +113,7 @@
             // textBoxConnectionString
             // 
             this.textBoxConnectionString.Location = new System.Drawing.Point(12, 26);
-            this.textBoxConnectionString.MaxLength = 16;
+            this.textBoxConnectionString.MaxLength = 1024;
             this.textBoxConnectionString.Name = "textBoxConnectionString";
             this.textBoxConnectionString.Size = new System.Drawing.Size(431, 21);
             this.textBoxConnectionString.TabIndex = 0;
@@ -130,7 +130,7 @@
             // textBoxLDAPUserName
             // 
             this.textBoxLDAPUserName.Location = new System.Drawing.Point(12, 67);
-            this.textBoxLDAPUserName.MaxLength = 16;
+            this.textBoxLDAPUserName.MaxLength = 1024;
             this.textBoxLDAPUserName.Name = "textBoxLDAPUserName";
             this.textBoxLDAPUserName.Size = new System.Drawing.Size(431, 21);
             this.textBoxLDAPUserName.TabIndex = 1;
@@ -147,7 +147,7 @@
             // textBoxLDAPPassword
             // 
             this.textBoxLDAPPassword.Location = new System.Drawing.Point(12, 108);
-            this.textBoxLDAPPassword.MaxLength = 16;
+            this.textBoxLDAPPassword.MaxLength = 1024;
             this.textBoxLDAPPassword.Name = "textBoxLDAPPassword";
             this.textBoxLDAPPassword.PasswordChar = '•';
             this.textBoxLDAPPassword.Size = new System.Drawing.Size(431, 21);
@@ -165,7 +165,7 @@
             // textBoxActivityManagerPath
             // 
             this.textBoxActivityManagerPath.Location = new System.Drawing.Point(12, 149);
-            this.textBoxActivityManagerPath.MaxLength = 16;
+            this.textBoxActivityManagerPath.MaxLength = 1024;
             this.textBoxActivityManagerPath.Name = "textBoxActivityManagerPath";
             this.textBoxActivityManagerPath.Size = new System.Drawing.Size(431, 21);
             this.textBoxActivityManagerPath.TabIndex = 3;
@@ -182,7 +182,7 @@
             // textBoxActivityManagerOutputCodepage
             // 
             this.textBoxActivityManagerOutputCodepage.Location = new System.Drawing.Point(12, 190);
-            this.textBoxActivityManagerOutputCodepage.MaxLength = 16;
+            this.textBoxActivityManagerOutputCodepage.MaxLength = 1024;
             this.textBoxActivityManagerOutputCodepage.Name = "textBoxActivityManagerOutputCodepage";
             this.textBoxActivityManagerOutputCodepage.Size = new System.Drawing.Size(431, 21);
             this.textBoxActivityManagerOutputCodepage.TabIndex = 4;
@@ -199,7 +199,7 @@
             // textBoxActivityManagerConfigsPath
             // 
             this.textBoxActivityManagerConfigsPath.Location = new System.Drawing.Point(12, 231);
-            this.textBoxActivityManagerConfigsPath.MaxLength = 16;
+            this.textBoxActivityManagerConfigsPath.MaxLength = 1024;
             this.textBoxActivityManagerConfigsPath.Name = "textBoxActivityManagerConfigsPath";
             this.textBoxActivityManagerConfigsPath.Size = new System.Drawing.Size(431, 21);
             this.textBoxActivityManagerConfigsPath.TabIndex = 5;
