@@ -194,13 +194,15 @@
             // 
             // comboBoxDepartmentLicID
             // 
-            this.comboBoxDepartmentLicID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentLicID.Enabled = false;
             this.comboBoxDepartmentLicID.FormattingEnabled = true;
             this.comboBoxDepartmentLicID.Location = new System.Drawing.Point(43, 242);
             this.comboBoxDepartmentLicID.Name = "comboBoxDepartmentLicID";
             this.comboBoxDepartmentLicID.Size = new System.Drawing.Size(436, 23);
             this.comboBoxDepartmentLicID.TabIndex = 11;
+            this.comboBoxDepartmentLicID.DropDownClosed += new System.EventHandler(this.comboBoxDepartmentLicID_DropDownClosed);
+            this.comboBoxDepartmentLicID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxDepartmentLicID_KeyUp);
+            this.comboBoxDepartmentLicID.Leave += new System.EventHandler(this.comboBoxDepartmentLicID_Leave);
             // 
             // comboBoxSupplierID
             // 
@@ -450,13 +452,15 @@
             // 
             // comboBoxDepartmentInstallID
             // 
-            this.comboBoxDepartmentInstallID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentInstallID.Enabled = false;
             this.comboBoxDepartmentInstallID.FormattingEnabled = true;
             this.comboBoxDepartmentInstallID.Location = new System.Drawing.Point(524, 25);
             this.comboBoxDepartmentInstallID.Name = "comboBoxDepartmentInstallID";
             this.comboBoxDepartmentInstallID.Size = new System.Drawing.Size(436, 23);
             this.comboBoxDepartmentInstallID.TabIndex = 23;
+            this.comboBoxDepartmentInstallID.DropDownClosed += new System.EventHandler(this.comboBoxDepartmentInstallID_DropDownClosed);
+            this.comboBoxDepartmentInstallID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxDepartmentInstallID_KeyUp);
+            this.comboBoxDepartmentInstallID.Leave += new System.EventHandler(this.comboBoxDepartmentInstallID_Leave);
             // 
             // comboBoxLicKey
             // 

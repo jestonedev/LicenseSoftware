@@ -19,6 +19,7 @@ namespace LicenseSoftware.Viewport.SearchForms
 
         private  BindingSource _vSoftware;
         private readonly BindingSource _vDepartmentsInstall;
+        private readonly BindingSource _vDepartmentsLic;
         private  BindingSource _vDevices;
         private  BindingSource _vDevicesInvNum;
         private  BindingSource _vDevicesSerialNum;
@@ -239,7 +240,7 @@ namespace LicenseSoftware.Viewport.SearchForms
 
             _vDepartmentsInstall = new BindingSource {DataSource = departments.SelectVisibleDepartments()};
 
-            var vDepartmentsLic = new BindingSource {DataSource = departments.SelectVisibleDepartments()};
+            _vDepartmentsLic = new BindingSource {DataSource = departments.SelectVisibleDepartments()};
 
             var vSoftInstallators = new BindingSource
             {
@@ -271,7 +272,7 @@ namespace LicenseSoftware.Viewport.SearchForms
             comboBoxLicDocType.ValueMember = "ID DocType";
             comboBoxLicDocType.DisplayMember = "DocType";
 
-            comboBoxDepartmentLicID.DataSource = vDepartmentsLic;
+            comboBoxDepartmentLicID.DataSource = _vDepartmentsLic;
             comboBoxDepartmentLicID.ValueMember = "ID Department";
             comboBoxDepartmentLicID.DisplayMember = "Department";
 
@@ -762,6 +763,80 @@ namespace LicenseSoftware.Viewport.SearchForms
         {
             if (comboBoxLicKey.Items.Count == 0)
                 comboBoxLicKey.SelectedIndex = -1;
+        }
+
+        private void comboBoxDepartmentInstallID_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) ||
+                (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                var text = comboBoxDepartmentInstallID.Text;
+                var selectionStart = comboBoxDepartmentInstallID.SelectionStart;
+                var selectionLength = comboBoxDepartmentInstallID.SelectionLength;
+                _vDepartmentsInstall.Filter = "Department like '%" + comboBoxDepartmentInstallID.Text + "%' OR Department not like '    %'";
+                comboBoxDepartmentInstallID.Text = text;
+                comboBoxDepartmentInstallID.SelectionStart = selectionStart;
+                comboBoxDepartmentInstallID.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxDepartmentInstallID_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count > 0)
+            {
+                if (comboBoxDepartmentInstallID.SelectedItem == null)
+                    comboBoxDepartmentInstallID.SelectedItem = _vDepartmentsInstall[_vDepartmentsInstall.Position];
+                comboBoxDepartmentInstallID.Text = ((DataRowView)_vDepartmentsInstall[_vDepartmentsInstall.Position])["Department"].ToString();
+            }
+            if (comboBoxDepartmentInstallID.SelectedItem == null)
+            {
+                comboBoxDepartmentInstallID.Text = "";
+                _vDepartmentsInstall.Filter = "";
+            }
+        }
+
+        private void comboBoxDepartmentInstallID_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxDepartmentInstallID.Items.Count == 0)
+                comboBoxDepartmentInstallID.SelectedIndex = -1;
+        }
+
+        private void comboBoxDepartmentLicID_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxDepartmentLicID.Items.Count == 0)
+                comboBoxDepartmentLicID.SelectedIndex = -1;
+        }
+
+        private void comboBoxDepartmentLicID_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) ||
+                (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                var text = comboBoxDepartmentLicID.Text;
+                var selectionStart = comboBoxDepartmentLicID.SelectionStart;
+                var selectionLength = comboBoxDepartmentLicID.SelectionLength;
+                _vDepartmentsLic.Filter = "Department like '%" + comboBoxDepartmentLicID.Text + "%' OR Department not like '    %'";
+                comboBoxDepartmentLicID.Text = text;
+                comboBoxDepartmentLicID.SelectionStart = selectionStart;
+                comboBoxDepartmentLicID.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxDepartmentLicID_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count > 0)
+            {
+                if (comboBoxDepartmentLicID.SelectedItem == null)
+                    comboBoxDepartmentLicID.SelectedItem = _vDepartmentsLic[_vDepartmentsLic.Position];
+                comboBoxDepartmentLicID.Text = ((DataRowView)_vDepartmentsLic[_vDepartmentsLic.Position])["Department"].ToString();
+            }
+            if (comboBoxDepartmentLicID.SelectedItem == null)
+            {
+                comboBoxDepartmentLicID.Text = "";
+                _vDepartmentsLic.Filter = "";
+            }
         }
     }
 }

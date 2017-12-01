@@ -178,13 +178,15 @@
             // 
             this.comboBoxDepartmentID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxDepartmentID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDepartmentID.Enabled = false;
             this.comboBoxDepartmentID.FormattingEnabled = true;
             this.comboBoxDepartmentID.Location = new System.Drawing.Point(42, 242);
             this.comboBoxDepartmentID.Name = "comboBoxDepartmentID";
             this.comboBoxDepartmentID.Size = new System.Drawing.Size(436, 23);
             this.comboBoxDepartmentID.TabIndex = 11;
+            this.comboBoxDepartmentID.DropDownClosed += new System.EventHandler(this.comboBoxDepartmentID_DropDownClosed);
+            this.comboBoxDepartmentID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxDepartmentID_KeyUp);
+            this.comboBoxDepartmentID.Leave += new System.EventHandler(this.comboBoxDepartmentID_Leave);
             // 
             // comboBoxSupplierID
             // 
@@ -458,7 +460,7 @@
             this.label8.TabIndex = 94;
             this.label8.Text = "Лицензионный ключ";
             // 
-            // checkBoxOnlyAvalableInstallations
+            // checkBoxOnlyAvailableInstallations
             // 
             this.checkBoxOnlyAvailableInstallations.AutoSize = true;
             this.checkBoxOnlyAvailableInstallations.Location = new System.Drawing.Point(18, 487);

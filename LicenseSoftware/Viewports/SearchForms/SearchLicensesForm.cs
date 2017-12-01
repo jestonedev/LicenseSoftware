@@ -18,6 +18,7 @@ namespace LicenseSoftware.Viewport.SearchForms
 
         private BindingSource _vSoftware;
         private BindingSource _vSoftLicKeys;
+        private BindingSource _vDepartments;
 
         internal override string GetFilter()
         {
@@ -206,9 +207,9 @@ namespace LicenseSoftware.Viewport.SearchForms
                 DataSource = DataSetManager.DataSet
             };
 
-            var vDepartments = new BindingSource { DataSource = departments.SelectVisibleDepartments() };
+            _vDepartments = new BindingSource { DataSource = departments.SelectVisibleDepartments() };
 
-            comboBoxDepartmentID.DataSource = vDepartments;
+            comboBoxDepartmentID.DataSource = _vDepartments;
             comboBoxDepartmentID.ValueMember = "ID Department";
             comboBoxDepartmentID.DisplayMember = "Department";   
 
@@ -486,6 +487,43 @@ namespace LicenseSoftware.Viewport.SearchForms
         {
             if (comboBoxLicKey.Items.Count == 0)
                 comboBoxLicKey.SelectedIndex = -1;
+        }
+
+        private void comboBoxDepartmentID_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxSupplierID.Items.Count > 0)
+            {
+                if (comboBoxDepartmentID.SelectedItem == null)
+                    comboBoxDepartmentID.SelectedItem = _vDepartments[_vDepartments.Position];
+                comboBoxDepartmentID.Text = ((DataRowView)_vDepartments[_vDepartments.Position])["Department"].ToString();
+            }
+            if (comboBoxDepartmentID.SelectedItem == null)
+            {
+                comboBoxDepartmentID.Text = "";
+                _vDepartments.Filter = "";
+            }
+        }
+
+        private void comboBoxDepartmentID_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || (e.KeyCode == Keys.Back) ||
+                (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+                || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            {
+                var text = comboBoxDepartmentID.Text;
+                var selectionStart = comboBoxDepartmentID.SelectionStart;
+                var selectionLength = comboBoxDepartmentID.SelectionLength;
+                _vDepartments.Filter = "Department like '%" + comboBoxDepartmentID.Text + "%' OR Department not like '    %'";
+                comboBoxDepartmentID.Text = text;
+                comboBoxDepartmentID.SelectionStart = selectionStart;
+                comboBoxDepartmentID.SelectionLength = selectionLength;
+            }
+        }
+
+        private void comboBoxDepartmentID_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboBoxDepartmentID.Items.Count == 0)
+                comboBoxDepartmentID.SelectedIndex = -1;
         }
     }
 }
