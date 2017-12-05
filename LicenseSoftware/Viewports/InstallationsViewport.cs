@@ -135,10 +135,12 @@ namespace LicenseSoftware.Viewport
                 return;
             var installationRow = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
             if ((comboBoxSoftwareID.DataSource == null) || (comboBoxLicenseID.DataSource == null) ||
-                (comboBoxLicKeysID.DataSource == null) || comboBoxSoftVersionID.DataSource == null)
+                (comboBoxLicKeysID.DataSource == null) || (comboBoxSoftVersionID.DataSource == null) || 
+                (comboBoxComputerID.DataSource == null))
                 return;
             if (string.IsNullOrEmpty(comboBoxSoftwareID.ValueMember) || string.IsNullOrEmpty(comboBoxLicenseID.ValueMember) ||
-                string.IsNullOrEmpty(comboBoxLicKeysID.ValueMember) || string.IsNullOrEmpty(comboBoxSoftVersionID.ValueMember))
+                string.IsNullOrEmpty(comboBoxLicKeysID.ValueMember) || string.IsNullOrEmpty(comboBoxSoftVersionID.ValueMember) ||
+                string.IsNullOrEmpty(comboBoxComputerID.ValueMember))
                 return;
             int? idSoftware = null;
             int? idVersion = null;
@@ -163,26 +165,45 @@ namespace LicenseSoftware.Viewport
             }
             if (installationRow["ID LicenseKey"] != DBNull.Value)
                 idLicKey = Convert.ToInt32(installationRow["ID LicenseKey"], CultureInfo.InvariantCulture);
+
+            comboBoxSoftwareID.DataSource = null;
+            comboBoxSoftVersionID.DataSource = null;
+            comboBoxLicenseID.DataSource = null;
+            comboBoxLicKeysID.DataSource = null;
+            comboBoxComputerID.DataSource = null;
+
+            comboBoxSoftwareID.SelectedValueChanged -= comboBoxSoftwareID_SelectedValueChanged;
+            comboBoxSoftVersionID.SelectedValueChanged -= comboBoxSoftVersionID_SelectedValueChanged;
+            comboBoxLicenseID.SelectedValueChanged -= comboBoxLicenseID_SelectedValueChanged;
+            comboBoxLicKeysID.SelectedValueChanged -= comboBoxLicKeysID_SelectedValueChanged;
+            comboBoxComputerID.SelectedValueChanged -= comboBoxComputerID_SelectedValueChanged;
+
             _vSoftware.Filter = "";
-            comboBoxSoftwareID.SelectedValue = (object)idSoftware ?? DBNull.Value;
-            comboBoxSoftVersionID.SelectedValue = (object)idVersion ?? DBNull.Value;
-            comboBoxLicenseID.SelectedValue = (object)idLicense ?? DBNull.Value;
+            _vSoftware.Position = _vSoftware.Find("ID Software", (object)idSoftware ?? DBNull.Value);
+            _vSoftVersions.Filter = BuildSoftVersionsFilter(idSoftware);
+            _vSoftVersions.Position = _vSoftVersions.Find("ID Version", (object)idVersion ?? DBNull.Value);
+            _vLicenses.Filter = BuildLicensesFilter(idVersion);
+            _vLicenses.Position = _vLicenses.Find("ID License", (object)idLicense ?? DBNull.Value);
             if (_vLicenses.Position != -1)
             {
-                _vSoftLicKeys.Filter = "[ID License] = " + ((DataRowView)_vLicenses[_vLicenses.Position])["ID License"]
-                     + " AND [ID LicenseKey] IN (0" + GetLicKeysFilter((int)((DataRowView)_vLicenses[_vLicenses.Position])["ID License"]) + ")";
-                comboBoxLicKeysID.SelectedValue = (object)idLicKey ?? DBNull.Value;
+                _vSoftLicKeys.Filter =
+                    BuildSoftLicKeysFilter((int) ((DataRowView) _vLicenses[_vLicenses.Position])["ID License"]);
             }
-            else
-                comboBoxLicKeysID.SelectedValue = DBNull.Value;
-            if (comboBoxComputerID.DataSource != null && !string.IsNullOrEmpty(comboBoxComputerID.ValueMember))
-            {
-                _vDevices.Filter = GetAllowedDepartmentFilter();
-                int? idComputer = null;
-                if (installationRow["ID Computer"] != DBNull.Value)
-                    idComputer = (int)installationRow["ID Computer"];
-                comboBoxComputerID.SelectedValue = (object)idComputer ?? DBNull.Value;
-            }
+            _vSoftLicKeys.Position = _vSoftLicKeys.Find("ID LicenseKey", (object)idLicKey ?? DBNull.Value);
+
+            _vDevices.Filter = BuildDeviceFilter();
+            int? idComputer = null;
+            if (installationRow["ID Computer"] != DBNull.Value)
+                idComputer = (int)installationRow["ID Computer"];
+            _vDevices.Position = _vDevices.Find("ID Device", (object)idComputer ?? DBNull.Value);
+
+            DataBind();
+
+            comboBoxSoftwareID.SelectedValueChanged += comboBoxSoftwareID_SelectedValueChanged;
+            comboBoxSoftVersionID.SelectedValueChanged += comboBoxSoftVersionID_SelectedValueChanged;
+            comboBoxLicenseID.SelectedValueChanged += comboBoxLicenseID_SelectedValueChanged;
+            comboBoxLicKeysID.SelectedValueChanged += comboBoxLicKeysID_SelectedValueChanged;
+            comboBoxComputerID.SelectedValueChanged += comboBoxComputerID_SelectedValueChanged;
         }
 
         private void DataBind()
@@ -1030,7 +1051,7 @@ namespace LicenseSoftware.Viewport
                 var text = comboBoxLicenseID.Text;
                 var selectionStart = comboBoxLicenseID.SelectionStart;
                 var selectionLength = comboBoxLicenseID.SelectionLength;
-                _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Software] = " + (comboBoxSoftwareID.SelectedValue ?? "0") + " AND License like '%" + comboBoxLicenseID.Text + "%'";
+                _vLicenses.Filter = BuildLicensesFilter((int?)comboBoxSoftVersionID.SelectedValue) + " AND License like '%" + comboBoxLicenseID.Text + "%'";
                 comboBoxLicenseID.Text = text;
                 comboBoxLicenseID.SelectionStart = selectionStart;
                 comboBoxLicenseID.SelectionLength = selectionLength;
@@ -1047,7 +1068,7 @@ namespace LicenseSoftware.Viewport
             if (comboBoxLicenseID.SelectedItem == null)
             {
                 comboBoxLicenseID.Text = "";
-                _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Version] = " + (comboBoxSoftVersionID.SelectedValue ?? "0");
+                _vLicenses.Filter = BuildLicensesFilter((int?)comboBoxSoftVersionID.SelectedValue);
             }
         }
 
@@ -1103,7 +1124,7 @@ namespace LicenseSoftware.Viewport
             if (!string.IsNullOrEmpty(comboBoxComputerID.Text))
             {
                 var deviceFilter = "[Device Name] like '%" + comboBoxComputerID.Text + "%'";
-                var filter = GetDeviceFilter();
+                var filter = BuildDeviceFilter();
                 filter = !string.IsNullOrEmpty(filter) ? 
                     string.Format("({0}) AND {1}", filter, deviceFilter) : 
                     deviceFilter;
@@ -1124,7 +1145,7 @@ namespace LicenseSoftware.Viewport
             if (comboBoxComputerID.SelectedItem == null)
             {
                 comboBoxComputerID.Text = "";
-                _vDevices.Filter = GetDeviceFilter();
+                _vDevices.Filter = BuildDeviceFilter();
             }
         }
 
@@ -1156,12 +1177,16 @@ namespace LicenseSoftware.Viewport
                 !string.IsNullOrEmpty(comboBoxSoftwareID.ValueMember))
             {
                 var idSoftware = (int?)comboBoxSoftwareID.SelectedValue;
-                if (idSoftware != null)
-                    _vSoftVersions.Filter = "[ID Software] = " + idSoftware;
-                else
-                    _vSoftVersions.Filter = "1 = 0";
+                _vSoftVersions.Filter = BuildSoftVersionsFilter(idSoftware);
             }
             CheckViewportModifications();
+        }
+
+        private string BuildSoftVersionsFilter(int? idSoftware)
+        {
+            if (idSoftware != null)
+                return "[ID Software] = " + idSoftware;
+            return "1 = 0";
         }
 
         private void comboBoxSoftVersionID_SelectedValueChanged(object sender, EventArgs e)
@@ -1171,12 +1196,16 @@ namespace LicenseSoftware.Viewport
                 !string.IsNullOrEmpty(comboBoxSoftVersionID.ValueMember))
             {
                 var idVersion = (int?)comboBoxSoftVersionID.SelectedValue;
-                if (idVersion != null)
-                    _vLicenses.Filter = GetAllowedDepartmentFilter() + " AND [ID Version] = " + idVersion;
-                else
-                    _vLicenses.Filter = "1 = 0";
+                _vLicenses.Filter = BuildLicensesFilter(idVersion);
             }
             CheckViewportModifications();
+        }
+
+        private string BuildLicensesFilter(int? idVersion)
+        {
+            if (idVersion != null)
+                return GetAllowedDepartmentFilter() + " AND [ID Version] = " + idVersion;
+            return "1 = 0";
         }
 
         private void comboBoxLicenseID_SelectedValueChanged(object sender, EventArgs e)
@@ -1186,19 +1215,38 @@ namespace LicenseSoftware.Viewport
                 !string.IsNullOrEmpty(comboBoxLicenseID.ValueMember))
             {
                 var idLicense = (int?)comboBoxLicenseID.SelectedValue;
-                if (idLicense != null)
-                {
-                    _vSoftLicKeys.Filter = "[ID License] = " + idLicense + " AND [ID LicenseKey] IN (0" +
-                                           GetLicKeysFilter(idLicense.Value) + ")";
-                    _vDevices.Filter = GetDeviceFilter();
-                }
-                else
-                    _vSoftLicKeys.Filter = "1 = 0";
+                _vSoftLicKeys.Filter = BuildSoftLicKeysFilter(idLicense);
+                _vDevices.Filter = BuildDeviceFilter();
             }
             CheckViewportModifications();
         }
 
-        private string GetDeviceFilter()
+        private string BuildSoftLicKeysFilter(int? idLicense)
+        {
+            if (idLicense != null)
+            {
+                return "[ID License] = " + idLicense + " AND [ID LicenseKey] IN (0" +
+                       GetLicKeysFilter((int) idLicense) + ")";
+            }
+            return "1 = 0";
+        }
+
+        private string GetLicKeysFilter(int idLicense)
+        {
+            var licKeyIds = DataModelHelper.LicKeyIdsNotUsed(idLicense);
+            var licKeys = "";
+            foreach (var licKey in licKeyIds)
+                licKeys += licKey.ToString(CultureInfo.InvariantCulture) + ",";
+            if (_vSoftInstallations.Position != -1)
+            {
+                var row = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
+                if (row["ID LicenseKey"] != DBNull.Value)
+                    licKeys += row["ID LicenseKey"].ToString();
+            }
+            return licKeys;
+        }
+
+        private string BuildDeviceFilter()
         {
             var filter = GetAllowedDepartmentFilter();
             var licenseId = comboBoxLicenseID.SelectedValue;
@@ -1229,21 +1277,6 @@ namespace LicenseSoftware.Viewport
                     string.Format("([ID Device] = {0})", idComputer);
             }
             return filter;
-        }
-
-        private string GetLicKeysFilter(int idLicense)
-        {
-            var licKeyIds = DataModelHelper.LicKeyIdsNotUsed(idLicense);
-            var licKeys = "";
-            foreach (var licKey in licKeyIds)
-                licKeys += licKey.ToString(CultureInfo.InvariantCulture) + ",";
-            if (_vSoftInstallations.Position != -1)
-            {
-                var row = (DataRowView)_vSoftInstallations[_vSoftInstallations.Position];
-                if (row["ID LicenseKey"] != DBNull.Value)
-                    licKeys += row["ID LicenseKey"].ToString();
-            }
-            return licKeys;
         }
 
         private void comboBoxLicKeysID_SelectedValueChanged(object sender, EventArgs e)
@@ -1356,415 +1389,415 @@ namespace LicenseSoftware.Viewport
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallationsViewport));
-            tableLayoutPanel14 = new TableLayoutPanel();
-            dataGridView = new DataGridView();
-            idInstallation = new DataGridViewTextBoxColumn();
-            software = new DataGridViewTextBoxColumn();
-            licKey = new DataGridViewTextBoxColumn();
-            department = new DataGridViewTextBoxColumn();
-            computer = new DataGridViewTextBoxColumn();
-            serialNum = new DataGridViewTextBoxColumn();
-            invNum = new DataGridViewTextBoxColumn();
-            installationDate = new DataGridViewTextBoxColumn();
-            license = new DataGridViewTextBoxColumn();
-            groupBox1 = new GroupBox();
-            comboBoxSoftVersionID = new ComboBox();
-            label6 = new Label();
-            comboBoxLicenseID = new ComboBox();
-            label3 = new Label();
-            comboBoxLicKeysID = new ComboBox();
-            label8 = new Label();
-            comboBoxSoftwareID = new ComboBox();
-            label2 = new Label();
-            groupBox2 = new GroupBox();
-            label1 = new Label();
-            textBoxDescription = new TextBox();
-            comboBoxComputerID = new ComboBox();
-            label4 = new Label();
-            label9 = new Label();
-            comboBoxInstallatorID = new ComboBox();
-            dateTimePickerInstallDate = new DateTimePicker();
-            label5 = new Label();
-            tableLayoutPanel14.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
-            SuspendLayout();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.idInstallation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.software = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.licKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.department = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.computer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.serialNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.invNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.installationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.license = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBoxSoftVersionID = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBoxLicenseID = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxLicKeysID = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBoxSoftwareID = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxDescription = new System.Windows.Forms.TextBox();
+            this.comboBoxComputerID = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.comboBoxInstallatorID = new System.Windows.Forms.ComboBox();
+            this.dateTimePickerInstallDate = new System.Windows.Forms.DateTimePicker();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.SuspendLayout();
             // 
             // tableLayoutPanel14
             // 
-            tableLayoutPanel14.ColumnCount = 2;
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel14.Controls.Add(dataGridView, 0, 1);
-            tableLayoutPanel14.Controls.Add(groupBox1, 0, 0);
-            tableLayoutPanel14.Controls.Add(groupBox2, 1, 0);
-            tableLayoutPanel14.Dock = DockStyle.Fill;
-            tableLayoutPanel14.Location = new System.Drawing.Point(3, 3);
-            tableLayoutPanel14.Name = "tableLayoutPanel14";
-            tableLayoutPanel14.RowCount = 2;
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Absolute, 145F));
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Absolute, 89F));
-            tableLayoutPanel14.Size = new System.Drawing.Size(1019, 479);
-            tableLayoutPanel14.TabIndex = 0;
+            this.tableLayoutPanel14.ColumnCount = 2;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.Controls.Add(this.dataGridView, 0, 1);
+            this.tableLayoutPanel14.Controls.Add(this.groupBox1, 0, 0);
+            this.tableLayoutPanel14.Controls.Add(this.groupBox2, 1, 0);
+            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
+            this.tableLayoutPanel14.RowCount = 2;
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 89F));
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(1019, 479);
+            this.tableLayoutPanel14.TabIndex = 0;
             // 
             // dataGridView
             // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.AllowUserToOrderColumns = true;
-            dataGridView.AllowUserToResizeRows = false;
-            dataGridView.BackgroundColor = System.Drawing.Color.White;
-            dataGridView.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToOrderColumns = true;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new Padding(0, 2, 0, 2);
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Columns.AddRange(new DataGridViewColumn[] {
-            idInstallation,
-            software,
-            licKey,
-            department,
-            computer,
-            serialNum,
-            invNum,
-            installationDate,
-            license});
-            tableLayoutPanel14.SetColumnSpan(dataGridView, 2);
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.Location = new System.Drawing.Point(3, 148);
-            dataGridView.MultiSelect = false;
-            dataGridView.Name = "dataGridView";
-            dataGridView.ReadOnly = true;
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new System.Drawing.Size(1013, 328);
-            dataGridView.TabIndex = 0;
-            dataGridView.VirtualMode = true;
-            dataGridView.CellValueNeeded += new DataGridViewCellValueEventHandler(dataGridView_CellValueNeeded);
-            dataGridView.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(dataGridView_ColumnHeaderMouseClick);
-            dataGridView.DataError += new DataGridViewDataErrorEventHandler(dataGridView_DataError);
-            dataGridView.SelectionChanged += new EventHandler(dataGridView_SelectionChanged);
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idInstallation,
+            this.software,
+            this.licKey,
+            this.department,
+            this.computer,
+            this.serialNum,
+            this.invNum,
+            this.installationDate,
+            this.license});
+            this.tableLayoutPanel14.SetColumnSpan(this.dataGridView, 2);
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(3, 148);
+            this.dataGridView.MultiSelect = false;
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView.Size = new System.Drawing.Size(1013, 328);
+            this.dataGridView.TabIndex = 2;
+            this.dataGridView.VirtualMode = true;
+            this.dataGridView.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView_CellValueNeeded);
+            this.dataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_ColumnHeaderMouseClick);
+            this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
+            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
             // 
             // idInstallation
             // 
-            idInstallation.Frozen = true;
-            idInstallation.HeaderText = "Идентификатор";
-            idInstallation.Name = "idInstallation";
-            idInstallation.ReadOnly = true;
-            idInstallation.Visible = false;
+            this.idInstallation.Frozen = true;
+            this.idInstallation.HeaderText = "Идентификатор";
+            this.idInstallation.Name = "idInstallation";
+            this.idInstallation.ReadOnly = true;
+            this.idInstallation.Visible = false;
             // 
             // software
             // 
-            software.HeaderText = "Наименование ПО";
-            software.MinimumWidth = 300;
-            software.Name = "software";
-            software.ReadOnly = true;
-            software.SortMode = DataGridViewColumnSortMode.NotSortable;
-            software.Width = 300;
+            this.software.HeaderText = "Наименование ПО";
+            this.software.MinimumWidth = 300;
+            this.software.Name = "software";
+            this.software.ReadOnly = true;
+            this.software.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.software.Width = 300;
             // 
             // licKey
             // 
-            licKey.HeaderText = "Лицензионный ключ";
-            licKey.MinimumWidth = 150;
-            licKey.Name = "licKey";
-            licKey.ReadOnly = true;
-            licKey.SortMode = DataGridViewColumnSortMode.NotSortable;
-            licKey.Width = 150;
+            this.licKey.HeaderText = "Лицензионный ключ";
+            this.licKey.MinimumWidth = 150;
+            this.licKey.Name = "licKey";
+            this.licKey.ReadOnly = true;
+            this.licKey.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.licKey.Width = 150;
             // 
             // department
             // 
-            department.HeaderText = "Кабинет";
-            department.MinimumWidth = 80;
-            department.Name = "department";
-            department.ReadOnly = true;
-            department.Resizable = DataGridViewTriState.True;
-            department.SortMode = DataGridViewColumnSortMode.NotSortable;
-            department.Width = 80;
+            this.department.HeaderText = "Кабинет";
+            this.department.MinimumWidth = 80;
+            this.department.Name = "department";
+            this.department.ReadOnly = true;
+            this.department.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.department.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.department.Width = 80;
             // 
             // computer
             // 
-            computer.HeaderText = "Имя ПК";
-            computer.MinimumWidth = 80;
-            computer.Name = "computer";
-            computer.ReadOnly = true;
-            computer.Resizable = DataGridViewTriState.True;
-            computer.SortMode = DataGridViewColumnSortMode.NotSortable;
-            computer.Width = 80;
+            this.computer.HeaderText = "Имя ПК";
+            this.computer.MinimumWidth = 80;
+            this.computer.Name = "computer";
+            this.computer.ReadOnly = true;
+            this.computer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.computer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.computer.Width = 80;
             // 
             // serialNum
             // 
-            serialNum.HeaderText = "Серийный №";
-            serialNum.MinimumWidth = 150;
-            serialNum.Name = "serialNum";
-            serialNum.ReadOnly = true;
-            serialNum.SortMode = DataGridViewColumnSortMode.NotSortable;
-            serialNum.Width = 150;
+            this.serialNum.HeaderText = "Серийный №";
+            this.serialNum.MinimumWidth = 150;
+            this.serialNum.Name = "serialNum";
+            this.serialNum.ReadOnly = true;
+            this.serialNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.serialNum.Width = 150;
             // 
             // invNum
             // 
-            invNum.HeaderText = "Инвентарный №";
-            invNum.MinimumWidth = 130;
-            invNum.Name = "invNum";
-            invNum.ReadOnly = true;
-            invNum.SortMode = DataGridViewColumnSortMode.NotSortable;
-            invNum.Width = 130;
+            this.invNum.HeaderText = "Инвентарный №";
+            this.invNum.MinimumWidth = 130;
+            this.invNum.Name = "invNum";
+            this.invNum.ReadOnly = true;
+            this.invNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.invNum.Width = 130;
             // 
             // installationDate
             // 
-            installationDate.HeaderText = "Дата установки";
-            installationDate.MinimumWidth = 80;
-            installationDate.Name = "installationDate";
-            installationDate.ReadOnly = true;
-            installationDate.Width = 80;
+            this.installationDate.HeaderText = "Дата установки";
+            this.installationDate.MinimumWidth = 80;
+            this.installationDate.Name = "installationDate";
+            this.installationDate.ReadOnly = true;
+            this.installationDate.Width = 80;
             // 
             // license
             // 
-            license.HeaderText = "Лицензия";
-            license.MinimumWidth = 250;
-            license.Name = "license";
-            license.ReadOnly = true;
-            license.SortMode = DataGridViewColumnSortMode.NotSortable;
-            license.Width = 250;
+            this.license.HeaderText = "Лицензия";
+            this.license.MinimumWidth = 250;
+            this.license.Name = "license";
+            this.license.ReadOnly = true;
+            this.license.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.license.Width = 250;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(comboBoxSoftVersionID);
-            groupBox1.Controls.Add(label6);
-            groupBox1.Controls.Add(comboBoxLicenseID);
-            groupBox1.Controls.Add(label3);
-            groupBox1.Controls.Add(comboBoxLicKeysID);
-            groupBox1.Controls.Add(label8);
-            groupBox1.Controls.Add(comboBoxSoftwareID);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Location = new System.Drawing.Point(3, 3);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(503, 139);
-            groupBox1.TabIndex = 1;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Сведения о лицензии";
+            this.groupBox1.Controls.Add(this.comboBoxSoftVersionID);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.comboBoxLicenseID);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.comboBoxLicKeysID);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.comboBoxSoftwareID);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(503, 139);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Сведения о лицензии";
             // 
             // comboBoxSoftVersionID
             // 
-            comboBoxSoftVersionID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxSoftVersionID.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxSoftVersionID.FormattingEnabled = true;
-            comboBoxSoftVersionID.Location = new System.Drawing.Point(161, 50);
-            comboBoxSoftVersionID.Name = "comboBoxSoftVersionID";
-            comboBoxSoftVersionID.Size = new System.Drawing.Size(330, 23);
-            comboBoxSoftVersionID.TabIndex = 1;
-            comboBoxSoftVersionID.SelectedValueChanged += new EventHandler(comboBoxSoftVersionID_SelectedValueChanged);
+            this.comboBoxSoftVersionID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSoftVersionID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSoftVersionID.FormattingEnabled = true;
+            this.comboBoxSoftVersionID.Location = new System.Drawing.Point(161, 50);
+            this.comboBoxSoftVersionID.Name = "comboBoxSoftVersionID";
+            this.comboBoxSoftVersionID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxSoftVersionID.TabIndex = 1;
+            this.comboBoxSoftVersionID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftVersionID_SelectedValueChanged);
             // 
             // label6
             // 
-            label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(7, 53);
-            label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(70, 15);
-            label6.TabIndex = 88;
-            label6.Text = "Версия ПО";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 53);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 15);
+            this.label6.TabIndex = 88;
+            this.label6.Text = "Версия ПО";
             // 
             // comboBoxLicenseID
             // 
-            comboBoxLicenseID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxLicenseID.FormattingEnabled = true;
-            comboBoxLicenseID.Location = new System.Drawing.Point(161, 78);
-            comboBoxLicenseID.Name = "comboBoxLicenseID";
-            comboBoxLicenseID.Size = new System.Drawing.Size(330, 23);
-            comboBoxLicenseID.TabIndex = 2;
-            comboBoxLicenseID.DropDownClosed += new EventHandler(comboBoxLicenseID_DropDownClosed);
-            comboBoxLicenseID.SelectedValueChanged += new EventHandler(comboBoxLicenseID_SelectedValueChanged);
-            comboBoxLicenseID.KeyUp += new KeyEventHandler(comboBoxLicenseID_KeyUp);
-            comboBoxLicenseID.Leave += new EventHandler(comboBoxLicenseID_Leave);
+            this.comboBoxLicenseID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxLicenseID.FormattingEnabled = true;
+            this.comboBoxLicenseID.Location = new System.Drawing.Point(161, 78);
+            this.comboBoxLicenseID.Name = "comboBoxLicenseID";
+            this.comboBoxLicenseID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxLicenseID.TabIndex = 2;
+            this.comboBoxLicenseID.DropDownClosed += new System.EventHandler(this.comboBoxLicenseID_DropDownClosed);
+            this.comboBoxLicenseID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicenseID_SelectedValueChanged);
+            this.comboBoxLicenseID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicenseID_KeyUp);
+            this.comboBoxLicenseID.Leave += new System.EventHandler(this.comboBoxLicenseID_Leave);
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(7, 81);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(63, 15);
-            label3.TabIndex = 75;
-            label3.Text = "Лицензия";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 81);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 15);
+            this.label3.TabIndex = 75;
+            this.label3.Text = "Лицензия";
             // 
             // comboBoxLicKeysID
             // 
-            comboBoxLicKeysID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxLicKeysID.FormattingEnabled = true;
-            comboBoxLicKeysID.Location = new System.Drawing.Point(161, 107);
-            comboBoxLicKeysID.Name = "comboBoxLicKeysID";
-            comboBoxLicKeysID.Size = new System.Drawing.Size(330, 23);
-            comboBoxLicKeysID.TabIndex = 3;
-            comboBoxLicKeysID.DropDownClosed += new EventHandler(comboBoxLicKeysID_DropDownClosed);
-            comboBoxLicKeysID.SelectedValueChanged += new EventHandler(comboBoxLicKeysID_SelectedValueChanged);
-            comboBoxLicKeysID.KeyUp += new KeyEventHandler(comboBoxLicKeysID_KeyUp);
-            comboBoxLicKeysID.Leave += new EventHandler(comboBoxLicKeysID_Leave);
+            this.comboBoxLicKeysID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxLicKeysID.FormattingEnabled = true;
+            this.comboBoxLicKeysID.Location = new System.Drawing.Point(161, 107);
+            this.comboBoxLicKeysID.Name = "comboBoxLicKeysID";
+            this.comboBoxLicKeysID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxLicKeysID.TabIndex = 3;
+            this.comboBoxLicKeysID.DropDownClosed += new System.EventHandler(this.comboBoxLicKeysID_DropDownClosed);
+            this.comboBoxLicKeysID.SelectedValueChanged += new System.EventHandler(this.comboBoxLicKeysID_SelectedValueChanged);
+            this.comboBoxLicKeysID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxLicKeysID_KeyUp);
+            this.comboBoxLicKeysID.Leave += new System.EventHandler(this.comboBoxLicKeysID_Leave);
             // 
             // label8
             // 
-            label8.AutoSize = true;
-            label8.Location = new System.Drawing.Point(7, 110);
-            label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(124, 15);
-            label8.TabIndex = 86;
-            label8.Text = "Лицензионный ключ";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 110);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(124, 15);
+            this.label8.TabIndex = 86;
+            this.label8.Text = "Лицензионный ключ";
             // 
             // comboBoxSoftwareID
             // 
-            comboBoxSoftwareID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxSoftwareID.FormattingEnabled = true;
-            comboBoxSoftwareID.Location = new System.Drawing.Point(161, 22);
-            comboBoxSoftwareID.Name = "comboBoxSoftwareID";
-            comboBoxSoftwareID.Size = new System.Drawing.Size(330, 23);
-            comboBoxSoftwareID.TabIndex = 0;
-            comboBoxSoftwareID.DropDownClosed += new EventHandler(comboBoxSoftwareID_DropDownClosed);
-            comboBoxSoftwareID.SelectedValueChanged += new EventHandler(comboBoxSoftwareID_SelectedValueChanged);
-            comboBoxSoftwareID.VisibleChanged += new EventHandler(comboBoxSoftwareID_VisibleChanged);
-            comboBoxSoftwareID.KeyUp += new KeyEventHandler(comboBoxSoftwareID_KeyUp);
-            comboBoxSoftwareID.Leave += new EventHandler(comboBoxSoftwareID_Leave);
+            this.comboBoxSoftwareID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSoftwareID.FormattingEnabled = true;
+            this.comboBoxSoftwareID.Location = new System.Drawing.Point(161, 22);
+            this.comboBoxSoftwareID.Name = "comboBoxSoftwareID";
+            this.comboBoxSoftwareID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxSoftwareID.TabIndex = 0;
+            this.comboBoxSoftwareID.DropDownClosed += new System.EventHandler(this.comboBoxSoftwareID_DropDownClosed);
+            this.comboBoxSoftwareID.SelectedValueChanged += new System.EventHandler(this.comboBoxSoftwareID_SelectedValueChanged);
+            this.comboBoxSoftwareID.VisibleChanged += new System.EventHandler(this.comboBoxSoftwareID_VisibleChanged);
+            this.comboBoxSoftwareID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxSoftwareID_KeyUp);
+            this.comboBoxSoftwareID.Leave += new System.EventHandler(this.comboBoxSoftwareID_Leave);
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(7, 25);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(116, 15);
-            label2.TabIndex = 73;
-            label2.Text = "Наименование ПО";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 25);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(116, 15);
+            this.label2.TabIndex = 73;
+            this.label2.Text = "Наименование ПО";
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(label1);
-            groupBox2.Controls.Add(textBoxDescription);
-            groupBox2.Controls.Add(comboBoxComputerID);
-            groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(label9);
-            groupBox2.Controls.Add(comboBoxInstallatorID);
-            groupBox2.Controls.Add(dateTimePickerInstallDate);
-            groupBox2.Controls.Add(label5);
-            groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new System.Drawing.Point(512, 3);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new System.Drawing.Size(504, 139);
-            groupBox2.TabIndex = 2;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Сведения об установке";
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.textBoxDescription);
+            this.groupBox2.Controls.Add(this.comboBoxComputerID);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.comboBoxInstallatorID);
+            this.groupBox2.Controls.Add(this.dateTimePickerInstallDate);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(512, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(504, 139);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Сведения об установке";
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(7, 112);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(80, 15);
-            label1.TabIndex = 87;
-            label1.Text = "Примечание";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 112);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(80, 15);
+            this.label1.TabIndex = 87;
+            this.label1.Text = "Примечание";
             // 
             // textBoxDescription
             // 
-            textBoxDescription.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            textBoxDescription.Location = new System.Drawing.Point(161, 109);
-            textBoxDescription.MaxLength = 2048;
-            textBoxDescription.Name = "textBoxDescription";
-            textBoxDescription.Size = new System.Drawing.Size(330, 21);
-            textBoxDescription.TabIndex = 3;
-            textBoxDescription.TextChanged += new EventHandler(textBoxDescription_TextChanged);
+            this.textBoxDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDescription.Location = new System.Drawing.Point(161, 109);
+            this.textBoxDescription.MaxLength = 2048;
+            this.textBoxDescription.Name = "textBoxDescription";
+            this.textBoxDescription.Size = new System.Drawing.Size(330, 21);
+            this.textBoxDescription.TabIndex = 3;
+            this.textBoxDescription.TextChanged += new System.EventHandler(this.textBoxDescription_TextChanged);
             // 
             // comboBoxComputerID
             // 
-            comboBoxComputerID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxComputerID.Enabled = false;
-            comboBoxComputerID.FormattingEnabled = true;
-            comboBoxComputerID.Location = new System.Drawing.Point(161, 22);
-            comboBoxComputerID.Name = "comboBoxComputerID";
-            comboBoxComputerID.Size = new System.Drawing.Size(330, 23);
-            comboBoxComputerID.TabIndex = 0;
-            comboBoxComputerID.DropDownClosed += new EventHandler(comboBoxComputerID_DropDownClosed);
-            comboBoxComputerID.SelectedValueChanged += new EventHandler(comboBoxComputerID_SelectedValueChanged);
-            comboBoxComputerID.KeyUp += new KeyEventHandler(comboBoxComputerID_KeyUp);
-            comboBoxComputerID.Leave += new EventHandler(comboBoxComputerID_Leave);
+            this.comboBoxComputerID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxComputerID.Enabled = false;
+            this.comboBoxComputerID.FormattingEnabled = true;
+            this.comboBoxComputerID.Location = new System.Drawing.Point(161, 22);
+            this.comboBoxComputerID.Name = "comboBoxComputerID";
+            this.comboBoxComputerID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxComputerID.TabIndex = 0;
+            this.comboBoxComputerID.DropDownClosed += new System.EventHandler(this.comboBoxComputerID_DropDownClosed);
+            this.comboBoxComputerID.SelectedValueChanged += new System.EventHandler(this.comboBoxComputerID_SelectedValueChanged);
+            this.comboBoxComputerID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboBoxComputerID_KeyUp);
+            this.comboBoxComputerID.Leave += new System.EventHandler(this.comboBoxComputerID_Leave);
             // 
             // label4
             // 
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(7, 25);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(75, 15);
-            label4.TabIndex = 77;
-            label4.Text = "Компьютер";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 25);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 15);
+            this.label4.TabIndex = 77;
+            this.label4.Text = "Компьютер";
             // 
             // label9
             // 
-            label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(6, 54);
-            label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(99, 15);
-            label9.TabIndex = 85;
-            label9.Text = "Дата установки";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 54);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(99, 15);
+            this.label9.TabIndex = 85;
+            this.label9.Text = "Дата установки";
             // 
             // comboBoxInstallatorID
             // 
-            comboBoxInstallatorID.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            comboBoxInstallatorID.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxInstallatorID.Enabled = false;
-            comboBoxInstallatorID.FormattingEnabled = true;
-            comboBoxInstallatorID.Location = new System.Drawing.Point(161, 80);
-            comboBoxInstallatorID.Name = "comboBoxInstallatorID";
-            comboBoxInstallatorID.Size = new System.Drawing.Size(330, 23);
-            comboBoxInstallatorID.TabIndex = 2;
-            comboBoxInstallatorID.SelectedIndexChanged += new EventHandler(comboBoxInstallatorID_SelectedIndexChanged);
+            this.comboBoxInstallatorID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxInstallatorID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxInstallatorID.Enabled = false;
+            this.comboBoxInstallatorID.FormattingEnabled = true;
+            this.comboBoxInstallatorID.Location = new System.Drawing.Point(161, 80);
+            this.comboBoxInstallatorID.Name = "comboBoxInstallatorID";
+            this.comboBoxInstallatorID.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxInstallatorID.TabIndex = 2;
+            this.comboBoxInstallatorID.SelectedIndexChanged += new System.EventHandler(this.comboBoxInstallatorID_SelectedIndexChanged);
             // 
             // dateTimePickerInstallDate
             // 
-            dateTimePickerInstallDate.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Left) 
-            | AnchorStyles.Right)));
-            dateTimePickerInstallDate.Location = new System.Drawing.Point(161, 53);
-            dateTimePickerInstallDate.Name = "dateTimePickerInstallDate";
-            dateTimePickerInstallDate.Size = new System.Drawing.Size(330, 21);
-            dateTimePickerInstallDate.TabIndex = 1;
-            dateTimePickerInstallDate.ValueChanged += new EventHandler(dateTimePickerInstallationDate_ValueChanged);
+            this.dateTimePickerInstallDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePickerInstallDate.Location = new System.Drawing.Point(161, 53);
+            this.dateTimePickerInstallDate.Name = "dateTimePickerInstallDate";
+            this.dateTimePickerInstallDate.Size = new System.Drawing.Size(330, 21);
+            this.dateTimePickerInstallDate.TabIndex = 1;
+            this.dateTimePickerInstallDate.ValueChanged += new System.EventHandler(this.dateTimePickerInstallationDate_ValueChanged);
             // 
             // label5
             // 
-            label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(7, 83);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(78, 15);
-            label5.TabIndex = 77;
-            label5.Text = "Установщик";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 83);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(78, 15);
+            this.label5.TabIndex = 77;
+            this.label5.Text = "Установщик";
             // 
             // InstallationsViewport
             // 
-            AutoScroll = true;
-            AutoScrollMinSize = new System.Drawing.Size(650, 300);
-            BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(1025, 485);
-            Controls.Add(tableLayoutPanel14);
-            Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            Name = "InstallationsViewport";
-            Padding = new Padding(3);
-            Text = "Установки ПО";
-            tableLayoutPanel14.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            ResumeLayout(false);
+            this.AutoScroll = true;
+            this.AutoScrollMinSize = new System.Drawing.Size(650, 300);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(1025, 485);
+            this.Controls.Add(this.tableLayoutPanel14);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "InstallationsViewport";
+            this.Padding = new System.Windows.Forms.Padding(3);
+            this.Text = "Установки ПО";
+            this.tableLayoutPanel14.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.ResumeLayout(false);
 
         }
 

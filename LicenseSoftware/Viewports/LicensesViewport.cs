@@ -207,7 +207,7 @@ namespace LicenseSoftware.Viewport
 
         private void UnbindedCheckBoxesUpdate()
         {
-            var row = (_vLicenses.Position >= 0) ? (DataRowView)_vLicenses[_vLicenses.Position] : null;
+            var row = _vLicenses.Position >= 0 ? (DataRowView)_vLicenses[_vLicenses.Position] : null;
             if (row == null)
             {
                 return;
